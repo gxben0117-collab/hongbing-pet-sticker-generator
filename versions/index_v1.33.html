@@ -1,0 +1,2268 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐾 寵物 LINE 貼圖咒語產生器 v1.33</title>
+<style>
+/* ── Premium Design System ── */
+:root {
+  --bg: #0b0805;
+  --surface: rgba(255,248,240,0.055);
+  --surface-raised: rgba(255,248,240,0.085);
+  --border: rgba(255,200,140,0.10);
+  --border-strong: rgba(245,131,10,0.48);
+  --text: #F2ECE4;
+  --text-muted: rgba(242,236,228,0.62);
+  --text-hint: rgba(242,236,228,0.36);
+  --accent: #F5830A;
+  --accent-dark: #D46500;
+  --accent-light: rgba(245,131,10,0.13);
+  --glass: rgba(255,248,240,0.05);
+  --glass-border: rgba(255,255,255,0.09);
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.50), 0 2px 8px rgba(0,0,0,0.30);
+  --shadow-sm: 0 2px 12px rgba(0,0,0,0.30);
+  --blur: blur(20px) saturate(180%);
+  --blur-sm: blur(12px);
+}
+@keyframes fadeUp   { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+@keyframes fadeIn   { from{opacity:0} to{opacity:1} }
+@keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+@keyframes glow-pulse{ 0%,100%{box-shadow:0 0 20px rgba(245,131,10,.20)} 50%{box-shadow:0 0 44px rgba(245,131,10,.50)} }
+@keyframes shimmer  { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:#0b0805;
+  background-image:
+    radial-gradient(ellipse 70% 50% at 20% 20%,rgba(200,90,20,.13) 0%,transparent 60%),
+    radial-gradient(ellipse 50% 40% at 80% 80%,rgba(140,55,10,.10) 0%,transparent 60%),
+    radial-gradient(ellipse 40% 30% at 55% 0%,rgba(245,131,10,.07) 0%,transparent 55%);
+  background-attachment:fixed;
+  color:var(--text);
+  font-family:-apple-system,'SF Pro Display','Helvetica Neue','Noto Serif TC',Georgia,serif;
+  min-height:100vh; overflow-x:hidden;
+}
+
+/* ── Hero ── */
+.hero{
+  position:relative; min-height:100vh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:7rem 2rem 5rem; overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 90% 60% at 50% -5%,rgba(245,131,10,.18) 0%,transparent 65%),
+    radial-gradient(ellipse 60% 40% at 85% 85%,rgba(180,80,20,.13) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 30% at 8%  90%,rgba(120,55,10,.10) 0%,transparent 55%);
+  z-index:0;
+}
+.hero-orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;}
+.hero-orb-1{width:380px;height:380px;background:rgba(245,131,10,.11);top:-100px;right:8%;animation:float 9s ease-in-out infinite;}
+.hero-orb-2{width:260px;height:260px;background:rgba(180,80,20,.09);bottom:18%;left:4%;animation:float 11s ease-in-out infinite;animation-delay:-4s;}
+.hero-orb-3{width:200px;height:200px;background:rgba(255,200,100,.07);top:38%;right:4%;animation:float 7s ease-in-out infinite;animation-delay:-2s;}
+.hero-content{position:relative;z-index:1;max-width:720px;}
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(245,131,10,.14);border:1px solid rgba(245,131,10,.28);
+  border-radius:50px;padding:8px 20px;font-size:11px;
+  font-family:system-ui,sans-serif;color:rgba(255,185,90,.92);
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:2.2rem;
+  backdrop-filter:var(--blur-sm);animation:fadeUp .8s ease both;
+}
+.hero-title{
+  font-size:clamp(2.5rem,6.5vw,5rem);font-weight:700;line-height:1.08;
+  letter-spacing:-.025em;margin-bottom:1.4rem;
+  background:linear-gradient(140deg,#F5EDE3 0%,#FFD08A 48%,#F5830A 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:fadeUp .9s .1s ease both;
+}
+.hero-subtitle{
+  font-size:clamp(.95rem,2vw,1.2rem);color:var(--text-muted);
+  font-family:system-ui,sans-serif;font-weight:400;line-height:1.75;
+  max-width:540px;margin:0 auto 2.8rem;
+  animation:fadeUp 1s .2s ease both;
+}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s .35s ease both;}
+.hero-btn-primary{
+  background:linear-gradient(135deg,#F5830A,#D46500);color:#fff;border:none;
+  padding:17px 40px;border-radius:50px;font-size:16px;font-weight:600;
+  font-family:system-ui,sans-serif;cursor:pointer;letter-spacing:.03em;
+  box-shadow:0 4px 28px rgba(245,131,10,.42);transition:all .25s ease;
+}
+.hero-btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(245,131,10,.58);}
+.hero-btn-secondary{
+  background:rgba(255,255,255,.08);color:var(--text);
+  border:1px solid rgba(255,255,255,.16);padding:17px 40px;
+  border-radius:50px;font-size:16px;font-weight:500;
+  font-family:system-ui,sans-serif;cursor:pointer;
+  backdrop-filter:var(--blur-sm);transition:all .25s ease;
+}
+.hero-btn-secondary:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.26);transform:translateY(-3px);}
+.hero-stats{display:flex;gap:3.5rem;justify-content:center;margin-top:4.5rem;animation:fadeUp 1s .5s ease both;}
+.hero-stat{text-align:center;}
+.hero-stat-num{font-size:2.2rem;font-weight:700;color:var(--accent);line-height:1;}
+.hero-stat-label{font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-top:5px;letter-spacing:.09em;text-transform:uppercase;}
+.hero-scroll-hint{
+  position:absolute;bottom:2.8rem;left:50%;transform:translateX(-50%);
+  z-index:1;display:flex;flex-direction:column;align-items:center;gap:9px;
+  color:var(--text-hint);font-size:10px;font-family:system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;
+  animation:fadeIn 2s 1.2s ease both;
+}
+.hero-scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(245,131,10,.6),transparent);animation:float 2.2s ease-in-out infinite;}
+
+/* ── Main Container ── */
+.page{max-width:700px;margin:0 auto;padding:0 1.5rem 6rem;}
+
+/* ── Reveal on Scroll ── */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── Glass Cards (sections) ── */
+.section{
+  background:var(--surface);
+  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);border-radius:var(--radius-xl);
+  margin-bottom:1.5rem;overflow:hidden;box-shadow:var(--shadow);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.section:hover{transform:translateY(-2px);box-shadow:var(--shadow),0 0 40px rgba(245,131,10,.10);}
+.section-header{
+  display:flex;align-items:center;gap:12px;
+  padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);
+  background:rgba(255,255,255,.03);
+}
+.section-num{
+  width:28px;height:28px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+  color:#fff;font-size:12px;font-family:system-ui,sans-serif;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-weight:700;box-shadow:0 2px 8px rgba(245,131,10,.35);
+}
+.section-title{font-size:14px;font-weight:600;font-family:system-ui,sans-serif;color:var(--text);letter-spacing:.02em;flex:1;}
+.section-body{padding:1.4rem 1.5rem;}
+
+/* ── Inputs ── */
+input[type=text],textarea{
+  font-family:system-ui,sans-serif;font-size:13px;color:var(--text);
+  background:rgba(255,255,255,.06);border:1px solid var(--border);
+  border-radius:var(--radius);padding:10px 14px;width:100%;outline:none;
+  transition:border-color .2s,background .2s,box-shadow .2s;
+  backdrop-filter:var(--blur-sm);
+}
+input[type=text]::placeholder,textarea::placeholder{color:var(--text-hint);}
+input[type=text]:focus,textarea:focus{
+  border-color:rgba(245,131,10,.5);background:rgba(255,255,255,.09);
+  box-shadow:0 0 0 3px rgba(245,131,10,.12);
+}
+textarea{resize:vertical;line-height:1.7;}
+
+/* ── Buttons ── */
+button{
+  font-family:system-ui,sans-serif;cursor:pointer;border-radius:50px;
+  border:1px solid var(--border);background:rgba(255,255,255,.06);
+  color:var(--text);font-size:13px;padding:8px 18px;
+  transition:all .2s ease;backdrop-filter:var(--blur-sm);
+}
+button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);transform:translateY(-1px);}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+  color:#fff;border:none;font-weight:600;
+  box-shadow:0 2px 12px rgba(245,131,10,.35);
+}
+.btn-primary:hover{box-shadow:0 6px 24px rgba(245,131,10,.52);transform:translateY(-2px);}
+.btn-rand{
+  background:rgba(255,255,255,.05);
+  border:1px dashed rgba(245,131,10,.35);
+  color:var(--text-muted);font-size:12px;padding:6px 14px;border-radius:50px;
+}
+.btn-rand:hover{background:var(--accent-light);color:var(--text);border-color:var(--accent);}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:4px;margin-bottom:1rem;padding:4px;background:rgba(0,0,0,.25);border-radius:50px;}
+.tab{
+  flex:1;text-align:center;padding:8px;font-size:12px;border-radius:50px;
+  border:none;background:transparent;color:var(--text-muted);cursor:pointer;
+  transition:all .2s ease;font-family:system-ui,sans-serif;
+}
+.tab.active{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;box-shadow:0 2px 10px rgba(245,131,10,.35);}
+.tab:hover:not(.active){background:rgba(255,255,255,.06);color:var(--text);}
+
+/* ── Check Items ── */
+.check-list{display:grid;gap:7px;}
+.check-list.col2{grid-template-columns:1fr 1fr;}
+.check-list.col3{grid-template-columns:1fr 1fr 1fr;}
+.check-list.col4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.c-item{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:10px 14px;cursor:pointer;background:rgba(255,255,255,.04);
+  display:flex;align-items:center;gap:10px;transition:all .2s ease;font-family:system-ui,sans-serif;
+}
+.c-item:hover{border-color:rgba(245,131,10,.40);background:rgba(245,131,10,.08);transform:translateY(-1px);}
+.c-item.active{border-color:rgba(245,131,10,.60);background:rgba(245,131,10,.12);box-shadow:0 0 0 1px rgba(245,131,10,.18);}
+.c-check{
+  width:17px;height:17px;border-radius:50%;border:1.5px solid rgba(245,131,10,.40);
+  flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:transparent;transition:all .2s ease;
+}
+.c-item.active .c-check{background:linear-gradient(135deg,var(--accent),var(--accent-dark));border-color:var(--accent);color:#fff;}
+.c-body{flex:1;}
+.c-name{font-size:13px;font-weight:500;color:var(--text);}
+.c-desc{font-size:11px;color:var(--text-hint);margin-top:3px;line-height:1.4;}
+.c-item.ai-pick{border-style:dashed;}
+
+/* ── Category Tags ── */
+.cat-tag{
+  font-size:12px;font-family:system-ui,sans-serif;padding:5px 13px;
+  border-radius:50px;border:1px solid var(--border);
+  background:rgba(255,255,255,.05);color:var(--text-muted);
+  cursor:pointer;transition:all .2s ease;display:inline-block;
+}
+.cat-tag:hover{border-color:rgba(245,131,10,.40);color:var(--text);background:rgba(245,131,10,.08);}
+.cat-tag.active{background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;border-color:transparent;box-shadow:0 2px 8px rgba(245,131,10,.35);}
+.script-cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;}
+.s-item{
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:10px 14px;cursor:pointer;background:rgba(255,255,255,.04);
+  transition:all .2s ease;font-family:system-ui,sans-serif;
+}
+.s-item:hover{border-color:rgba(245,131,10,.40);background:rgba(245,131,10,.08);transform:translateY(-1px);}
+.s-item.active{border-color:rgba(245,131,10,.60);background:rgba(245,131,10,.12);}
+.s-item .s-name{font-size:13px;font-weight:500;color:var(--text);}
+.s-item .s-type{font-size:11px;color:var(--text-hint);margin-top:3px;}
+.script-toolbar{
+  padding:.65rem 1.25rem;border-bottom:1px solid var(--border);
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;
+}
+.script-toolbar button{padding:8px 10px;min-height:36px;white-space:nowrap;}
+.script-empty{
+  color:var(--text-hint);font-family:system-ui,sans-serif;font-size:12px;
+  padding:14px;border:1px dashed var(--border);border-radius:var(--radius);
+  text-align:center;background:rgba(255,255,255,.03);
+}
+
+/* ── Props / Colors ── */
+.color-swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:12px;}
+.swatch{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s ease;position:relative;}
+.swatch.active{border-color:var(--accent);box-shadow:0 0 0 2px rgba(11,8,5,.9),0 0 0 4px var(--accent);}
+.swatch .sticker{position:absolute;top:-4px;right:-4px;font-size:9px;background:var(--accent);color:#fff;border-radius:50%;width:14px;height:14px;display:none;align-items:center;justify-content:center;}
+.swatch.active .sticker{display:flex;}
+.prop-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-bottom:10px;}
+.prop-option{
+  border:1px solid var(--border);border-radius:var(--radius);padding:9px 12px;cursor:pointer;
+  background:rgba(255,255,255,.04);display:flex;align-items:center;gap:8px;
+  transition:all .2s ease;font-family:system-ui,sans-serif;min-height:40px;
+}
+.prop-option:hover{border-color:rgba(245,131,10,.40);background:rgba(245,131,10,.08);transform:translateY(-1px);}
+.prop-option.active{border-color:rgba(245,131,10,.60);background:rgba(245,131,10,.12);box-shadow:inset 0 0 0 1px rgba(245,131,10,.20);}
+.prop-icon{font-size:16px;line-height:1;flex-shrink:0;}
+.prop-name{font-size:12px;color:var(--text);line-height:1.35;}
+.color-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.color-tag{
+  font-size:11px;font-family:system-ui,sans-serif;padding:5px 12px;border-radius:50px;
+  background:rgba(245,131,10,.12);color:var(--text);
+  border:1px solid rgba(245,131,10,.28);display:flex;align-items:center;gap:5px;
+}
+.color-tag .rm{cursor:pointer;opacity:.65;}
+.color-tag .rm:hover{opacity:1;}
+
+/* ── Output ── */
+.output-box{
+  background:rgba(0,0,0,.45);backdrop-filter:var(--blur);
+  color:#F0DFC8;border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius-lg);padding:1.4rem;
+  font-size:12px;font-family:'Courier New',monospace;
+  line-height:1.9;white-space:pre-wrap;word-break:break-word;
+  min-height:200px;margin-bottom:1rem;
+}
+.script-limit-msg{min-height:18px;font-size:11px;line-height:1.5;color:#FF7B5C;font-family:system-ui,sans-serif;}
+.script-limit-msg.ok{color:var(--text-hint);}
+
+/* ── Combine ── */
+.combine-section{
+  background:rgba(255,248,240,.04);backdrop-filter:var(--blur);
+  border:1px solid rgba(245,131,10,.22);border-radius:var(--radius-xl);
+  padding:2.2rem;margin-top:2rem;text-align:center;
+  box-shadow:0 4px 40px rgba(245,131,10,.10),var(--shadow);
+  position:relative;overflow:hidden;
+}
+.combine-section::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 65% 45% at 50% 0%,rgba(245,131,10,.08) 0%,transparent 70%);
+  pointer-events:none;
+}
+.combine-section h2{font-size:18px;margin-bottom:8px;font-family:system-ui,sans-serif;color:var(--text);font-weight:700;}
+.combine-section p{font-size:13px;color:var(--text-muted);font-family:system-ui,sans-serif;margin-bottom:1.3rem;}
+.status-dots{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem;}
+.dot{font-size:11px;font-family:system-ui,sans-serif;padding:4px 12px;border-radius:50px;border:1px solid var(--border);color:var(--text-hint);background:rgba(255,255,255,.04);}
+.dot.done{background:rgba(245,131,10,.15);color:rgba(255,185,80,.92);border-color:rgba(245,131,10,.30);}
+.sub-label{font-size:11px;color:var(--text-hint);margin-bottom:6px;font-family:system-ui,sans-serif;}
+.row-flex{display:flex;gap:8px;align-items:center;}
+.prompt-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.prompt-meta-info{font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;}
+
+/* ── FAB ── */
+.fab-top{
+  position:fixed;bottom:1.5rem;right:1.5rem;width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-dark));
+  color:#fff;border:none;font-size:18px;cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(245,131,10,.45);z-index:100;transition:all .2s ease;
+}
+.fab-top:hover{transform:translateY(-3px) scale(1.06);box-shadow:0 8px 30px rgba(245,131,10,.58);}
+.fab-top.visible{display:flex;}
+
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:5rem;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(20,12,6,.92);backdrop-filter:var(--blur);
+  color:#F0DFC8;font-size:13px;font-family:system-ui,sans-serif;
+  padding:10px 22px;border-radius:50px;z-index:200;
+  border:1px solid rgba(255,255,255,.10);opacity:0;
+  transition:opacity .25s,transform .25s;pointer-events:none;white-space:nowrap;box-shadow:var(--shadow);
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* ── AI Image Workflow ── */
+.ai-workflow-section{
+  background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
+  border:1px solid var(--glass-border);border-radius:var(--radius-xl);
+  margin-bottom:1.5rem;overflow:hidden;box-shadow:var(--shadow);
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.ai-workflow-section:hover{transform:translateY(-2px);box-shadow:var(--shadow),0 0 40px rgba(245,131,10,.10);}
+.ai-workflow-header{
+  padding:1.35rem 1.5rem;background:rgba(245,131,10,.06);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;
+}
+.ai-workflow-icon{
+  width:46px;height:46px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(245,131,10,.28),rgba(212,101,0,.25));
+  border:1px solid rgba(245,131,10,.28);
+  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;
+}
+.ai-workflow-title{font-size:15px;font-weight:700;color:var(--text);font-family:system-ui,sans-serif;}
+.ai-workflow-subtitle{font-size:12px;color:var(--text-muted);margin-top:3px;font-family:system-ui,sans-serif;}
+.ai-workflow-body{padding:1.4rem 1.5rem;}
+.upload-zone{
+  border:2px dashed rgba(245,131,10,.32);border-radius:var(--radius-lg);
+  padding:2.8rem 2rem;text-align:center;cursor:pointer;
+  transition:all .22s ease;background:rgba(245,131,10,.03);
+  position:relative;overflow:hidden;
+}
+.upload-zone:hover,.upload-zone.drag-over{
+  border-color:var(--accent);background:rgba(245,131,10,.09);transform:scale(1.012);
+}
+.upload-zone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;
+  width:100%;height:100%;border:none;background:transparent;padding:0;
+}
+.upload-zone input[type=file]:focus{box-shadow:none;}
+.upload-icon{font-size:3.2rem;margin-bottom:1rem;display:block;animation:float 4s ease-in-out infinite;}
+.upload-text{font-size:15px;font-weight:600;color:var(--text);font-family:system-ui,sans-serif;margin-bottom:6px;}
+.upload-hint{font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;}
+.image-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:1.3rem;}
+.preview-item{
+  position:relative;aspect-ratio:1;border-radius:var(--radius);
+  overflow:hidden;border:1px solid var(--border);
+  background:rgba(0,0,0,.35);cursor:pointer;transition:all .2s ease;
+}
+.preview-item:hover{transform:scale(1.04);border-color:rgba(245,131,10,.50);}
+.preview-item img{width:100%;height:100%;object-fit:cover;}
+.preview-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.62);
+  opacity:0;transition:opacity .2s;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.preview-item:hover .preview-overlay{opacity:1;}
+.preview-item.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(245,131,10,.40);}
+.preview-del-btn{
+  background:rgba(220,50,50,.85);color:#fff;border:none;
+  border-radius:50%;width:30px;height:30px;font-size:15px;
+  display:flex;align-items:center;justify-content:center;padding:0;
+  transition:background .15s;
+}
+.preview-del-btn:hover{background:rgba(220,50,50,1);transform:none;}
+.ai-prompt-panel{
+  margin-top:1.2rem;padding:1.2rem;background:rgba(245,131,10,.06);
+  border:1px solid rgba(245,131,10,.18);border-radius:var(--radius-lg);
+}
+.ai-prompt-label{font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px;font-weight:600;}
+.ai-prompt-output{
+  font-size:13px;color:var(--text-muted);font-family:system-ui,sans-serif;
+  line-height:1.75;min-height:56px;
+}
+.ai-history-panel{margin-top:1.2rem;border-top:1px solid var(--border);padding-top:1.2rem;}
+.ai-history-title{font-size:11px;font-weight:600;color:var(--text-hint);font-family:system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
+.ai-history-list{display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto;}
+.ai-history-item{
+  display:flex;gap:10px;align-items:center;
+  background:rgba(255,255,255,.04);border:1px solid var(--border);
+  border-radius:var(--radius);padding:10px 14px;cursor:pointer;transition:all .2s ease;
+}
+.ai-history-item:hover{background:rgba(245,131,10,.08);border-color:rgba(245,131,10,.28);}
+.ai-history-thumb{width:42px;height:42px;border-radius:8px;object-fit:cover;flex-shrink:0;}
+.ai-history-thumb-ph{width:42px;height:42px;border-radius:8px;background:rgba(245,131,10,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.ai-history-info{flex:1;min-width:0;}
+.ai-history-name{font-size:13px;font-weight:500;color:var(--text);font-family:system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ai-history-date{font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-top:2px;}
+.ai-history-del{color:var(--text-hint);border:none;background:transparent;font-size:14px;padding:4px 8px;border-radius:8px;flex-shrink:0;}
+.ai-history-del:hover{color:#FF6B6B;background:rgba(255,0,0,.10);transform:none;}
+
+/* ── Page Header (below hero) ── */
+.page-header{text-align:center;margin-bottom:2.5rem;padding:2rem 0 2rem;}
+.page-header h1{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;letter-spacing:-.01em;
+  background:linear-gradient(135deg,#F5EDE3 0%,#FFD08A 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.page-header .version-badge{display:inline-flex;align-items:center;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;font-size:10px;padding:3px 10px;border-radius:50px;font-weight:700;font-family:system-ui,sans-serif;margin-left:8px;vertical-align:middle;}
+.page-header .subtitle{font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;letter-spacing:.08em;margin-top:6px;}
+
+/* ── Mobile Responsive ── */
+@media (max-width:640px){
+  .hero{min-height:auto;padding:5.5rem 1.5rem 3.5rem;}
+  .hero-title{font-size:2.2rem;}
+  .hero-subtitle{font-size:.95rem;}
+  .hero-stats{gap:2rem;margin-top:3rem;}
+  .hero-stat-num{font-size:1.7rem;}
+  .hero-cta{gap:10px;}
+  .hero-btn-primary,.hero-btn-secondary{padding:14px 26px;font-size:14px;}
+  .page{padding:0 1rem 4rem;}
+  .section-body{padding:.9rem 1rem;}
+  .section-header{padding:.9rem 1.1rem;gap:8px;}
+  .section-num{width:24px;height:24px;font-size:11px;border-radius:8px;}
+  .section-title{font-size:13px;}
+  .check-list.col4{grid-template-columns:1fr 1fr;}
+  .check-list.col3{grid-template-columns:1fr 1fr;}
+  .script-panel{grid-template-columns:1fr !important;}
+  .script-panel-right{position:static !important;}
+  .script-toolbar{grid-template-columns:1fr 1fr;padding:.65rem 1rem;}
+  .script-toolbar button{font-size:11px;padding:8px 8px;}
+  .color-swatches,.prop-options{grid-template-columns:repeat(auto-fit,minmax(95px,1fr));}
+  .combine-section{padding:1.5rem 1rem;}
+  .output-box{font-size:11px;padding:.9rem;min-height:140px;}
+  .status-dots{gap:4px;}
+  .dot{font-size:10px;padding:3px 8px;}
+  .cat-tag{font-size:11px;padding:4px 10px;}
+  .c-item{padding:8px 11px;}
+  .c-name{font-size:12px;}
+  .c-desc{font-size:10px;}
+  .s-item{padding:8px 11px;}
+  .s-item .s-name{font-size:12px;}
+  .color-tag{font-size:10px;}
+  .swatch{width:28px;height:28px;}
+  .btn-rand{font-size:11px;padding:6px 11px;}
+  .upload-zone{padding:1.8rem 1rem;}
+  .image-preview-grid{grid-template-columns:repeat(auto-fill,minmax(88px,1fr));}
+  .ai-workflow-body{padding:1rem;}
+}
+@media (max-width:400px){
+  .page{padding:0 .75rem 4rem;}
+  .check-list.col2{grid-template-columns:1fr;}
+  .script-toolbar{grid-template-columns:1fr;}
+  .prop-options{grid-template-columns:1fr 1fr;}
+  .fab-top{bottom:1rem;right:1rem;width:42px;height:42px;}
+  .hero-stats{flex-direction:column;gap:1.2rem;align-items:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero" id="hero-section">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ AI 貼圖生成工具 ✦</div>
+    <h1 class="hero-title">寵物 LINE 貼圖<br>咒語產生器</h1>
+    <p class="hero-subtitle">上傳你的毛孩照片，填入設定，一鍵產生專屬 ChatGPT 提示詞，讓 AI 幫你畫出完整 LINE 貼圖包。</p>
+    <div class="hero-cta">
+      <button class="hero-btn-primary" onclick="document.querySelector('.page').scrollIntoView({behavior:'smooth'})">🐾 開始生成咒語</button>
+      <button class="hero-btn-secondary" onclick="document.getElementById('ai-workflow-section').scrollIntoView({behavior:'smooth'})">📸 AI 圖片工作流</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="hero-stat-num">55+</div><div class="hero-stat-label">寵物套餐</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">50+</div><div class="hero-stat-label">腳本分類</div></div>
+      <div class="hero-stat"><div class="hero-stat-num">16</div><div class="hero-stat-label">貼圖格式</div></div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint">
+    <div class="hero-scroll-line"></div>
+    SCROLL
+  </div>
+</section>
+
+<button class="fab-top" id="fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到頂部">⬆</button>
+<div class="toast" id="toast-msg"></div>
+<div class="page">
+<header class="page-header">
+  <div>
+    <h1>🐾 寵物 LINE 貼圖咒語產生器<span class="version-badge">v1.33</span></h1>
+    <p class="subtitle">PET STICKER PROMPT GENERATOR — 填完各模組後點「組合全部」複製給 ChatGPT</p>
+  </div>
+  <div style="display:flex;justify-content:center;margin-top:1.2rem;">
+    <button onclick="randomizeAll()" class="btn-primary" style="font-size:14px;padding:12px 28px;border-radius:50px;">🎲 全部隨機</button>
+  </div>
+</header>
+
+<!-- AI 圖片工作流 -->
+<div class="ai-workflow-section reveal" id="ai-workflow-section">
+  <div class="ai-workflow-header">
+    <div class="ai-workflow-icon">📸</div>
+    <div>
+      <div class="ai-workflow-title">AI 圖片工作流</div>
+      <div class="ai-workflow-subtitle">上傳寵物照片 · 預覽管理 · 產生提示描述 · 儲存歷史紀錄</div>
+    </div>
+  </div>
+  <div class="ai-workflow-body">
+    <!-- Upload Zone -->
+    <div class="upload-zone" id="upload-zone">
+      <input type="file" id="pet-file-input" accept="image/*" multiple onchange="handleFileUpload(event)">
+      <span class="upload-icon">🐾</span>
+      <div class="upload-text">拖曳寵物照片到這裡，或點擊選擇檔案</div>
+      <div class="upload-hint">支援 JPG / PNG / WebP · 可多選 · 建議上傳三視圖</div>
+    </div>
+
+    <!-- Preview Grid -->
+    <div class="image-preview-grid" id="image-preview-grid"></div>
+
+    <!-- AI Prompt Panel (shown when image selected) -->
+    <div class="ai-prompt-panel" id="ai-prompt-panel" style="display:none;">
+      <div class="ai-prompt-label">生成的寵物描述提示</div>
+      <div class="ai-prompt-output" id="ai-prompt-output">選擇上方照片後點「生成描述」</div>
+      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="generatePetPrompt()" style="font-size:13px;padding:9px 20px;">✨ 生成描述提示</button>
+        <button class="btn-rand" onclick="copyPromptToDesc()" style="font-size:12px;">📋 複製到寵物描述欄</button>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div class="ai-history-panel" id="ai-history-panel">
+      <div class="ai-history-title">
+        <span>歷史紀錄</span>
+        <button class="btn-rand" onclick="clearAiHistory()" style="font-size:11px;padding:4px 10px;border-radius:6px;">清除全部</button>
+      </div>
+      <div class="ai-history-list" id="ai-history-list">
+        <div style="font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;padding:8px 0;">尚無歷史紀錄。上傳寵物照片後將自動儲存。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 快速套餐 -->
+<div class="section" style="border-color:var(--accent);box-shadow:0 2px 12px rgba(196,114,74,0.12);">
+  <div class="section-header" style="background:linear-gradient(135deg,var(--accent-light),#fde8d5);">
+    <div class="section-num">⚡</div>
+    <div class="section-title">快速套餐 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:6px;">一鍵套用所有模組設定</span></div>
+  </div>
+  <div class="section-body" style="padding:0;">
+    <!-- 我的套餐 v1.29 -->
+    <div style="padding:1rem 1.25rem 0.75rem;border-bottom:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-bottom:8px;font-weight:600;letter-spacing:0.05em;">⭐ 我的套餐</div>
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
+        <input type="text" id="my-preset-name" placeholder="輸入套餐名稱…" style="flex:1;font-size:13px;" maxlength="30">
+        <button class="btn-rand" onclick="saveMyPreset()" style="white-space:nowrap;padding:6px 14px;">💾 儲存目前設定</button>
+      </div>
+      <div id="my-presets-list" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <!-- 套餐搜尋 v1.30 -->
+    <div style="padding:0.6rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center;">
+      <input type="text" id="preset-search" placeholder="🔍 搜尋套餐名稱、寵物種類…" oninput="onPresetSearch()" style="flex:1;font-size:12px;">
+      <button class="btn-rand" id="preset-search-clear" onclick="clearPresetSearch()" style="display:none;font-size:11px;padding:5px 10px;">✕ 清除</button>
+    </div>
+    <!-- 分類標籤 v1.30 -->
+    <div style="padding:0.75rem 1.25rem 0.5rem;border-bottom:1px solid var(--border);">
+      <div id="preset-cat-tabs" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <!-- 套餐列表 -->
+    <div style="padding:1rem 1.25rem;">
+      <div class="check-list col2" id="preset-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ① 寵物描述 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">1</div><div class="section-title">寵物描述</div></div>
+  <div class="section-body">
+    <div class="tabs">
+      <div class="tab active" id="tab-img" onclick="switchCharTab('img')">圖片上傳（推薦）</div>
+      <div class="tab" id="tab-text" onclick="switchCharTab('text')">文字輸入</div>
+    </div>
+    <div id="char-img-panel">
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;">
+        <div style="font-size:13px;font-weight:500;color:var(--text);font-family:system-ui,sans-serif;margin-bottom:6px;">📎 請將寵物三視圖或照片上傳給 ChatGPT</div>
+        <div style="font-size:12px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:1.7;">組合咒語後，請先在 ChatGPT 上傳事先做好的寵物三視圖；若沒有三視圖，也可以上傳正面、側面、背面或日常照片。系統會要求 ChatGPT 依照上傳圖片鎖定同一隻寵物來設計貼圖。</div>
+      </div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:1.7;">
+        💡 <strong>建議素材：</strong>三視圖最穩定；若只有照片，請盡量提供正面、側面、背面或能看清毛色花紋、眼睛、耳朵、尾巴與常用配件的照片。
+      </div>
+    </div>
+    <div id="char-text-panel" style="display:none;">
+      <div class="row-flex" style="margin-bottom:6px;">
+        <label style="margin:0;flex:1;">寵物外觀描述</label>
+        <button class="btn-rand" onclick="randomCharDesc()">🎲 隨機填入</button>
+      </div>
+      <textarea id="char-input" rows="3" placeholder="例：橘白貓、圓臉大眼、短毛、胖胖的、額頭有M紋、綠色眼睛" oninput="updateDots()"></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- ② 貼圖數量 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">2</div><div class="section-title">貼圖數量</div></div>
+  <div class="section-body">
+    <div class="check-list col4">
+      <div class="c-item" id="qty-1" onclick="selectQty(1)"><div class="c-check">✓</div><div class="c-body"><div class="c-name">1×1</div><div class="c-desc">1 格・測試用</div></div></div>
+      <div class="c-item" id="qty-4" onclick="selectQty(4)"><div class="c-check">✓</div><div class="c-body"><div class="c-name">2×2</div><div class="c-desc">4 格・測試用</div></div></div>
+      <div class="c-item" id="qty-9" onclick="selectQty(9)"><div class="c-check">✓</div><div class="c-body"><div class="c-name">3×3</div><div class="c-desc">9 格・測試用</div></div></div>
+      <div class="c-item active" id="qty-16" onclick="selectQty(16)"><div class="c-check">✓</div><div class="c-body"><div class="c-name">4×4</div><div class="c-desc">16 格・LINE 最小值 ✓</div></div></div>
+    </div>
+    <div style="margin-top:8px;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:1.7;">
+      📋 <strong>LINE 上架規格：</strong>正式貼圖包最少 <strong>8 格</strong>，以 8 的倍數遞增（8、16、24、32、40）。建議以 <strong>16 格</strong>為第一套起步數量。1／4／9 格適合先測試風格，確認滿意後再做完整版。
+    </div>
+  </div>
+</div>
+
+<!-- ③ 畫風 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">3</div><div class="section-title">畫風 / 材質風格</div></div>
+  <div class="section-body">
+    <div class="script-cats" id="style-cats"></div>
+    <div class="check-list col2" id="style-grid" style="margin-bottom:6px;"></div>
+    <div class="c-item ai-pick" id="style-ai" onclick="selectStyle('ai')" style="margin-top:4px;"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🎲 AI 隨機選擇</div><div class="c-desc">由 AI 自行決定最適合的畫風</div></div></div>
+  </div>
+</div>
+
+<!-- ④ 服裝 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">4</div><div class="section-title">擬人化服裝 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:6px;">選擇是否幫寵物穿衣服</span></div></div>
+  <div class="section-body">
+    <div class="check-list col2" style="margin-bottom:10px;">
+      <div class="c-item active" id="outfit-none" onclick="selectOutfitMode('none')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🐾 保持動物原樣</div><div class="c-desc">純動物外觀，不穿衣服</div></div></div>
+      <div class="c-item" id="outfit-manual" onclick="selectOutfitMode('manual')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">👗 擬人化穿衣服</div><div class="c-desc">保留動物特徵，加上造型服裝</div></div></div>
+    </div>
+    <div id="outfit-panel" style="display:none;">
+      <div class="sub-label">選擇服裝主題</div>
+      <div class="script-cats" id="outfit-cats"></div>
+      <div class="check-list col2" id="outfit-grid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑤ 道具 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">5</div><div class="section-title">道具方案 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:6px;">裝飾品、玩具、寵物衣之類的</span></div></div>
+  <div class="section-body">
+    <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px;">
+      <button class="btn-rand" onclick="clearColors()">讓 AI 自行判斷</button>
+      <button class="btn-rand" onclick="randomColors()">🎲 隨機道具風格</button>
+    </div>
+    <div class="color-swatches" id="color-swatches"></div>
+    <div class="color-tags" id="color-tags"></div>
+    <div class="custom-color-input" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+      <input id="custom-color-input" placeholder="輸入自訂道具或裝飾，逗號分隔" style="flex:1;min-width:180px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--ink);" />
+      <button class="btn-primary" style="padding:10px 14px;white-space:nowrap;" onclick="addCustomColors()">新增自訂項目</button>
+    </div>
+    <div class="color-tags" id="custom-color-tags" style="margin-top:8px;"></div>
+    <div id="color-ai-hint" style="font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-top:8px;">讓 AI / ChatGPT 自行判斷道具、裝飾品、玩具或寵物衣搭配</div>
+  </div>
+</div>
+
+<!-- ⑥ 字體 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">6</div><div class="section-title">文字字體</div></div>
+  <div class="section-body">
+    <div class="c-item ai-pick active" id="font-ai" onclick="selectFont('ai')" style="margin-bottom:10px;"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🎲 AI 隨機選擇</div><div class="c-desc">由 AI 選擇最搭配風格的字體</div></div></div>
+    <div class="script-cats" id="font-cats"></div>
+    <div class="check-list col2" id="font-grid" style="max-height:260px;overflow-y:auto;"></div>
+  </div>
+</div>
+
+<!-- ⑦ 構圖 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">7</div><div class="section-title">構圖位置</div></div>
+  <div class="section-body">
+    <div class="c-item ai-pick active" id="layout-random" onclick="selectLayout('random')" style="margin-bottom:8px;"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🎲 AI 隨機決定</div><div class="c-desc">每格構圖由 AI 自由發揮</div></div></div>
+    <div class="check-list col2">
+      <div class="c-item" id="layout-A" onclick="selectLayout('A')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">A — 文字左＋寵物右</div><div class="c-desc">文字佔左40%，寵物靠右</div></div></div>
+      <div class="c-item" id="layout-B" onclick="selectLayout('B')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">B — 文字上＋寵物下</div><div class="c-desc">文字在上，寵物在下</div></div></div>
+      <div class="c-item" id="layout-C" onclick="selectLayout('C')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">C — 大字居中＋寵物角落</div><div class="c-desc">文字主角，寵物貼緊角落</div></div></div>
+      <div class="c-item" id="layout-D" onclick="selectLayout('D')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">D — 寵物左＋文字右</div><div class="c-desc">寵物靠左，文字在右</div></div></div>
+      <div class="c-item" id="layout-E" onclick="selectLayout('E')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">E — 寵物上＋文字下</div><div class="c-desc">寵物在上，文字在下</div></div></div>
+      <div class="c-item" id="layout-F" onclick="selectLayout('F')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">F — 寵物全版＋文字疊加</div><div class="c-desc">寵物全版，文字浮疊</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑧ 背景 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">8</div><div class="section-title">背景設定</div></div>
+  <div class="section-body">
+    <div class="check-list col2">
+      <div class="c-item active" id="bg-white" onclick="selectBg('white')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">純白背景</div><div class="c-desc">乾淨純白，標準貼圖格式</div></div></div>
+      <div class="c-item" id="bg-ai" onclick="selectBg('ai')"><div class="c-check">✓</div><div class="c-body"><div class="c-name">AI 補充情境背景</div><div class="c-desc">根據主題自動補充簡單背景</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑨ 腳本 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">9</div><div class="section-title">貼圖腳本</div><button class="btn-rand" onclick="randomScript()" style="margin-left:auto;">🎲 隨機填入</button></div>
+  <div class="section-body" style="padding:0;">
+    <div style="padding:0.75rem 1.25rem 0.5rem;display:flex;gap:6px;align-items:center;">
+      <input type="text" id="script-search" placeholder="🔍 搜尋腳本…" oninput="onScriptSearch()" style="flex:1;">
+      <button class="btn-rand" id="script-search-clear" onclick="clearScriptSearch()" style="display:none;">✕ 清除</button>
+    </div>
+    <div style="padding:1rem 1.25rem 0.75rem;border-bottom:1px solid var(--border);">
+      <div id="script-cats"></div>
+    </div>
+    <div class="script-toolbar">
+      <button class="btn-rand" onclick="fillScriptSlots()">補滿空格</button>
+      <button class="btn-rand" onclick="shuffleSelectedScripts()">重排已選</button>
+      <button class="btn-rand" onclick="copySelectedScripts()">複製腳本</button>
+      <button class="btn-rand" onclick="clearSelectedScripts()">清空腳本</button>
+    </div>
+    <div class="script-panel" style="display:grid;grid-template-columns:1fr 1fr;">
+      <div style="border-right:1px solid var(--border);padding:10px;">
+        <button class="btn-rand" onclick="randomCurrentCatScripts()" style="width:100%;margin-bottom:8px;padding:8px 12px;">🎲 隨機選擇本分類</button>
+        <button class="btn-rand" onclick="applyNoTextMode()" style="width:100%;margin-bottom:8px;padding:8px 12px;">🐾 純表情無字模式</button>
+        <div id="script-items" style="display:grid;gap:5px;"></div>
+      </div>
+      <div class="script-panel-right" style="display:flex;flex-direction:column;padding:10px;gap:6px;position:sticky;top:12px;align-self:start;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;">已選腳本（可直接編輯）</span>
+          <span style="font-size:12px;font-family:system-ui,sans-serif;color:var(--text-muted);">已選 <span id="sel-count" style="font-weight:600;color:var(--accent);">0</span> / <span id="total-slots">16</span> 格</span>
+        </div>
+        <textarea id="script-edit-area" placeholder="點選左側腳本後出現在這裡，可直接修改..." style="height:320px;font-size:13px;line-height:1.9;resize:vertical;" oninput="syncScriptFromTextarea()"></textarea>
+        <div id="script-limit-msg" class="script-limit-msg ok"></div>
+      </div>
+    </div>
+    <!-- ⑨ 我的腳本組 v1.29 -->
+    <div style="padding:10px 12px 12px;border-top:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-bottom:8px;font-weight:600;letter-spacing:0.05em;">📂 我的腳本組</div>
+      <div style="display:flex;gap:6px;align-items:center;margin-bottom:8px;">
+        <input type="text" id="my-set-name" placeholder="輸入腳本組名稱…" style="flex:1;font-size:13px;" maxlength="30">
+        <button class="btn-rand" onclick="saveMyScriptSet()" style="white-space:nowrap;padding:6px 14px;">💾 儲存目前腳本</button>
+      </div>
+      <div id="my-script-sets" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 組合 -->
+<div class="combine-section">
+  <h2>🐾 組合全部咒語</h2>
+  <p>複製後貼到 ChatGPT（記得先上傳寵物照片！）</p>
+  <div class="status-dots" id="status-dots"></div>
+  <button class="btn-primary" onclick="combineAll()" style="width:100%;padding:16px;font-size:17px;font-weight:700;border-radius:var(--radius-lg);margin-bottom:1rem;letter-spacing:0.05em;box-shadow:0 4px 16px rgba(196,114,74,0.4);">🐾 組合全部並複製</button>
+  <div id="combined-out" style="display:none;">
+    <div class="prompt-meta">
+      <span class="prompt-meta-info" id="prompt-char-count"></span>
+      <button onclick="copyFinal()" class="btn-primary" style="font-size:12px;padding:6px 16px;" id="final-copy-btn-top">複製完整咒語</button>
+    </div>
+    <div class="output-box" id="combined-box"></div>
+    <button onclick="copyFinal()" class="btn-primary" style="width:100%;padding:10px;font-size:13px;" id="final-copy-btn">複製完整咒語</button>
+    <div style="margin-top:14px;padding:12px 14px;background:var(--accent-light);border:1px solid var(--border);border-radius:var(--radius);text-align:left;">
+      <div style="font-size:12px;font-weight:600;color:var(--text);font-family:system-ui,sans-serif;margin-bottom:8px;">🐾 接下來這樣用：</div>
+      <div style="font-size:12px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:2;">
+        <div>① 打開 <strong>ChatGPT</strong>（需要 DALL·E 圖片生成功能）</div>
+        <div>② <strong>先上傳寵物照片</strong>（三視圖最佳，一般照片也可以）</div>
+        <div>③ 貼上剛才複製的咒語，直接送出</div>
+        <div>④ 若某格風格跑掉，可說「重新生成第 N 格，保持同一隻寵物」</div>
+      </div>
+    </div>
+    <div style="margin-top:10px;display:flex;justify-content:center;">
+      <button onclick="window.scrollTo({top:0,behavior:'smooth'})" style="font-size:12px;padding:6px 20px;border-radius:20px;border:1px solid var(--border);background:var(--bg);color:var(--text-muted);font-family:system-ui,sans-serif;cursor:pointer;">⬆ 回到頂部重新填寫</button>
+    </div>
+  </div>
+</div>
+
+<!-- 上架準備清單 v1.30 -->
+<div class="section" style="margin-top:2rem;border-color:#22c55e;">
+  <div class="section-header" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-left-color:#22c55e;">
+    <div class="section-num" style="background:#22c55e;font-size:14px;">✅</div>
+    <div class="section-title">LINE 貼圖上架準備清單</div>
+    <button onclick="toggleSubmitGuide()" id="submit-toggle-btn" class="btn-rand" style="margin-left:auto;font-size:11px;padding:4px 12px;color:#15803d;border-color:#86efac;">展開說明 ▾</button>
+  </div>
+  <div id="submit-guide" style="display:none;">
+    <div style="padding:1rem 1.25rem;display:grid;gap:10px;">
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:var(--radius);padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:#15803d;font-family:system-ui,sans-serif;margin-bottom:8px;">① 用 ChatGPT 生成貼圖圖片</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;font-family:system-ui,sans-serif;">
+          • 複製上方咒語，貼給 ChatGPT（先上傳寵物照片）<br>
+          • 逐格存圖，每張存成 <strong>PNG 格式</strong><br>
+          • 建議圖片尺寸：<strong>370 × 320 px</strong>（一般貼圖）<br>
+          • 若需透明底，可用 remove.bg 或 Photoshop 去背
+        </div>
+      </div>
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:var(--radius);padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:#15803d;font-family:system-ui,sans-serif;margin-bottom:8px;">② 準備上架所需素材</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;font-family:system-ui,sans-serif;color:var(--text-muted);">
+          <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:8px 10px;">
+            <div style="font-weight:600;color:#166534;margin-bottom:4px;">貼圖圖片</div>
+            <div>• PNG（建議透明底）</div>
+            <div>• 370 × 320 px</div>
+            <div>• 每張 ≤ 1 MB</div>
+            <div>• 8 / 16 / 24 / 32 / 40 張</div>
+          </div>
+          <div style="background:#fff;border:1px solid #bbf7d0;border-radius:6px;padding:8px 10px;">
+            <div style="font-weight:600;color:#166534;margin-bottom:4px;">主圖 & 圖示</div>
+            <div>• 主圖：240 × 240 px</div>
+            <div>• 分類圖示：96 × 74 px</div>
+            <div>• PNG 格式、無透明底</div>
+            <div>• 展示在貼圖商店</div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:var(--radius);padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:#15803d;font-family:system-ui,sans-serif;margin-bottom:8px;">③ 提交 LINE Creators Market</div>
+        <div style="font-size:12px;color:var(--text-muted);line-height:1.9;font-family:system-ui,sans-serif;">
+          • 前往 <strong>creators.line.me</strong> 用 LINE 帳號登入<br>
+          • 點選 Create → Stickers → Upload<br>
+          • 依序上傳：貼圖圖片、主圖、分類圖示<br>
+          • 填寫貼圖組名稱（中文或英文）與分類標籤<br>
+          • 送出審查，約等 <strong>1～7 個工作天</strong><br>
+          • 通過後可設定售價（或免費）並上架
+        </div>
+      </div>
+      <div style="background:var(--accent-light);border:1px solid var(--border-strong);border-radius:var(--radius);padding:12px 14px;">
+        <div style="font-size:12px;font-weight:600;color:var(--text);font-family:system-ui,sans-serif;margin-bottom:10px;">📌 上架前確認清單</div>
+        <div id="submit-checklist" style="display:grid;gap:6px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const state = {
+  qty:16, charTab:'img', petDesc:'',
+  styleKey:'chibi', outfitMode:'none', outfitSelected:null,
+  colorSelections:[], customColors:[],
+  fontStyle:'ai', layoutStyle:'random', bgStyle:'white',
+  scriptSelected:[], customItems:[], currentCat:'日常萌態'
+};
+
+// ── PRESETS ──
+const presets = [
+  {id:'happy-cat',icon:'😺',name:'快樂橘貓日常',style:'chibi',outfit:'none',colors:['毛線球','小魚玩具'],font:'可愛手寫',layout:'random',cat:'日常萌態'},
+  {id:'lazy-cat',icon:'😴',name:'慵懶貓咪',style:'watercolor',outfit:'none',colors:['貓窩抱枕','毛毯'],font:'水彩暈染',layout:'E',cat:'慵懶放空'},
+  {id:'huihui',icon:'🐈',name:'灰灰（灰貓）',style:'sticker',outfit:'none',colors:['玩具老鼠','逗貓棒','紙箱'],font:'糖果彩虹',layout:'random',cat:'熱門常用',qty:16,bg:'white',
+   petDesc:'灰灰，7歲男生灰虎斑貓，愛出去玩。請以我上傳給你的灰灰三式圖為最高基準。特徵：短毛灰黑棕虎斑，額頭清楚M字紋，黃綠色圓眼，耳朵大而尖，鼻樑與臉頰有棕色漸層，嘴邊與下巴為白色，胸口大片白毛，前腳有白襪，尾巴粗、有深色環狀虎斑，身形結實。表情可以活潑調皮，但每張都要像同一隻灰灰，不要變成泛用灰貓。',
+   scripts:['灰灰出門巡邏','我回來啦','飯飯準備好沒','先摸頭再說','不要偷看我','紙箱是我的','灰灰認真中','我只是路過','陪我出去玩','尾巴警戒中','今天很帥吧','給我罐罐','晚安守門員','收到喵','交給灰灰','我在窗邊等']},
+  {id:'tianxin',icon:'🐶',name:'甜心（馬爾濟斯）',style:'dreamy',outfit:'none',colors:['蝴蝶結','寵物衣','愛心抱枕'],font:'棉花糖',layout:'random',cat:'撒嬌賣萌',qty:16,bg:'white',
+   petDesc:'甜心，5歲女生馬爾濟斯。請以我上傳給你的甜心三式圖為最高基準。特徵：全身蓬鬆純白長毛，圓而大的黑色眼睛，黑色小鼻子，嘴巴小巧，長耳毛自然垂落到臉頰兩側，頭頂有一撮綁起的小毛束，常戴粉紅與黑色蝴蝶結髮飾，中間有小白珠。整體氣質甜美、乖巧、有點公主感。每張都要保留白色長毛、黑圓眼、黑鼻、垂耳長毛與粉黑蝴蝶結，不能變成泛用白狗。',
+   scripts:['喜歡你','抱緊緊','不要走','寵我啦','求抱抱','比心','親親','我好乖','你最好了','再抱一下','偷偷喜歡','給我零食','謝謝你','辛苦了','晚安','愛你喔']},
+  {id:'cola-cat',icon:'🐈‍⬛',name:'可樂（玳瑁貓）',style:'sticker',outfit:'none',colors:['毛線球','逗貓棒','紙箱'],font:'可愛手寫',layout:'random',cat:'寵物視角',qty:16,bg:'white',
+   petDesc:'可樂，豬年出生的小貓，目前約7公斤，是橘黑交錯的玳瑁貓，毛色像一團橘黑毛線，身形圓潤厚實。請以我上傳給你的可樂三式圖為最高基準，正面臉像可愛貓頭鷹，大而漂亮的貓眼，黑橘玳瑁花紋分布不規則，身上橘色、黑色、深棕色交錯，尾巴短短且已經絕育，整體胖嘟嘟但靈活。可樂上樓梯會用雙腳跳，有點像兔子；會和家裡狗狗一起玩；開始想出門冒險但仍然怕怕，常在門口觀望。個性又急又黑但很撒嬌，會翻肚子給人摸肚肚，摸摸時很舒服。所有貼圖都要保留可樂的玳瑁毛色、短尾巴、大眼貓頭鷹臉、圓潤7公斤體型與害羞冒險感，不能變成一般黑貓、橘貓或泛用玳瑁貓。',
+   scripts:['可樂來了','摸肚肚','怕怕觀望','想出去玩','兔子跳跳','跟狗狗玩','我很勇敢','先看一下','門口集合','舒服喔','短尾搖搖','我是毛線球','貓頭鷹臉','不要催我','再摸一下','冒險預備']},
+  {id:'qq-dog',icon:'🐶',name:'QQ（狗）',style:'sticker',outfit:'none',colors:['狗骨頭玩具','球球','金牌項圈'],font:'可愛手寫',layout:'random',cat:'寵物視角',qty:16,bg:'white',
+   petDesc:'QQ，13歲男生白色中型博美，約6~7公斤，個性懂事、黏人、貼心，小吃醋、愛吃牛肉。請以我上傳給你的QQ三式圖為最高基準。特徵：米白色超蓬鬆長毛，圓圓黑眼睛，粉咖啡鼻子，小三角耳朵且耳內粉粉的，尾巴蓬鬆捲到背上，老年狀態睡眠時間較長、行動較慢但仍黏主人。所有貼圖都要像同一隻 QQ，可以有不同表情與動作，但不能變成泛用白狗、其他博美或不同寵物。',
+   scripts:['QQ來了','收到汪','好喔','交給我','出去玩','等我一下','我最乖','給我零食','抱抱QQ','開心搖搖','不要催我','辛苦了','晚安汪','陪你喔','我在這裡','QQ報到']},
+  {id:'tangtang-dog',icon:'🐕',name:'糖糖（狗）',style:'dreamy',outfit:'none',colors:['愛心抱枕','蝴蝶結','寵物衣'],font:'棉花糖',layout:'random',cat:'撒嬌賣萌',qty:16,bg:'white',
+   petDesc:'糖糖，女生紅色偏橘紅博美犬，小型犬，約3.5~4公斤，約23公分高、28公分長。請以我上傳給你的糖糖三式圖為最高基準。特徵：蓬鬆橘紅長毛，小小圓眼常像沒睡飽，尖耳，黑色小鼻，尾巴蓬鬆捲在背上；個性活潑、黏人、聰明、護主、貪吃，會偷吃零食、抓人叫起床、遇到開放場合會主動討抱抱。每張都必須維持糖糖本人特徵，不能變成泛用可愛狗或其他寵物。',
+   scripts:['糖糖來了','抱緊緊','喜歡你','給我零食','我好乖','陪我玩','不要走','親親','謝謝你','辛苦了','晚安','愛你喔','再抱一下','我在等你','甜甜笑','糖糖比心']},
+  {id:'tangyuan-cat',icon:'🐱',name:'湯圓（貓）',style:'chibi',outfit:'none',colors:['毛線球','逗貓棒','貓窩抱枕'],font:'泡泡字',layout:'random',cat:'日常萌態',qty:16,bg:'white',
+   petDesc:'湯圓，3歲斑花貓，喜歡黏著人，是被寵壞的可愛大小姐，喜歡撒嬌、貪吃、怕狗、怕灰灰，常常跑去打卡娃。請以我上傳給你的湯圓三式圖為最高基準。特徵：白色臉與胸口，額頭與身體是棕黑虎斑花紋，黃綠色眼睛，鼻子粉棕色，尾巴長而上舉、帶深色環紋與黑尾端，身形修長。湯圓可以療癒撒嬌、大小姐感、偶爾好生氣，但不能變成泛用貓咪或不同花色的貓。',
+   scripts:['湯圓來了','窩著休息','摸摸我','收到喵','好喔','我餓了','陪我玩','晚安喵','撒嬌一下','慢慢來','不要催我','開飯啦','圓滾滾','我在這裡','給我抱抱','湯圓報到']},
+  {id:'kawa-cat',icon:'🐈',name:'卡哇（貓）',style:'sticker',outfit:'none',colors:['紙箱','小魚玩具','逗貓棒'],font:'可愛手寫',layout:'random',cat:'寵物視角',qty:16,bg:'white',
+   petDesc:'卡哇，黑橘白三花貓。請以我上傳給你的卡哇三式圖為最高基準。特徵：短毛三花，頭頂與身體有明顯黑色、橘色、深棕色斑塊，白色臉頰、鼻口、胸口與腳，眼睛大而圓，耳朵尖，身形纖細靈活，常在門窗邊探頭觀察。卡哇可以活潑、有個性、可愛調皮，但每張都要保留卡哇本人辨識度，不能變成泛用三花貓、玳瑁貓或其他寵物。',
+   scripts:['卡哇來了','看我一下','收到喵','沒問題','陪我玩','我最可愛','不要催我','先觀察','開心跳跳','摸摸頭','晚安喵','給我零食','我在這裡','一起冒險','卡哇報到','再玩一下']},
+  {id:'shiba',icon:'🐕',name:'柴柴日常',style:'popmart',outfit:'none',colors:['狗骨頭玩具','球球'],font:'可愛手寫',layout:'random',cat:'日常萌態'},
+  {id:'bunny',icon:'🐰',name:'兔兔甜心',style:'nendo',outfit:'sweet',colors:['蝴蝶結','小花圈'],font:'棉花糖',layout:'B',cat:'撒嬌賣萌'},
+  {id:'hamster',icon:'🐹',name:'倉鼠鼓鼓',style:'nendo',outfit:'none',colors:['瓜子零食','小碗'],font:'泡泡字',layout:'C',cat:'吃吃喝喝'},
+  {id:'shiba-work',icon:'💼',name:'打工柴柴',style:'sticker',outfit:'office',colors:['領帶','小公事包'],font:'迷因體',layout:'A',cat:'上班崩潰'},
+  {id:'cat-xmas',icon:'🎄',name:'聖誕貓咪',style:'nendo',outfit:'holiday',colors:['聖誕帽','禮物盒'],font:'糖霜餅乾',layout:'random',cat:'節日祝福'},
+  {id:'dog-meme',icon:'😂',name:'狗狗迷因包',style:'sticker',outfit:'none',colors:['墨鏡','金牌項圈'],font:'迷因體',layout:'random',cat:'誇張反應'},
+  {id:'puppy-love',icon:'💕',name:'愛心小狗',style:'dreamy',outfit:'none',colors:['愛心抱枕','蝴蝶結'],font:'奶油蛋糕',layout:'B',cat:'撒嬌賣萌'},
+  {id:'cat-wizard',icon:'🧙',name:'魔法貓巫師',style:'ghibli',outfit:'magic',colors:['魔法帽','星星法杖'],font:'夢幻星空',layout:'F',cat:'奇幻冒險'},
+  {id:'corgi',icon:'🐶',name:'柯基超可愛',style:'chibi',outfit:'none',colors:['飛盤','狗骨頭玩具'],font:'泡泡字',layout:'random',cat:'日常萌態'},
+  {id:'cat-princess',icon:'👑',name:'公主貓咪',style:'korean',outfit:'dress',colors:['小皇冠','蝴蝶結'],font:'可愛手寫',layout:'D',cat:'節日祝福'},
+  {id:'cat-british',icon:'🐱',name:'英短圓臉貓',style:'chibi',outfit:'none',colors:['毛線球','貓窩抱枕'],font:'泡泡字',layout:'random',cat:'日常萌態',
+   petDesc:'英國短毛貓，圓臉、短鼻、厚實身形，毛色可由使用者照片決定，眼睛大而圓，表情沉穩又可愛。請保持短毛、圓臉、厚臉頰與憨萌氣質一致。'},
+  {id:'cat-ragdoll',icon:'🐈',name:'布偶貓甜心',style:'dreamy',outfit:'none',colors:['蝴蝶結','毛毯'],font:'棉花糖',layout:'B',cat:'撒嬌賣萌',
+   petDesc:'布偶貓，長毛柔順，藍色大眼，臉部重點色，尾巴蓬鬆，氣質溫柔親人。每張都要保留長毛、藍眼與優雅甜美感。'},
+  {id:'cat-mainecoon',icon:'🦁',name:'緬因貓王者',style:'ghibli',outfit:'none',colors:['小皇冠','小花圈'],font:'夢幻星空',layout:'F',cat:'奇幻冒險',
+   petDesc:'緬因貓，大型長毛貓，耳尖有毛束，胸毛蓬鬆，尾巴巨大，眼神聰明有王者感。請讓角色威風但仍然可愛。'},
+  {id:'cat-siamese',icon:'🐾',name:'暹羅貓話癆',style:'sticker',outfit:'none',colors:['逗貓棒','玩具老鼠'],font:'迷因體',layout:'A',cat:'誇張反應',
+   petDesc:'暹羅貓，奶油色身體、深色耳朵臉部四肢與尾巴，藍色眼睛，表情聰明又愛講話。每張都要保留重點色與俐落身形。'},
+  {id:'cat-bengal',icon:'🐆',name:'豹貓探險家',style:'comic',outfit:'none',colors:['球球','紙箱'],font:'可愛手寫',layout:'random',cat:'奇幻冒險',
+   petDesc:'孟加拉豹貓，短毛、有豹紋或玫瑰斑，身形敏捷，眼神銳利，動作充滿探險感。每張都要保留豹紋花色與活潑野性。'},
+  {id:'dog-poodle',icon:'🐩',name:'貴賓狗萌萌',style:'nendo',outfit:'none',colors:['蝴蝶結','寵物衣'],font:'棉花糖',layout:'random',cat:'撒嬌賣萌',
+   petDesc:'貴賓狗，捲捲毛，圓眼睛，小鼻子，身形輕巧，表情活潑親人。毛色可由使用者照片決定，請保持捲毛與聰明撒嬌氣質。'},
+  {id:'dog-pomeranian',icon:'🧸',name:'博美小雲朵',style:'popmart',outfit:'none',colors:['愛心抱枕','小皇冠'],font:'泡泡字',layout:'B',cat:'撒嬌賣萌',
+   petDesc:'博美犬，小型蓬鬆毛球，狐狸臉，眼睛明亮，尾巴蓬鬆上捲，像小雲朵一樣活潑。請保留蓬毛、尖耳與開朗表情。'},
+  {id:'dog-golden',icon:'🐕',name:'黃金獵犬暖男',style:'watercolor',outfit:'none',colors:['球球','飛盤'],font:'可愛手寫',layout:'D',cat:'日常萌態',
+   petDesc:'黃金獵犬，中大型犬，金色長毛，溫柔眼神，笑容親切，耳朵自然垂落。每張都要保留金色毛與可靠暖心氣質。'},
+  {id:'dog-frenchie',icon:'🐶',name:'法鬥表情包',style:'sticker',outfit:'none',colors:['墨鏡','金牌項圈'],font:'迷因體',layout:'F',cat:'誇張反應',
+   petDesc:'法國鬥牛犬，短鼻、蝙蝠耳、結實小身形，表情誇張有喜劇感。請保留大耳朵、短臉與呆萌迷因氣質。'},
+  {id:'dog-husky',icon:'🐺',name:'哈士奇崩潰王',style:'comic',outfit:'none',colors:['墨鏡','球球'],font:'迷因體',layout:'random',cat:'上班崩潰',
+   petDesc:'哈士奇，黑白或灰白毛色，藍眼或異色眼，臉部面罩花紋明顯，表情戲劇化。請保留雪橇犬輪廓與傻萌崩潰感。'},
+  {id:'shark',icon:'🦈',name:'鯊魚貼圖',style:'chibi',outfit:'none',colors:['玩水了','閃閃發光'],font:'泡泡字',layout:'random',cat:'誇張反應',
+   petDesc:'可愛Q版鯊魚，圓潤身體，灰藍色背部、白色肚子，小魚鰭與大笑臉，不能可怕，要像寵物一樣親人可愛。'},
+  {id:'monkey',icon:'🐒',name:'猴子日常',style:'sticker',outfit:'none',colors:['瓜子零食','球球'],font:'可愛手寫',layout:'random',cat:'日常萌態',
+   petDesc:'可愛小猴子，棕色毛、淺色臉、長尾巴，表情聰明頑皮，動作靈活，像寵物夥伴一樣活潑。'},
+  {id:'goat',icon:'🐐',name:'山羊咩咩',style:'nendo',outfit:'none',colors:['小花圈','蝴蝶結'],font:'棉花糖',layout:'B',cat:'日常萌態',
+   petDesc:'可愛山羊，短角、小鬍子、柔和眼神，白色或奶茶色毛，個性溫和又有點固執，表情要親切可愛。'},
+  {id:'rabbit-extra',icon:'🐰',name:'兔子蹦蹦',style:'dreamy',outfit:'none',colors:['蝴蝶結','小花圈'],font:'棉花糖',layout:'random',cat:'撒嬌賣萌',
+   petDesc:'可愛兔子，長耳朵、圓眼睛、柔軟短毛，小鼻子會動，姿勢包含跳躍、窩著、撒嬌與吃草。'},
+  {id:'crocodile',icon:'🐊',name:'鱷魚小隊長',style:'popmart',outfit:'none',colors:['小皇冠','金牌項圈'],font:'泡泡字',layout:'D',cat:'誇張反應',
+   petDesc:'可愛Q版鱷魚，綠色身體、短短四肢、圓眼睛、大嘴巴但不兇，像小隊長一樣有精神又呆萌。'},
+  {id:'parrot',icon:'🦜',name:'鸚鵡聊天王',style:'sticker',outfit:'none',colors:['星星法杖','小皇冠'],font:'糖果彩虹',layout:'A',cat:'問候回覆',
+   petDesc:'彩色鸚鵡，羽毛鮮豔，彎曲鳥喙，眼神靈活，站在小棲木上，表情像很會聊天的寵物。'},
+  {id:'green-snake',icon:'🐍',name:'青蛇小可愛',style:'chibi',outfit:'none',colors:['小花圈','閃閃發光'],font:'可愛手寫',layout:'C',cat:'奇幻冒險',
+   petDesc:'綠色青蛇，細長身體，圓圓大眼，表情溫和，不可怕，身體可盤成可愛形狀，像療癒系寵物。'},
+  {id:'starter-orange-cat',icon:'🐱',name:'新手橘貓貼圖包',style:'chibi',outfit:'none',colors:['毛線球','紙箱'],font:'可愛手寫',layout:'random',cat:'日常萌態',qty:16,bg:'white',
+   petDesc:'橘色虎斑貓，圓臉，明亮眼睛，橘白相間毛色，尾巴有虎斑環紋，個性親人又有點調皮。請依使用者上傳照片鎖定同一隻貓的臉型、毛色、斑紋、眼睛、耳朵、尾巴與體型，不要變成泛用橘貓。',
+   scripts:['早安','收到','謝謝你','辛苦了','抱抱','我餓了','陪我玩','晚安','好累喔','加油','拜託啦','太棒了','等一下','想你了','可以喔','不可以']},
+  {id:'starter-shiba-pack',icon:'🐕',name:'新手柴犬貼圖包',style:'nendo',outfit:'none',colors:['狗骨頭玩具','球球'],font:'泡泡字',layout:'random',cat:'日常萌態',qty:16,bg:'white',
+   petDesc:'柴犬，立耳，捲尾巴，圓潤臉頰，表情有精神，毛色與花紋以使用者上傳照片為準。每張都要保持同一隻柴犬的耳朵、尾巴、毛色、眼神與體型，不要變成泛用狗狗。',
+   scripts:['收到','好喔','走吧','加油','我來了','等等我','謝謝','晚安','吃飯啦','出去玩','不可以','拜託','開心','累了','抱抱','沒問題']},
+  {id:'starter-parrot-pack',icon:'🦜',name:'新手鸚鵡貼圖包',style:'popmart',outfit:'none',colors:['小棲木','閃閃發光'],font:'糖果彩虹',layout:'random',cat:'日常萌態',qty:16,bg:'white',
+   petDesc:'彩色鸚鵡，彎曲鳥喙，明亮眼睛，羽毛顏色與花紋以使用者上傳照片為準。每張都要保留同一隻鳥的羽色、頭型、鳥喙形狀、眼睛與站姿，不要變成泛用卡通鳥。',
+   scripts:['早安','你好','收到','謝謝','太棒了','加油','晚安','想你','開心','等等','我在','可以','不行','辛苦了','祝福你','啾啾']},
+  {id:'starter-hamster-pack',icon:'🐹',name:'新手倉鼠貼圖包',style:'chibi',outfit:'none',colors:['瓜子零食','小碗'],font:'棉花糖',layout:'random',cat:'吃吃喝喝',qty:16,bg:'white',
+   petDesc:'小倉鼠，圓滾滾身體，小耳朵，小黑眼，短短四肢，毛色與臉部花紋以使用者上傳照片為準。每張都要保留同一隻倉鼠的毛色、臉型、耳朵、眼睛與圓潤體型。',
+   scripts:['吃飯啦','給我一口','謝謝','好飽','再一下','等等','早安','晚安','收到','加油','我躲起來','好累','開心','抱抱','可以喔','拜託啦']},
+  {id:'starter-rabbit-pack',icon:'🐰',name:'新手垂耳兔貼圖包',style:'dreamy',outfit:'none',colors:['小花圈','蝴蝶結'],font:'夢幻星空',layout:'random',cat:'撒嬌賣萌',qty:16,bg:'white',
+   petDesc:'垂耳兔，柔軟長耳朵，圓眼睛，小鼻子，毛色與花紋以使用者上傳照片為準。每張都要保持同一隻兔子的耳朵長度、毛色、眼睛、鼻子與身體比例，不要變成泛用兔兔。',
+   scripts:['抱抱我','喜歡你','謝謝','晚安','早安','陪我玩','不要走','加油','收到','想你了','比心','好乖','可以喔','等一下','辛苦了','給你花花']},
+  {id:'green-bird',icon:'🐦',name:'綠色青鳥',style:'watercolor',outfit:'none',colors:['小花圈','閃閃發光'],font:'夢幻星空',layout:'B',cat:'節日祝福',
+   petDesc:'綠色青鳥，小巧圓潤，羽毛以嫩綠與青綠為主，眼睛明亮，姿態輕盈，帶來幸運與祝福感。'},
+  // ── 新增角色 v1.30 ──
+  {id:'persian-cat',icon:'😻',name:'波斯貓優雅',style:'dreamy',outfit:'none',colors:['蝴蝶結','毛毯'],font:'棉花糖',layout:'B',cat:'撒嬌賣萌',
+   petDesc:'波斯貓，長毛扁臉，銅色或藍色大圓眼，厚臉頰，身形圓潤，毛色柔和，氣質高貴。請保持扁鼻、圓眼與蓬鬆長毛特徵，不能變成一般貓。'},
+  {id:'scottish-fold',icon:'🐱',name:'折耳貓日常',style:'chibi',outfit:'none',colors:['毛線球','貓窩抱枕'],font:'泡泡字',layout:'random',cat:'日常萌態',
+   petDesc:'蘇格蘭折耳貓，招牌向前彎折的小耳朵，圓臉、大眼、矮短四肢，體型圓滾滾，毛色依照片。請保持折耳特徵與茶壺般的圓潤體型，不能變成立耳普通貓。'},
+  {id:'black-cat',icon:'🐈‍⬛',name:'黑貓神秘感',style:'holographic',outfit:'none',colors:['小皇冠','閃閃發光'],font:'夢幻星空',layout:'F',cat:'奇幻冒險',
+   petDesc:'全黑短毛貓，瞳孔金黃或翠綠色，黑緞子般光滑毛色，眼神神秘優雅，輪廓清晰。請保持全黑毛色與發光眼睛，不能出現其他顏色的毛。'},
+  {id:'tuxedo-cat',icon:'🐈',name:'燕尾服貓紳士',style:'popmart',outfit:'none',colors:['領帶','小公事包'],font:'正黑體',layout:'A',cat:'日常萌態',
+   petDesc:'黑白貓（燕尾服貓），黑色背部與頭部，白色胸口、嘴邊與前腳，像天生穿著燕尾服的紳士貓，表情嚴肅又可愛。'},
+  {id:'samoyed',icon:'🐕',name:'薩摩耶笑容',style:'watercolor',outfit:'none',colors:['小花圈','飛盤'],font:'可愛手寫',layout:'random',cat:'日常萌態',
+   petDesc:'薩摩耶，大型犬，全身蓬鬆純白毛，招牌永遠微笑的嘴角，黑色眼圈與眼睛，尾巴蓬鬆上捲，活潑又溫柔。'},
+  {id:'labrador',icon:'🐶',name:'拉布拉多暖男',style:'chibi',outfit:'none',colors:['球球','狗骨頭玩具'],font:'可愛手寫',layout:'D',cat:'日常萌態',
+   petDesc:'拉布拉多，中大型犬，短滑亮毛，顏色為黑色、黃色或巧克力棕，圓眼睛，厚嘴巴，天生溫和友善笑容，喜歡咬玩具。'},
+  {id:'chihuahua',icon:'🐕',name:'吉娃娃大將軍',style:'nendo',outfit:'none',colors:['蝴蝶結','寵物衣'],font:'泡泡字',layout:'C',cat:'誇張反應',
+   petDesc:'吉娃娃，超小型犬，巨大立耳、大圓眼、嬌小身體，毛色依照片，表情驕傲又可愛，常做出誇張反應。請保持大耳、大眼與嬌小身形。'},
+  {id:'border-collie',icon:'🐕',name:'邊牧聰明狗',style:'popmart',outfit:'none',colors:['飛盤','球球'],font:'正黑體',layout:'random',cat:'日常萌態',
+   petDesc:'邊境牧羊犬，中型犬，通常黑白雙色，聰明眼神，耳朵半立、腰部纖細，身形俐落，充滿工作犬氣質但超級可愛。'},
+  {id:'beagle',icon:'🐕',name:'比格犬吃貨',style:'sticker',outfit:'none',colors:['狗骨頭玩具','零食碗'],font:'可愛手寫',layout:'random',cat:'吃吃喝喝',
+   petDesc:'比格犬，中型犬，黑白棕三色，大垂耳，圓眼睛，鼻子超靈，天生好奇與愛吃鬼的表情，肚子圓滾滾。'},
+  {id:'guinea-pig',icon:'🐹',name:'天竺鼠圓圓',style:'chibi',outfit:'none',colors:['瓜子零食','小花圈'],font:'棉花糖',layout:'C',cat:'吃吃喝喝',qty:16,bg:'white',
+   petDesc:'天竺鼠，無尾胖圓身，大眼睛，短耳，毛色依照片（常見雙色或三色），叫聲可愛，會發出噗噗聲。每張都要保留圓滾身形與大眼。',
+   scripts:['好餓喔','給我吃','嗚嗚嗚','開心轉圈','摸摸頭','我最乖','躲起來了','太舒服了','在睡覺','噗噗聲','你在哪','請摸我','今天也吃','毛很軟','抱緊緊','謝謝陪伴']},
+  {id:'hedgehog',icon:'🦔',name:'刺蝟小可愛',style:'nendo',outfit:'none',colors:['小花圈','瓜子零食'],font:'棉花糖',layout:'B',cat:'日常萌態',
+   petDesc:'刺蝟，小型刺背，白或棕色小臉，小黑豆眼睛，短鼻子，圓滾滾身體蜷縮時像球，表情可愛溫和，腳短短。'},
+  {id:'chinchilla',icon:'🐭',name:'龍貓鼠毛絨絨',style:'dreamy',outfit:'none',colors:['毛毯','小碗'],font:'夢幻星空',layout:'E',cat:'慵懶放空',
+   petDesc:'龍貓（毛絲鼠），銀灰色超柔軟蓬鬆毛，大耳朵，大圓黑眼，長白鬍鬚，超蓬鬆尾巴，動作輕盈，常用後腳站立。'},
+  {id:'turtle',icon:'🐢',name:'烏龜慢慢來',style:'popmart',outfit:'none',colors:['小皇冠','小花圈'],font:'泡泡字',layout:'D',cat:'慵懶放空',
+   petDesc:'小烏龜，可愛Q版，綠色龜甲有花紋，圓眼睛，小爪子慢慢走，表情悠哉自在，有時縮進殼裡。'},
+  {id:'starter-guinea-pig-pack',icon:'🐹',name:'新手天竺鼠貼圖包',style:'chibi',outfit:'none',colors:['瓜子零食','小碗'],font:'棉花糖',layout:'random',cat:'日常萌態',qty:16,bg:'white',
+   petDesc:'天竺鼠，胖圓無尾，大眼睛，短耳，毛色與花紋以使用者上傳照片為準。每張都要保留圓滾身形、大眼睛與短耳特徵。',
+   scripts:['早安','你好','謝謝','好棒棒','加油','吃飯啦','晚安','抱抱','可以喔','好的好的','等等我','辛苦了','嗯嗯','想你了','好開心','謝謝你']},
+  {id:'starter-hedgehog-pack',icon:'🦔',name:'新手刺蝟貼圖包',style:'nendo',outfit:'none',colors:['小花圈','瓜子零食'],font:'棉花糖',layout:'random',cat:'日常萌態',qty:16,bg:'white',
+   petDesc:'刺蝟，小型刺背動物，白或棕色小臉，小黑眼，圓鼻子，毛色與刺背花紋以使用者上傳照片為準。每張都要保留刺背特徵與可愛小臉。',
+   scripts:['早安','你好','謝謝','加油','晚安','收到','好喔','等等','抱緊緊','我在這','辛苦了','想你了','可以喔','好棒','謝謝陪','沒問題']},
+  {id:'mothers-day',icon:'🌸',name:'母親節感謝',style:'dreamy',outfit:'none',colors:['小花圈','愛心抱枕'],font:'棉花糖',layout:'B',cat:'節日祝福',qty:16,bg:'white',
+   scripts:['謝謝媽媽','最愛你了','辛苦了','我在這裡','抱緊緊','你最棒','媽媽加油','我愛你','母親節快樂','謝謝你','陪伴最重要','永遠支持你','媽媽休息','給你花花','最暖的媽','比心比心']},
+  {id:'fathers-day',icon:'👔',name:'父親節感謝',style:'chibi',outfit:'none',colors:['領帶','小公事包'],font:'可愛手寫',layout:'D',cat:'節日祝福',qty:16,bg:'white',
+   scripts:['謝謝爸爸','你最帥','辛苦了','爸爸加油','父親節快樂','最愛你了','我在這裡','好棒棒','永遠支持','你的背影','有你真好','陪你散步','請你休息','給你力量','最強老爸','比讚']},
+  {id:'valentines',icon:'💝',name:'情人節甜蜜',style:'dreamy',outfit:'none',colors:['愛心抱枕','蝴蝶結'],font:'棉花糖',layout:'F',cat:'撒嬌賣萌',qty:16,bg:'white',
+   scripts:['喜歡你','陪著你','比心','親親','抱抱','情人節快樂','你最重要','給你花花','愛你喔','只想黏你','永遠在你身邊','牽手手','偷偷喜歡','今天也喜歡','心動了','你是我的']},
+  {id:'halloween',icon:'🎃',name:'萬聖節鬼鬼',style:'sticker',outfit:'none',colors:['魔法帽','星星法杖'],font:'糖霜餅乾',layout:'random',cat:'節日祝福',qty:16,bg:'white',
+   scripts:['萬聖節快樂','不給糖就搗蛋','嚇到你了','糖糖給我','我是鬼鬼','嗚嗚嗚嗚','詭計時間','糖果大作戰','我最恐怖','快逃跑啦','夜晚的魔法','被我捉到了','太嚇人了','南瓜萬歲','幽靈現身','快給糖果']},
+];
+
+const PRESET_CATS_MAP={
+  '新手包':['starter-orange-cat','starter-shiba-pack','starter-parrot-pack','starter-hamster-pack','starter-rabbit-pack','starter-guinea-pig-pack','starter-hedgehog-pack'],
+  '貓咪':['happy-cat','lazy-cat','huihui','cola-cat','tangyuan-cat','kawa-cat','cat-british','cat-ragdoll','cat-mainecoon','cat-siamese','cat-bengal','persian-cat','scottish-fold','black-cat','tuxedo-cat'],
+  '狗狗':['shiba','tianxin','qq-dog','tangtang-dog','corgi','dog-poodle','dog-pomeranian','dog-golden','dog-frenchie','dog-husky','samoyed','labrador','chihuahua','border-collie','beagle'],
+  '小動物':['bunny','hamster','rabbit-extra','goat','monkey','guinea-pig','hedgehog','chinchilla','turtle'],
+  '節日':['cat-xmas','mothers-day','fathers-day','valentines','halloween'],
+  '主題':['shiba-work','dog-meme','puppy-love','cat-wizard','cat-princess'],
+  '其他':['shark','crocodile','parrot','green-snake','green-bird'],
+};
+const PRESET_ALL_CATS=['全部','新手包','貓咪','狗狗','小動物','節日','主題','其他'];
+let currentPresetCat='全部';
+
+function initPresets(){
+  document.getElementById('preset-cat-tabs').innerHTML=PRESET_ALL_CATS.map(c=>{
+    const cnt=c==='全部'?presets.length:(PRESET_CATS_MAP[c]||[]).length;
+    return `<div class="cat-tag${c===currentPresetCat?' active':''}" data-cat="${c}" onclick="filterPresets('${c}')">${c}<span style="font-size:10px;opacity:0.65;margin-left:3px;">${cnt}</span></div>`;
+  }).join('');
+  renderPresetGrid();
+}
+function filterPresets(cat){
+  currentPresetCat=cat;
+  document.querySelectorAll('#preset-cat-tabs .cat-tag').forEach(el=>el.classList.toggle('active',el.dataset.cat===cat));
+  renderPresetGrid();
+}
+function onPresetSearch(){
+  const q=document.getElementById('preset-search')?.value.trim()||'';
+  const clearBtn=document.getElementById('preset-search-clear');
+  if(clearBtn)clearBtn.style.display=q?'inline-block':'none';
+  renderPresetGrid();
+}
+function clearPresetSearch(){
+  const el=document.getElementById('preset-search');if(el)el.value='';
+  const clearBtn=document.getElementById('preset-search-clear');
+  if(clearBtn)clearBtn.style.display='none';
+  renderPresetGrid();
+}
+function renderPresetGrid(){
+  const q=(document.getElementById('preset-search')?.value||'').trim().toLowerCase();
+  const ids=currentPresetCat==='全部'?null:(PRESET_CATS_MAP[currentPresetCat]||[]);
+  let filtered=ids?presets.filter(p=>ids.includes(p.id)):presets;
+  if(q) filtered=filtered.filter(p=>p.name.toLowerCase().includes(q)||(p.petDesc||'').toLowerCase().includes(q));
+  document.getElementById('preset-grid').innerHTML=filtered.length?filtered.map(p=>
+    `<div class="c-item" id="preset-${p.id}" onclick="applyPreset('${p.id}')">
+      <div style="font-size:20px;flex-shrink:0;">${p.icon}</div>
+      <div class="c-body"><div class="c-name">${p.name}</div><div class="c-desc">${p.petDesc?'指定寵物 / ':''}${p.style} / ${p.outfit==='none'?'原樣':'擬人'}</div></div>
+    </div>`
+  ).join(''):`<div style="font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;padding:8px 4px;">沒有符合的套餐</div>`;
+}
+function applyPreset(id) {
+  const p = presets.find(x=>x.id===id); if(!p) return;
+  document.querySelectorAll('#preset-grid .c-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('preset-'+id)?.classList.add('active');
+  if(p.qty) selectQty(p.qty);
+  if(p.petDesc){
+    switchCharTab('text');
+    document.getElementById('char-input').value=p.petDesc;
+  }
+  selectStyle(p.style);
+  selectOutfitMode(p.outfit==='none'?'none':'manual');
+  state.colorSelections=[]; state.customColors=[];
+  document.querySelectorAll('.prop-option').forEach(el=>el.classList.remove('active'));
+  p.colors.forEach(name=>{const i=presetColors.findIndex(c=>c.name===name);if(i>=0)toggleColor(i);});
+  renderColorTags();
+  selectFont(p.font);
+  selectLayout(p.layout);
+  if(p.bg) selectBg(p.bg);
+  selectCat(p.cat);
+  if(!p.petDesc) switchCharTab('img');
+  if(p.scripts?.length){
+    state.scriptSelected=p.scripts.slice(0,state.qty);
+    state.customItems=[];
+    renderSelectedTags();
+    filterScripts();
+    updateCounter();
+  }
+  updateDots();
+  showToast(`✅ 已套用「${p.name}」`);
+}
+
+// ── CHAR ──
+const randDescs = [
+  '橘白貓、圓臉大眼、短毛、胖胖的、額頭有M紋、綠色眼睛',
+  '黑白花貓、長毛、藍眼睛、耳尖有白毛、尾巴蓬鬆',
+  '金色柴犬、三角耳、捲尾、棕色眼睛、嘴角微笑、活潑感',
+  '米白色迷你兔、垂耳兔、粉紅色鼻子、短毛、圓滾滾的身體',
+  '黃金倉鼠、圓臉鼓鼓腮幫、小黑眼睛、米棕毛色、超短四肢',
+  '黑色拉布拉多、大眼睛、長耳朵、亮滑毛、友善笑容',
+  '灰色英國短毛貓、扁臉、銅色眼睛、圓滾滾體型、懶洋洋表情',
+  '白色博美、蓬鬆毛球、黑色小眼睛、尖耳、毛茸茸的大尾巴',
+  '灰灰，灰黑棕虎斑貓，黃綠色圓眼，額頭M字紋，白下巴與白胸口，前腳白襪，粗尾巴有深色環狀虎斑，活潑愛出去玩',
+  '甜心，白色馬爾濟斯，蓬鬆長毛，黑色圓眼與小黑鼻，長耳毛垂落，頭頂綁毛束，戴粉紅黑蝴蝶結，甜美乖巧',
+];
+function randomCharDesc() {
+  document.getElementById('char-input').value = randDescs[Math.floor(Math.random()*randDescs.length)];
+  updateDots();
+}
+function switchCharTab(tab) {
+  state.charTab=tab;
+  document.getElementById('char-img-panel').style.display=tab==='img'?'block':'none';
+  document.getElementById('char-text-panel').style.display=tab==='text'?'block':'none';
+  document.getElementById('tab-img').classList.toggle('active',tab==='img');
+  document.getElementById('tab-text').classList.toggle('active',tab==='text');
+  updateDots();
+}
+
+// ── QTY ──
+function selectQty(n) {
+  [1,4,9,16].forEach(q=>document.getElementById('qty-'+q).classList.toggle('active',q===n));
+  state.qty=n;
+  while(state.scriptSelected.length+state.customItems.length>n){if(state.customItems.length)state.customItems.pop();else state.scriptSelected.pop();}
+  renderSelectedTags(); filterScripts();
+  document.getElementById('total-slots').textContent=n;
+  updateCounter(); updateDots();
+}
+
+// ── STYLE ──
+const styleCats=['可愛Q版','藝術感','個性'];
+const styleList=[
+  {key:'chibi',cat:'可愛Q版',name:'日系Chibi',desc:'Q版大頭小身體，可愛表情'},
+  {key:'popmart',cat:'可愛Q版',name:'PopMart潮玩',desc:'光滑玻璃感，收藏品美學'},
+  {key:'nendo',cat:'可愛Q版',name:'黏土娃娃',desc:'黏土質感，超Q圓潤'},
+  {key:'sticker',cat:'可愛Q版',name:'平面貼紙',desc:'2D剪影，白邊貼紙感'},
+  {key:'plush',cat:'可愛Q版',name:'毛絨玩具',desc:'布偶質感，毛茸茸可愛'},
+  {key:'watercolor',cat:'藝術感',name:'水彩插畫',desc:'柔和水彩，手繪感'},
+  {key:'ghibli',cat:'藝術感',name:'吉卜力',desc:'溫暖手繪動畫感'},
+  {key:'dreamy',cat:'藝術感',name:'夢幻療癒',desc:'柔焦粉彩，夢幻感'},
+  {key:'inkwash',cat:'藝術感',name:'水墨插畫',desc:'墨色渲染，東方美學'},
+  {key:'comic',cat:'個性',name:'復古漫畫',desc:'網點紙感，美式漫畫'},
+  {key:'holographic',cat:'個性',name:'全息貼紙',desc:'彩虹金屬，閃閃發光'},
+  {key:'pixel',cat:'個性',name:'像素點陣',desc:'8bit復古電玩風'},
+  {key:'korean',cat:'個性',name:'韓系插畫',desc:'簡潔線條、甜美配色、webtoon 感'},
+  {key:'3d_cartoon',cat:'個性',name:'3D 卡通',desc:'Pixar/Disney 立體感，毛絨光影'},
+];
+const styleData={
+  chibi:'## ART STYLE\nJapanese anime chibi style, head-to-body ratio 4:1, large expressive eyes, clean cel-shading linework\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color. Do NOT humanize the face or body structure.',
+  popmart:'## ART STYLE\nPop Mart art toy style, oversized round head, tiny body, smooth glossy surface\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  nendo:'## ART STYLE\nNendoroid clay figure style, ultra chibi proportions, chunky rounded limbs, matte clay texture\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  sticker:'## ART STYLE\nFlat 2D sticker illustration style, clean white border outline, graphic flat design, sticker sheet aesthetic\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  plush:'## ART STYLE\nPlush stuffed toy style, soft fluffy fabric texture, round proportions, visible seam details, cozy handmade feel\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  watercolor:'## ART STYLE\nWatercolor illustration style, soft paint wash texture, bleeding color edges, loose brushwork, hand-painted feel\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  ghibli:'## ART STYLE\nStudio Ghibli inspired style, warm hand-drawn animation, painterly brushwork, natural color palette\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  dreamy:'## ART STYLE\nDreamy healing illustration style, soft-focus pastel colors, gentle lighting, cotton candy aesthetic\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  inkwash:'## ART STYLE\nChinese ink wash painting style, brushstroke texture, ink gradients, traditional sumi-e aesthetic\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  comic:'## ART STYLE\nVintage comic book style, halftone dot pattern, retro print texture, bold outlines, classic aesthetic\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  holographic:'## ART STYLE\nHolographic sticker style, iridescent laser surface, rainbow shifting reflection, futuristic metallic aesthetic\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  pixel:'## ART STYLE\n8-bit pixel art style, retro video game character, blocky pixel grid, arcade game aesthetic\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  korean:'## ART STYLE\nKorean webtoon illustration style, clean minimal line art, sweet pastel color palette, soft shading, delicate facial expressions, k-style cute aesthetic\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  '3d_cartoon':'## ART STYLE\nPixar / Disney 3D cartoon style, smooth subsurface skin/fur shading, soft rim lighting, expressive large eyes, clean volumetric rendering, family-friendly animation quality\nPET ADAPTATION: Preserve ALL original animal features — ear shape, tail, paw texture, fur color and pattern, eye color.',
+  ai:'## ART STYLE\nAI freely selects the most suitable visual rendering style for this pet — choose based on the pet species, personality, and sticker theme.',
+};
+
+let currentStyleCat=styleCats[0];
+function initStyleUI() {
+  document.getElementById('style-cats').innerHTML=styleCats.map(c=>
+    `<div class="cat-tag${c===currentStyleCat?' active':''}" onclick="filterStyles('${c}')">${c}</div>`
+  ).join('');
+  filterStyles(currentStyleCat);
+}
+function filterStyles(cat) {
+  currentStyleCat=cat;
+  document.querySelectorAll('#style-cats .cat-tag').forEach(el=>el.classList.toggle('active',el.textContent===cat));
+  document.getElementById('style-grid').innerHTML=styleList.filter(s=>s.cat===cat).map(s=>
+    `<div class="c-item${state.styleKey===s.key?' active':''}" id="style-${s.key}" onclick="selectStyle('${s.key}')">
+      <div class="c-check">✓</div>
+      <div class="c-body"><div class="c-name">${s.name}</div><div class="c-desc">${s.desc}</div></div>
+    </div>`
+  ).join('');
+  document.getElementById('style-ai')?.classList.toggle('active',state.styleKey==='ai');
+}
+function selectStyle(key) {
+  state.styleKey=key;
+  document.querySelectorAll('#style-grid .c-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('style-ai')?.classList.toggle('active',key==='ai');
+  document.getElementById('style-'+key)?.classList.add('active');
+  updateDots();
+}
+
+// ── OUTFIT ──
+const outfitCatNames=['甜美可愛','節日慶典','日常休閒','職業角色','奇幻魔法','盛裝禮服'];
+const outfitData={
+  '甜美可愛':[
+    {name:'蕾絲洋裝',p:'frilly lace dress in pastel pink with bow decorations, cute ribbon collar, puffy skirt, matching bow headband'},
+    {name:'草莓蛋糕裝',p:'strawberry cake themed costume, red strawberry motif, cream white ruffle trim, cute berry accessories'},
+    {name:'棉花糖套裝',p:'fluffy cloud-like cotton candy themed outfit, pastel pink and blue puff sleeves, star and heart decorations'},
+    {name:'馬卡龍套裝',p:'French macaron inspired pastel outfit, smooth rounded collar, soft cream and mint tones, sweet patisserie aesthetic'},
+  ],
+  '節日慶典':[
+    {name:'聖誕精靈裝',p:'red and green Christmas elf costume, pointy elf hat with bell, jingle bell collar, cozy festive look'},
+    {name:'南瓜萬聖裝',p:'orange pumpkin Halloween costume, tiny witch hat or bat wings, cute spooky accessories'},
+    {name:'新年紅包裝',p:'Chinese New Year festive red outfit, gold trim, auspicious cloud pattern, lucky red bow collar'},
+    {name:'復活節春裝',p:'Easter spring costume, pastel floral accessories, bunny ear hat, flower wreath decoration'},
+  ],
+  '日常休閒':[
+    {name:'條紋T恤',p:'casual striped t-shirt in red-white or navy, simple relaxed fit, cute everyday comfortable look'},
+    {name:'牛仔吊帶褲',p:'denim overalls with cute pocket details, soft white shirt underneath, casual adorable style'},
+    {name:'雨衣雨靴',p:'adorable yellow raincoat with hood, matching rubber boots, tiny umbrella prop'},
+    {name:'運動套裝',p:'sporty tracksuit in bright colors, small sporty accessories, athletic cute look'},
+  ],
+  '職業角色':[
+    {name:'OL辦公裝',p:'cute office outfit, blazer with bow detail, pencil skirt or trousers, small briefcase prop'},
+    {name:'廚師服',p:'miniature chef white coat, tiny chef hat, cute apron, cooking utensil prop'},
+    {name:'醫生護士',p:'cute medical uniform, tiny stethoscope, white coat, caring professional look'},
+    {name:'郵差送貨',p:'postal worker uniform, small mail bag or parcel, cute delivery theme'},
+  ],
+  '奇幻魔法':[
+    {name:'魔法師袍',p:'tiny wizard robe in deep purple or midnight blue, pointed star-decorated wizard hat, magic wand prop, sparkle effects'},
+    {name:'精靈服裝',p:'forest elf costume with leaf and vine accessories, nature-themed green outfit, fairy wings optional'},
+    {name:'海盜船長',p:'tiny pirate costume, small tricorn hat, striped shirt, mini telescope or treasure chest prop'},
+    {name:'太空人服',p:'miniature astronaut suit, tiny helmet, space-themed accessories, star and planet decorations'},
+  ],
+  '盛裝禮服':[
+    {name:'公主禮服',p:'elaborate princess gown in pastel colors, tiny crown or tiara, sparkle and star decorations, royal elegant look'},
+    {name:'漢服古裝',p:'miniature hanfu traditional Chinese costume, delicate fabric, elegant ancient Chinese styling'},
+    {name:'婚禮花童',p:'flower girl white dress, small flower crown, petal basket prop, celebration wedding theme'},
+    {name:'舞會晚禮服',p:'formal evening gown, glamorous sparkle details, tiny pearl necklace, elegant ballroom look'},
+  ],
+};
+let currentOutfitCat=outfitCatNames[0];
+function renderOutfitCats() {
+  document.getElementById('outfit-cats').innerHTML=outfitCatNames.map(c=>
+    `<div class="cat-tag${c===currentOutfitCat?' active':''}" onclick="filterOutfits('${c}')">${c}</div>`
+  ).join('');
+  const items=outfitData[currentOutfitCat]||[];
+  document.getElementById('outfit-grid').innerHTML=items.map(o=>
+    `<div class="c-item${state.outfitSelected?.name===o.name?' active':''}" onclick='selectOutfitItem(${JSON.stringify(o).replace(/'/g,"&#39;")})'>
+      <div class="c-check">✓</div>
+      <div class="c-body"><div class="c-name">${o.name}</div></div>
+    </div>`
+  ).join('');
+}
+function filterOutfits(cat){currentOutfitCat=cat;renderOutfitCats();}
+function selectOutfitItem(o){state.outfitSelected=o;renderOutfitCats();updateDots();}
+function selectOutfitMode(mode) {
+  ['none','manual'].forEach(m=>document.getElementById('outfit-'+m)?.classList.toggle('active',m===mode));
+  state.outfitMode=mode;
+  document.getElementById('outfit-panel').style.display=mode==='manual'?'block':'none';
+  if(mode==='manual') renderOutfitCats();
+  updateDots();
+}
+
+// ── PROPS ──
+const presetColors=[
+  {name:'玩具老鼠',icon:'🐭'},
+  {name:'毛線球',icon:'🧶'},
+  {name:'逗貓棒',icon:'🪄'},
+  {name:'小魚玩具',icon:'🐟'},
+  {name:'紙箱',icon:'📦'},
+  {name:'貓窩抱枕',icon:'🛏️'},
+  {name:'狗骨頭玩具',icon:'🦴'},
+  {name:'球球',icon:'⚽'},
+  {name:'飛盤',icon:'🥏'},
+  {name:'咬繩',icon:'🪢'},
+  {name:'零食碗',icon:'🥣'},
+  {name:'瓜子零食',icon:'🌻'},
+  {name:'蝴蝶結',icon:'🎀'},
+  {name:'項圈鈴鐺',icon:'🔔'},
+  {name:'寵物衣',icon:'👕'},
+  {name:'小帽子',icon:'🎩'},
+  {name:'雨衣',icon:'☔'},
+  {name:'小皇冠',icon:'👑'},
+  {name:'愛心抱枕',icon:'💗'},
+  {name:'小花圈',icon:'🌸'},
+  {name:'聖誕帽',icon:'🎄'},
+  {name:'禮物盒',icon:'🎁'},
+  {name:'墨鏡',icon:'🕶️'},
+  {name:'金牌項圈',icon:'🏅'},
+  {name:'領帶',icon:'👔'},
+  {name:'小公事包',icon:'💼'},
+  {name:'魔法帽',icon:'🧙'},
+  {name:'星星法杖',icon:'⭐'},
+  {name:'毛毯',icon:'🧺'},
+  {name:'小碗',icon:'🫙'},
+];
+function initColorSwatches() {
+  document.getElementById('color-swatches').innerHTML=presetColors.map((col,i)=>
+    `<div class="prop-option" id="swatch-${i}" onclick="toggleColor(${i})"><span class="prop-icon">${col.icon}</span><span class="prop-name">${col.name}</span></div>`
+  ).join('');
+}
+function clearColors(){state.colorSelections=[];state.customColors=[];document.getElementById('custom-color-input').value='';document.querySelectorAll('.prop-option').forEach(el=>el.classList.remove('active'));renderColorTags();}
+function randomColors(){
+  clearColors();
+  const num=Math.floor(Math.random()*2)+2;
+  const picked=new Set();while(picked.size<num)picked.add(Math.floor(Math.random()*presetColors.length));
+  picked.forEach(i=>toggleColor(i));
+}
+function toggleColor(i){
+  const c=presetColors[i];
+  const idx=state.colorSelections.findIndex(s=>s.name===c.name);
+  if(idx>=0){state.colorSelections.splice(idx,1);document.getElementById('swatch-'+i).classList.remove('active');}
+  else{state.colorSelections.push(c);document.getElementById('swatch-'+i).classList.add('active');}
+  renderColorTags();
+}
+function addCustomColors(){
+  const input = document.getElementById('custom-color-input');
+  const values = input.value.split(/[，,]+/).map(v=>v.trim()).filter(Boolean);
+  values.forEach((value)=>{
+    if(!state.customColors.includes(value) && !state.colorSelections.some(c=>c.name===value)){
+      state.customColors.push(value);
+    }
+  });
+  input.value='';
+  renderColorTags();
+  updateDots();
+}
+function removeColor(i){const name=state.colorSelections[i].name;const pi=presetColors.findIndex(c=>c.name===name);if(pi>=0)document.getElementById('swatch-'+pi).classList.remove('active');state.colorSelections.splice(i,1);renderColorTags();}
+function removeCustomColor(i){state.customColors.splice(i,1);renderColorTags();}
+function renderColorTags(){
+  document.getElementById('color-tags').innerHTML=[
+    ...state.colorSelections.map((clr,i)=>
+      `<div class="color-tag">${clr.icon} ${clr.name} <span class="rm" onclick="removeColor(${i})">✕</span></div>`
+    ),
+    ...state.customColors.map((name,i)=>
+      `<div class="color-tag">✏️ ${escHtml(name)} <span class="rm" onclick="removeCustomColor(${i})">✕</span></div>`
+    )
+  ].join('');
+  document.getElementById('custom-color-tags').innerHTML='';
+  document.getElementById('color-ai-hint').style.display=(state.colorSelections.length>0 || state.customColors.length>0)?'none':'block';
+}
+
+// ── FONT ──
+const fontCats=['可愛系','夢幻系','毛筆系','海報迷因系'];
+const fontList=[
+  {n:'泡泡字',c:'可愛系',p:'3D inflated glossy bubble font, rounded puffy letters, glossy highlight sheen, pastel colors, bold and bouncy'},
+  {n:'糖果彩虹',c:'可愛系',p:'candy rainbow gradient font, smooth gradient fill hot pink to yellow to sky blue, thick white outline, rounded bubbly letterforms'},
+  {n:'奶油蛋糕',c:'可愛系',p:'cream frosting piping font, white whipped cream texture on letters, soft pastel pink, sweet bakery style'},
+  {n:'棉花糖',c:'可愛系',p:'cotton candy soft font, fluffy cloud-like letter forms, pastel pink and blue, dreamy soft texture'},
+  {n:'可愛手寫',c:'可愛系',p:'cute casual handwritten font, irregular bouncy letters, bright pink or purple, small hearts and stars decoration'},
+  {n:'糖霜餅乾',c:'可愛系',p:'royal icing cookie decoration font, piped sugar icing texture, pastel frosting colors, soft white outline'},
+  {n:'水彩暈染',c:'夢幻系',p:'watercolor wash font, soft bleeding watercolor texture, pastel rainbow color mix, gentle artistic feel'},
+  {n:'仙女粉塵',c:'夢幻系',p:'fairy dust magical font, sparkling glitter particles around letters, pastel pink and purple, enchanted soft glow'},
+  {n:'夢幻星空',c:'夢幻系',p:'dreamy starry font, deep purple letters with stars and glitter fill, soft shimmer, magical night sky feel'},
+  {n:'水墨毛筆',c:'毛筆系',p:'Chinese ink brush calligraphy font, flowing wet brushstroke texture, traditional sumi ink style'},
+  {n:'TOP海報體',c:'海報迷因系',p:'bold dramatic movie poster typography, massive weight black font, high contrast cinematic layout'},
+  {n:'正黑體',c:'海報迷因系',p:'clean bold black gothic font, Traditional Chinese sans-serif, strong uniform stroke weight, highly legible'},
+  {n:'迷因體',c:'海報迷因系',p:'internet meme bold font, thick black outline on white fill, maximum impact style, high contrast readable'},
+  {n:'表情包衝擊',c:'海報迷因系',p:'Chinese meme expression pack font, oversized dramatic characters, bold declaration style, viral social content'},
+];
+const fontData={ai:'## FONT STYLE\nAI freely selects the most suitable font style for this sticker set based on overall aesthetic and theme'};
+fontList.forEach(f=>{fontData[f.n]=`## FONT STYLE — ${f.n}\n${f.p}`;});
+
+function initFontUI() {
+  let currentFontCat=fontCats[0];
+  const renderFC=()=>{
+    document.getElementById('font-cats').innerHTML=fontCats.map(c=>
+      `<div class="cat-tag${c===currentFontCat?' active':''}" onclick="filterFonts('${c}')">${c}</div>`
+    ).join('');
+    document.getElementById('font-grid').innerHTML=fontList.filter(f=>f.c===currentFontCat).map(f=>
+      `<div class="c-item${state.fontStyle===f.n?' active':''}" id="font-${f.n}" onclick="selectFont('${f.n}')">
+        <div class="c-check">✓</div>
+        <div class="c-body"><div class="c-name">${f.n}</div></div>
+      </div>`
+    ).join('');
+    document.getElementById('font-ai')?.classList.toggle('active',state.fontStyle==='ai');
+  };
+  window.filterFonts=(cat)=>{currentFontCat=cat;renderFC();};
+  renderFC();
+}
+function selectFont(key) {
+  state.fontStyle=key;
+  document.querySelectorAll('#font-grid .c-item').forEach(el=>el.classList.remove('active'));
+  document.getElementById('font-ai')?.classList.toggle('active',key==='ai');
+  document.getElementById('font-'+key)?.classList.add('active');
+  updateDots();
+}
+
+// ── LAYOUT ──
+const layoutData={
+  random:`## COMPOSITION\nAI freely decides the layout for each panel — vary composition, camera angle, and text placement dynamically across all panels`,
+  A:`## COMPOSITION — Layout A\nText occupies left 40% of panel, pet character anchored to right side. Clear left-right separation.`,
+  B:`## COMPOSITION — Layout B\nText placed in upper area of panel, pet character fills lower portion. Clear top-bottom separation.`,
+  C:`## COMPOSITION — Layout C\nLarge text is dominant center element, pet character tucked into lower corner as accent.`,
+  D:`## COMPOSITION — Layout D\nPet character anchored to left side, text placed on right side. Mirror of Layout A.`,
+  E:`## COMPOSITION — Layout E\nPet character fills upper area of panel, text placed below. Mirror of Layout B.`,
+  F:`## COMPOSITION — Layout F\nPet fills entire panel frame, text overlaid on top with strong contrast styling. Text must be clearly readable.`,
+};
+function selectLayout(key) {
+  state.layoutStyle=key;
+  ['random','A','B','C','D','E','F'].forEach(k=>document.getElementById('layout-'+k)?.classList.toggle('active',k===key));
+  updateDots();
+}
+
+// ── BG ──
+const bgData={
+  white:`## BACKGROUND\nClean pure white background for all panels. NO gradient, NO pattern, NO scene elements. White only — standard LINE sticker ready format.`,
+  ai:`## BACKGROUND\nAI generates a simple contextual background matching each panel's mood and theme. Keep backgrounds simple and uncluttered — pet character must remain the dominant element.`,
+};
+function selectBg(key) {
+  state.bgStyle=key;
+  ['white','ai'].forEach(k=>document.getElementById('bg-'+k)?.classList.toggle('active',k===key));
+  updateDots();
+}
+
+// ── SCRIPT ──
+const scriptData={
+  '熱門常用':['辛苦了','收到','沒問題','交給我','拜託啦','謝謝你','太棒了','讚啦','好累喔','晚安','早安','加油','了解','等一下','馬上來','抱歉啦','可以喔','不可以','想你了','愛你喔'],
+  '日常萌態':['歡迎回來','抱抱我','摸摸我','好無聊','陪我玩','我在這裡','午睡中','伸個懶腰','滾來滾去','我最可愛','出去玩嗎','看什麼看','蹭蹭','討摸中','毛球警戒','我準備好了'],
+  '撒嬌賣萌':['喜歡你','抱緊緊','不要走','在一起','你最好了','寵我啦','再抱一下','我好乖','誇我誇我','給我零食','求抱抱','比心','親親','蹭一下','偷偷喜歡','你是我的'],
+  '吃吃喝喝':['好餓喔','這是我的','零食時間','開飯啦','好好吃','我要吃','分我一點','偷吃中','嗯嗯好吃','零食控','不給不行','摸摸肚子','飯飯呢','餓到虛脫','好飽喔','再來一口'],
+  '慵懶放空':['好睏喔','睡覺中','發呆中','別打擾我','躺平了','今天不動','懶得動','休眠模式','zzz','夢裡見','不想起床','休息一下','眼皮好重','打盹ing','放空放空','世界再見'],
+  '誇張反應':['傻眼了','怎麼回事','我不信','蛤？','超崩潰','石化了','不可能','嚇到我了','哇靠','震驚臉','這什麼啦','我要暴走','我裂開了','你說啥','夭壽喔','根本扯'],
+  '上班崩潰':['不想動','幫幫我','救命啊','撐不住了','累到冒煙','想放棄','太難了','我不行了','倒下了','我廢了','快休息','不想面對','今天算了','明天再說','躺平就行','放棄了'],
+  '節日祝福':['新年快樂','聖誕快樂','生日快樂','恭喜發財','中秋快樂','萬事如意','平安喜樂','加油加油','你最棒','我愛你','感謝有你','一起加油','比讚','撒花','拍拍手','好棒棒'],
+  '奇幻冒險':['出發吧','我來了','勇往直前','不怕不怕','闖關中','冒險去','厲害吧','打倒你','我是英雄','守護你','魔法發動','召喚完成','閃閃發光','升級了','我最強','無敵模式'],
+  '天氣心情':['今天好天氣','下雨了','好冷喔','好熱啊','散步嗎','外面好玩','留在家裡','避雨中','曬太陽','玩水了','踩水坑','秋天涼涼','冬天到了','春天來了','下雪了','彩虹出現'],
+  '純表情無字':['開心大笑','哭哭臉','傻眼石化','比愛心','撒嬌眼','憤怒爆炸','睡到流口水','超級得意','歡呼雙手舉','翻白眼','眼神死','發光閃閃','撲過來','原地轉圈','打個哈欠','嗚嗚嗚'],
+  '問候回覆':['早上好呀','午安安','晚上好','我回來了','你在嗎','我看到囉','等你回我','先這樣喔','晚點聊','明天見'],
+  '打招呼日常':['嗨嗨早安','中午好呀','晚上見囉','我先出門','你到家了嗎','路上小心','我回來了','晚點聊喔','明天見啦','先去忙','有空聊','我在這裡','等你一下','今天也加油','收到訊息','平安到家'],
+  '感謝道歉':['真的感謝','感恩的心','謝謝照顧','欠你一次','不好意思','我錯了嘛','原諒我啦','抱歉抱歉','下次請你','心意收到'],
+  '鼓勵打氣':['穩住穩住','你可以的','別怕有我','再撐一下','一起衝啊','今天很棒','慢慢來喔','給你力量','滿血復活','成功在望'],
+  '等待催促':['快回我啦','人呢人呢','我等到花開','先不要跑','趕快出現','可以出發嗎','進度如何','再等三分鐘','提醒一下','該你囉'],
+  '工作學校':['開會中','趕工中','讀書去','交作業啦','老闆來了','下課啦','下班倒數','報告完成','今日任務','請支援我'],
+  '職場日常':['開會中勿擾','資料收到','我確認一下','稍後回覆','請再等等','進度更新','已完成囉','麻煩你了','辛苦大家','先休息一下','今天先這樣','明天繼續','正在趕工','老闆來了','下班倒數','任務完成'],
+  '家人日常':['爸媽早安','吃飯了嗎','我到家了','路上小心','記得休息','多喝水喔','晚點回家','我先出門','幫我一下','辛苦你了','今天很棒','不要太累','一起吃飯','我想你了','愛你喔','平安就好'],
+  '餐飲點心':['咖啡救我','甜點時間','宵夜走嗎','我想喝飲料','加飯謝謝','先吃再說','今天吃什麼','點心補給','肚子咕嚕','飲料已到'],
+  '生活瑣事':['出門囉','到家了','洗澡去','掃除中','買到了','忘記了','我找找看','先收拾','路上小心','安全抵達'],
+  '崩潰迷因':['腦袋空白','心累累','我投降','先不要問','笑不出來','這合理嗎','我需要冷靜','直接躺平','崩潰邊緣','靈魂出走'],
+  '陪伴戀愛':['陪你一下','想抱抱你','今天也喜歡','留給你','我在你旁邊','只想黏你','給你小花','心動一下','你最重要','牽手手'],
+  '寵物視角':['主人去哪','快摸我頭','尾巴搖搖','我很乖吧','不是我做的','我只是路過','零食藏哪','床是我的','門開一下','我守著你'],
+  '商務回覆':['已收到資料','我確認一下','稍後回覆您','這邊可以','請再提供','已安排好了','會再追蹤','麻煩您了','進度更新','已完成囉'],
+  '客服禮貌':['您好您好','請稍等喔','為您確認','謝謝耐心','造成不便','已幫您處理','歡迎再詢問','這邊協助','沒問題的','祝您順心'],
+  '社群互動':['已按讚','我來留言','分享給你','追起來啦','太有梗了','這篇收藏','轉發支援','留言區見','我笑出來','熱度上升'],
+  '旅行出門':['行李好了','準備登機','出發旅行','到站囉','迷路中','拍照打卡','風景好美','買伴手禮','旅途愉快','回家路上'],
+  '購物花錢':['加入購物車','買它買它','先比價','這個可以','荷包哭哭','已下單了','等待到貨','開箱時間','折扣快衝','理性消費'],
+  '運動健康':['動起來啦','伸展一下','今天有練','補充水分','散步去囉','跑不動了','健康第一','深呼吸喔','恢復體力','再多一步'],
+  '生病關心':['多喝水喔','好好休息','快點康復','量體溫了','記得吃藥','不要逞強','我會擔心','抱抱安慰','睡一覺吧','保重身體'],
+  '家人朋友':['我到家了','家人最棒','朋友萬歲','一起吃飯','等你回家','電話聯絡','聚一下嗎','謝謝陪伴','我很珍惜','改天見面'],
+  '派對慶祝':['乾杯啦','開趴囉','今天主角','掌聲鼓勵','氣氛到了','嗨起來啦','慶祝一下','蛋糕來了','禮物時間','完美收場'],
+  '遊戲動漫':['開局啦','我補血','技能冷卻','任務完成','抽卡時間','歐氣爆發','差點翻車','隊友救我','再打一場','勝利到手'],
+  '金錢理財':['月底了啦','省錢模式','記帳一下','預算不足','先不要買','投資有風險','獎金快來','存錢中','發薪日到','錢包守護'],
+  '交通通勤':['等公車中','塞車了啦','捷運上了','快到站了','通勤路上','我快到了','停車好難','改搭計程車','慢慢開喔','安全第一'],
+  '睡眠休息':['先睡一下','補眠時間','睡飽再說','被窩封印','晚點醒來','休息充電','不要吵我','夢裡集合','睡到自然醒','精神回來'],
+  '家務整理':['洗衣服去','倒垃圾囉','地板亮亮','碗盤洗好','整理房間','收納完成','大掃除中','先擦一下','家裡香香','任務家務'],
+  '拍照打卡':['鏡頭看這','笑一個啦','拍到了嗎','這張可以','再來一張','光線剛好','角度完美','修圖一下','我要發文','留下紀念'],
+  '可愛撒野':['我要搗蛋','抱我起來','不准忽略','給我注意','我超黏人','撒嬌攻擊','可愛無罪','鬧一下嘛','陪我一下','我最大隻'],
+  '冷笑吐槽':['你認真的嗎','我先笑了','這很可以','懂的都懂','好喔好喔','有點東西','先不要鬧','太會了吧','我看不懂','這波很妙'],
+  '驚喜讚嘆':['哇太強了','好驚喜喔','真的假的','太神啦','我服了','超出預期','眼睛一亮','太夢幻了','心花怒放','掌聲響起'],
+  '決定選擇':['就這樣吧','我選這個','先不要改','可以決定','聽你的啦','我都可以','再想一下','二選一啦','拍板定案','就它了'],
+  '安慰療癒':['沒事的喔','慢慢來吧','你已經很好','我陪著你','辛苦你了','先抱一下','不要自責','會好起來','給你溫暖','安心休息'],
+  '道具動作':['舉牌中','拿花花','揮手手','比讚讚','轉圈圈','躲起來','探頭看','趴地板','跳起來','送愛心'],
+  '進度狀態':['處理中','準備中','載入中','排隊中','已送出','已讀取','已更新','待確認','進行中','完成啦'],
+  '台灣用語':['蝦毀啦','有夠可愛','根本傻眼','我哭','揪咪','你這傢伙','哎唷喂呀','真ㄉ假ㄉ','哪有這麼好康','你確定','太殺了啦','靠北喔','幫幫我啦','先這樣囉','沒問題ㄅ','笑到噴出來'],
+  '英語貼圖':['for me','no thanks',"I'm tired","let's go",'same','oof','mood','yes please','nope','brb','omg','ok ok','cute','on my way','good vibes','love this'],
+  '下班解壓':['終於下班','解脫了','任務完成','下班快跑','約飯嗎','今天喝一杯','好好休息','週末快來','我要放假','躺平模式','刷劇去囉','先吃再說','今天很累','慢慢來','療癒時間','重新充電'],
+  '聊天常用':['在嗎在嗎','我找你','怎麼了','說說看','嗯嗯知道了','哈哈哈','沒事啦','你呢','有趣耶','好耶好耶','這樣啊','繼續說','我懂我懂','跟我說','慢慢說','好喔等你'],
+  '考試讀書':['加油衝啊','讀書中','考試加油','撐住啊','快撐過去','考完再說','你一定行','腦子不夠用','全力以赴','最後衝刺','考好就好','好好休息','成功在望','加把勁','讀爆它','拼了'],
+  '寵物日記':['今天也乖','吃飽睡好','玩得很開心','沐浴芳香','健檢OK','打疫苗了','剪指甲完成','今天散步','零食夠了嗎','毛孩日記','乖乖的喔','長大了耶','好可愛喔','你最棒','摸頭頭','謝謝陪伴'],
+  '友情萬歲':['好朋友萬歲','謝謝有你','一起加油','永遠好朋友','你最好了','記得我喔','我在想你','相約出去玩','好久不見','下次見面','感謝陪伴','珍惜你','我的好朋友','支持你','有你真好','一起哈哈'],
+  '春節祝賀':['恭喜發財','新年快樂','紅包拿來','年年有餘','一年更好','春節快樂','開工大吉','走春去囉','大吉大利','心想事成','萬事如意','身體健康','招財進寶','萬事順利','過年囉','新年新氣象'],
+  '早晚問候':['早安抱抱','今天順利','午安補給','記得吃飯','晚安好夢','睡前抱抱','明天見喔','醒了嗎','今天也在','慢慢起床','工作順利','路上平安','回家報平安','早點休息','夢裡見囉','明天加油'],
+  '已讀回覆':['收到收到','我看到了','正在看喔','晚點回你','先記下來','了解安排','可以執行','我再確認','這樣可以','先照這樣','有空再聊','我懂你的意思','不用擔心','交給我吧','等等我喔','回覆完成'],
+  '情侶放閃':['想你一下','抱抱充電','今天也愛你','你最可愛','只給你看','牽手回家','貼貼一下','等你下班','我在等你','心被你偷走','一起吃飯嗎','親親一下','不准太累','你是第一名','我的小太陽','陪你到睡著'],
+  '飼主語錄':['鏟屎官到','主子請用','罐罐開了','散步出發','洗澡不要跑','剪指甲時間','乖乖吃藥','不要拆家','回籠睡覺','今天很乖','你又闖禍','先擦腳腳','毛好多啊','來拍照囉','坐下等等','零食獎勵'],
+  '貓咪專用':['喵一下','奴才呢','罐罐拿來','不給摸','我在高處','紙箱是我的','尾巴不爽','呼嚕呼嚕','踩踩棉被','貓拳警告','窗邊巡邏','今天不理你','摸頭可以','肚肚不行','我只是路過','喵到你心裡'],
+  '狗狗專用':['汪汪報到','散步散步','球球在哪','尾巴搖爆','主人回來了','我最乖','給我摸摸','門口等你','一起出去玩','骨頭時間','坐下握手','不要出門嗎','狗狗守護中','開心飛撲','我聞一下','汪到你笑'],
+  '兔鳥鼠龜':['咕嚕咕嚕','啾啾早安','蹦蹦跳跳','慢慢前進','小口啃啃','窩裡休息','翅膀拍拍','殼裡躲躲','小爪揮揮','耳朵豎起','安靜陪伴','小小冒險','給我青菜','種子時間','曬太陽囉','今天也乖'],
+  '急用短句':['OK','NO','YES','GO','等等','快點','不要','可以','救我','已到','在路上','晚點','先忙','收到','抱歉','謝啦'],
+  '貼圖標語':['超可愛','今日份療癒','小小幸福','萌力發射','快樂補給','可愛無敵','陪伴滿分','心情加分','生活有你','暖暖的','被萌到了','笑一個','開心收下','療癒抵達','好運來了','可愛營業中'],
+  '平台客服':['已為您查詢','這邊幫您看','請稍等一下','資料已收到','已轉交處理','會再通知您','目前處理中','已完成設定','請放心交給我','謝謝您的等待','需要再協助嗎','這邊確認完成','請補充資訊','已安排後續','祝您順心','歡迎再聯繫'],
+  '直播互動':['開播囉','歡迎進來','感謝追蹤','謝謝斗內','留言刷起來','一起嗨起來','今天好熱鬧','截圖成功','先別走嘛','抽獎開始','恭喜中獎','再陪我一下','聊天室集合','按讚分享','下次見囉','收播晚安'],
+  '社團公告':['公告一下','請大家注意','活動開始','報名截止','名單確認','集合時間','地點更新','記得簽到','資料補交','投票開始','結果公布','請勿洗版','歡迎新人','規則提醒','感謝配合','下次活動見'],
+  '買賣交易':['可以面交','已匯款囉','包裝完成','寄出通知','收到商品','請保留一下','可議價嗎','已售出囉','排隊候補','尺寸確認','付款完成','物流查詢','開箱平安','交易愉快','謝謝購買','下次再來'],
+  '醫療照護':['記得吃藥','回診時間','多休息喔','別太勉強','今天好點嗎','我陪你去','量血壓囉','喝點溫水','慢慢恢復','不要熬夜','照護中','已預約好','安心治療','辛苦你了','抱抱打氣','祝早日康復'],
+  '毛孩照護':['餵飯時間','換水完成','清貓砂囉','散步回來','洗澡完成','吹毛中','吃藥成功','看醫生去','指甲剪好','梳毛完成','便便正常','精神很好','今天乖乖','牽繩準備','外出籠好了','照護紀錄'],
+  '節氣季節':['春暖花開','梅雨來了','端午安康','夏天到啦','中秋團圓','秋天微涼','冬天保暖','跨年倒數','開學加油','畢業快樂','母親節快樂','父親節快樂','情人節快樂','萬聖節來了','聖誕倒數','新年新希望'],
+  '台語口吻':['哩賀哩賀','甘有影','足歹勢','袂歹啦','揪感心','緊來喔','免驚啦','水喔','拍謝拍謝','金古錐','食飽未','愛睏啦','歡喜就好','毋免客氣','有夠讚','平安順事'],
+  '日本語貼圖':['おはよう','ありがとう','了解です','おつかれ','かわいい','ごめんね','またね','大丈夫','すごい','おやすみ','いってきます','ただいま','がんばって','よろしく','うれしい','また明日'],
+  '韓語貼圖':['안녕','고마워','미안해','괜찮아','좋아','귀여워','화이팅','잘자','수고했어','잠깐만','알겠어','보고싶어','사랑해','대박','맛있다','또 봐'],
+  '灰灰日常':['灰灰報到','我回來啦','今天也巡邏','窗邊待命中','紙箱是我的','先摸頭再說','尾巴搖一下','我只是路過','灰灰看著你','不要忽略我','陽台集合','地板躺平中','沙發佔領','今天很帥吧','灰灰在這裡','晚安守門員'],
+  '灰灰出門':['我要出去玩','門開一下','散步巡邏去','外面有情況','窗外偵查中','灰灰帶路','出門前確認','回家報平安','草地聞一下','巷口巡邏','太陽好舒服','風來了耶','準備探險','別忘了帶我','我先探路','回來吃飯'],
+  '灰灰吃飯':['飯飯準備好沒','給我罐罐','零食在哪裡','開飯啦喵','我有乖乖等','再一口就好','碗空了耶','不要假裝沒看見','吃飽巡邏','魚魚可以嗎','先吃再說','肚子咕嚕','罐罐開起來','灰灰補給中','這口是我的','吃完再摸'],
+  '灰灰撒嬌':['摸頭服務','抱一下可以','陪我一下嘛','灰灰想你','蹭蹭報到','呼嚕開啟','我最乖吧','靠近一點','給我注意','今天要疼我','灰灰黏上來','不准走開','摸下巴啦','我在你旁邊','撒嬌攻擊','你最好了'],
+  '灰灰吐槽':['你認真的喵','我看不懂','先不要鬧','灰灰傻眼','這合理嗎','蛤又來','我先躲一下','不要牽拖我','不是我弄的','你自己想想','灰灰不背鍋','眼神死中','算了我睡覺','這很人類','我只是貓','喵到無言'],
+  '灰灰工作':['灰灰監工中','會議陪坐','資料收到喵','交給灰灰','我確認一下','進度盯著你','不要偷懶','休息五分鐘','灰灰上線','任務完成喵','加油我看著','先喝水啦','正在處理中','下班叫我','灰灰批准','今天可以了'],
+  '灰灰安慰':['沒事我在','灰灰陪你','慢慢來喵','先抱一下','你已經很好','不要太累','休息一下吧','灰灰守著你','難過給我抱','一起撐過去','明天會好','先睡一覺','我聽你說','給你呼嚕','安心一點','灰灰給力量'],
+  '灰灰節日':['灰灰祝福到','新年有罐罐','紅包分我嗎','生日快樂喵','聖誕巡邏','中秋吃飽飽','今天要慶祝','灰灰撒花','好運尾巴搖','平安順利喵','節日也要摸','大家都可愛','灰灰拜年','開工有精神','願望實現喵','一起過節'],
+  '灰灰短句':['收到喵','好喔喵','不要喵','可以喵','等一下喵','馬上來喵','灰灰知道','我在','先不要','交給我','快一點','晚點說','沒問題喵','謝謝喵','抱歉喵','晚安喵'],
+};
+const noTextCats=['純表情無字'];
+// "純表情無字" intentionally appears in both 情緒表達 and 純圖無字:
+// one path keeps it discoverable with reactions, the other is a dedicated no-text shortcut.
+const scriptGroups=[
+  {name:'熱門文字',cats:['熱門常用']},
+  {name:'日常互動',cats:['日常萌態','撒嬌賣萌','吃吃喝喝']},
+  {name:'情緒表達',cats:['誇張反應','慵懶放空','純表情無字']},
+  {name:'新增常用',cats:['問候回覆','打招呼日常','感謝道歉','鼓勵打氣','等待催促']},
+  {name:'新增生活',cats:['工作學校','職場日常','家人日常','餐飲點心','生活瑣事']},
+  {name:'實用回覆',cats:['商務回覆','客服禮貌','社群互動','決定選擇','進度狀態']},
+  {name:'生活場景',cats:['旅行出門','購物花錢','運動健康','交通通勤','家務整理','拍照打卡']},
+  {name:'關係關心',cats:['生病關心','家人朋友','安慰療癒']},
+  {name:'娛樂迷因',cats:['派對慶祝','遊戲動漫','金錢理財','可愛撒野','冷笑吐槽','驚喜讚嘆','道具動作']},
+  {name:'節日活動',cats:['節日祝福','奇幻冒險']},
+  {name:'生活天氣',cats:['天氣心情','上班崩潰']},
+  {name:'純圖無字',cats:['純表情無字']},
+  {name:'多語貼圖',cats:['台灣用語','英語貼圖']},
+  {name:'寵物主題',cats:['寵物日記','寵物視角']},
+  {name:'朋友聊天',cats:['友情萬歲','聊天常用','家人朋友']},
+  {name:'下班放鬆',cats:['下班解壓','睡眠休息','崩潰迷因']},
+  {name:'學習加油',cats:['考試讀書','鼓勵打氣']},
+  {name:'節日特輯',cats:['春節祝賀','節日祝福','奇幻冒險']},
+  {name:'v1.31 新增',cats:['早晚問候','已讀回覆','情侶放閃','飼主語錄','貓咪專用','狗狗專用','兔鳥鼠龜','急用短句','貼圖標語']},
+  {name:'寵物物種',cats:['貓咪專用','狗狗專用','兔鳥鼠龜','寵物日記','寵物視角']},
+  {name:'短句快用',cats:['急用短句','已讀回覆','熱門常用','貼圖標語']},
+  {name:'v1.32 新增',cats:['平台客服','直播互動','社團公告','買賣交易','醫療照護','毛孩照護','節氣季節','台語口吻','日本語貼圖','韓語貼圖']},
+  {name:'營運商用',cats:['平台客服','社團公告','買賣交易','商務回覆','客服禮貌']},
+  {name:'多語擴充',cats:['英語貼圖','日本語貼圖','韓語貼圖','台語口吻','台灣用語']},
+  {name:'照護關心',cats:['醫療照護','毛孩照護','生病關心','安慰療癒']},
+  {name:'灰灰專屬',cats:['灰灰日常','灰灰出門','灰灰吃飯','灰灰撒嬌','灰灰吐槽','灰灰工作','灰灰安慰','灰灰節日','灰灰短句']},
+  {name:'灰灰生活應用',cats:['灰灰日常','灰灰出門','灰灰吃飯','灰灰工作','灰灰短句']},
+  {name:'灰灰情緒陪伴',cats:['灰灰撒嬌','灰灰吐槽','灰灰安慰','灰灰節日']},
+];
+let currentScriptGroup=scriptGroups[0].name, currentScriptScope='cat';
+
+function escHtml(v){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
+function jsArg(v){return JSON.stringify(v).replace(/</g,'\\u003c');}
+function getScriptGroup(name=currentScriptGroup){return scriptGroups.find(g=>g.name===name)||scriptGroups[0];}
+function getVisibleScriptItems(){
+  const q=(document.getElementById('script-search')?.value||'').trim().toLowerCase();
+  if(q) return [...new Set(Object.values(scriptData).flat())].filter(t=>t.toLowerCase().includes(q));
+  if(currentScriptScope==='all') return [...new Set(Object.values(scriptData).flat())];
+  const g=getScriptGroup();
+  if(currentScriptScope==='group') return [...new Set(g.cats.flatMap(c=>scriptData[c]||[]))];
+  return [...new Set(scriptData[state.currentCat]||[])];
+}
+function isNoTextScript(t){return noTextCats.some(c=>scriptData[c]?.includes(t));}
+
+function onScriptSearch(){
+  const q=document.getElementById('script-search')?.value.trim()||'';
+  const clearBtn=document.getElementById('script-search-clear');
+  if(clearBtn)clearBtn.style.display=q?'inline-block':'none';
+  filterScripts();
+}
+function clearScriptSearch(){
+  const el=document.getElementById('script-search');if(el)el.value='';
+  const clearBtn=document.getElementById('script-search-clear');
+  if(clearBtn)clearBtn.style.display='none';
+  filterScripts();
+}
+
+function renderScriptCats() {
+  const g=getScriptGroup();
+  const allCount=[...new Set(Object.values(scriptData).flat())].length;
+  const gCount=[...new Set(g.cats.flatMap(c=>scriptData[c]||[]))].length;
+  const allBtn=`<div class="cat-tag${currentScriptScope==='all'?' active':''}" onclick="selectAllScripts()">全選 ${allCount}</div>`;
+  const gAllBtn=`<div class="cat-tag${currentScriptScope==='group'?' active':''}" style="font-size:11px;" onclick="selectGroupAll()">全選 ${gCount}</div>`;
+  const gHtml=scriptGroups.map(sg=>`<div class="cat-tag${currentScriptScope!=='all'&&sg.name===currentScriptGroup?' active':''}" onclick='selectScriptGroup(${jsArg(sg.name)})'>${escHtml(sg.name)}</div>`).join('');
+  const cHtml=g.cats.filter(c=>scriptData[c]).map(c=>`<div class="cat-tag${currentScriptScope==='cat'&&c===state.currentCat?' active':''}" style="font-size:11px;" onclick='selectCat(${jsArg(c)})'>${escHtml(c)}</div>`).join('');
+  document.getElementById('script-cats').innerHTML=`
+    <div style="display:flex;flex-wrap:wrap;gap:6px;">${allBtn}${gHtml}</div>
+    <div style="width:100%;border-top:1px solid var(--border);margin:8px 0 0;padding-top:8px;display:flex;flex-wrap:wrap;gap:6px;">${gAllBtn}${cHtml}</div>`;
+}
+function selectAllScripts(){currentScriptScope='all';renderScriptCats();filterScripts();}
+function selectGroupAll(){currentScriptScope='group';renderScriptCats();filterScripts();}
+function selectScriptGroup(name){currentScriptGroup=name;currentScriptScope='cat';const g=getScriptGroup(name);if(!g.cats.includes(state.currentCat))state.currentCat=g.cats[0];renderScriptCats();filterScripts();}
+function selectCat(cat){state.currentCat=cat;currentScriptScope='cat';currentScriptGroup=scriptGroups.find(g=>g.cats.includes(cat))?.name||currentScriptGroup;renderScriptCats();filterScripts();}
+
+function filterScripts(){
+  const items=getVisibleScriptItems();
+  const box=document.getElementById('script-items');
+  if(!box)return;
+  if(!items.length){
+    box.innerHTML='<div class="script-empty">沒有符合條件的腳本，請換個關鍵字或切換分類。</div>';
+    return;
+  }
+  box.innerHTML=items.map(t=>{
+    const silent=isNoTextScript(t);
+    const sel=state.scriptSelected.includes(t)||state.customItems.includes(t);
+    return `<div class="s-item${sel?' active':''}" onclick='toggleScript(${jsArg(t)})'>
+      <div class="s-name">${escHtml(t)}</div>
+      <div class="s-type">${silent?'純表情':'文字'}</div>
+    </div>`;
+  }).join('');
+}
+function toggleScript(t){
+  const idx=state.scriptSelected.indexOf(t);
+  if(idx>=0){state.scriptSelected.splice(idx,1);}
+  else{
+    if(state.scriptSelected.length+state.customItems.length>=state.qty){
+      showScriptLimitMsg(`已達 ${state.qty} 格上限，請先刪除一格再加入新腳本。`);
+      return;
+    }
+    state.scriptSelected.push(t);
+    showScriptLimitMsg('',true);
+  }
+  filterScripts();renderSelectedTags();updateCounter();updateDots();
+}
+function renderSelectedTags(){
+  const all=[...state.scriptSelected,...state.customItems];
+  const ta=document.getElementById('script-edit-area');
+  if(ta) ta.value=all.join('\n');
+  updateCounter();
+}
+function randomCurrentCatScripts(){
+  const items=getVisibleScriptItems();if(!items.length)return;
+  state.scriptSelected=items.slice().sort(()=>Math.random()-0.5).slice(0,state.qty);
+  state.customItems=[];renderSelectedTags();filterScripts();updateCounter();updateDots();
+}
+function randomScript(){randomCurrentCatScripts();}
+function fillScriptSlots(){
+  const current=[...state.scriptSelected,...state.customItems].map(v=>v.trim()).filter(Boolean);
+  const room=state.qty-current.length;
+  if(room<=0){showScriptLimitMsg(`已滿 ${state.qty} 格。`,true);return;}
+  const pool=getVisibleScriptItems().filter(t=>!current.includes(t));
+  const picks=pool.sort(()=>Math.random()-0.5).slice(0,room);
+  state.scriptSelected=[...state.scriptSelected,...picks].slice(0,state.qty);
+  renderSelectedTags();filterScripts();updateCounter();updateDots();
+  showScriptLimitMsg(picks.length?`已補入 ${picks.length} 格，現在 ${state.scriptSelected.length+state.customItems.length} / ${state.qty} 格。`:'目前分類沒有可補入的新腳本。',!!picks.length);
+}
+function shuffleSelectedScripts(){
+  const all=[...state.scriptSelected,...state.customItems];
+  if(all.length<2){showScriptLimitMsg('至少需要 2 格腳本才能重排。');return;}
+  const shuffled=all.slice().sort(()=>Math.random()-0.5);
+  state.scriptSelected=[];
+  state.customItems=shuffled;
+  renderSelectedTags();filterScripts();updateCounter();updateDots();
+  showScriptLimitMsg('已重排目前腳本順序。',true);
+}
+function clearSelectedScripts(){
+  state.scriptSelected=[];
+  state.customItems=[];
+  renderSelectedTags();filterScripts();updateCounter();updateDots();
+  showScriptLimitMsg('已清空目前腳本。',true);
+}
+function copySelectedScripts(){
+  const all=[...state.scriptSelected,...state.customItems].map(v=>v.trim()).filter(Boolean);
+  if(!all.length){showScriptLimitMsg('目前沒有可複製的腳本。');return;}
+  copyToClipboard(all.join('\n'));
+  showScriptLimitMsg(`已複製 ${all.length} 格腳本。`,true);
+}
+function applyNoTextMode(){
+  const cat=noTextCats[0];
+  const items=[...new Set(scriptData[cat]||[])];
+  if(!items.length)return;
+  currentScriptGroup=scriptGroups.find(g=>g.cats.includes(cat))?.name||currentScriptGroup;
+  currentScriptScope='cat';
+  state.currentCat=cat;
+  state.scriptSelected=items.slice().sort(()=>Math.random()-0.5).slice(0,state.qty);
+  state.customItems=[];
+  renderScriptCats();
+  renderSelectedTags();
+  filterScripts();
+  updateCounter();
+  updateDots();
+  showScriptLimitMsg('已套用純表情無字模式：整包只用寵物表情、姿勢與肢體語言，不生成文字。',true);
+}
+function syncScriptFromTextarea(){
+  const ta=document.getElementById('script-edit-area');if(!ta)return;
+  const lines=ta.value.split('\n').map(l=>l.trim()).filter(l=>l);
+  if(lines.length>state.qty){
+    updateCounter(lines.length);
+    showScriptLimitMsg(`目前 ${lines.length} 格，已超過 ${state.qty} 格上限。請刪減到 ${state.qty} 格以內再組合。`);
+    return;
+  }
+  state.scriptSelected=[];state.customItems=lines;
+  showScriptLimitMsg(lines.length?`目前 ${lines.length} / ${state.qty} 格。`: '',true);
+  filterScripts();updateCounter();updateDots();
+}
+function showScriptLimitMsg(text='',ok=false){
+  const msg=document.getElementById('script-limit-msg');
+  if(!msg)return;
+  msg.textContent=text;
+  msg.classList.toggle('ok',ok);
+}
+function updateCounter(count){
+  const used=typeof count==='number'?count:state.scriptSelected.length+state.customItems.length;
+  document.getElementById('sel-count').textContent=used;
+  document.getElementById('total-slots').textContent=state.qty;
+  document.getElementById('sel-count').style.color=used>state.qty?'#a43d18':'var(--accent)';
+}
+
+// ── DOTS ──
+const dotLabels=['寵物描述','貼圖數量','畫風','服裝','道具','字體','構圖','背景','腳本'];
+function updateDots(){
+  const done=[
+    state.charTab==='img'?true:!!document.getElementById('char-input')?.value.trim(),
+    true,!!state.styleKey,true,true,!!state.fontStyle,!!state.layoutStyle,!!state.bgStyle,
+    (state.scriptSelected.length+state.customItems.length)>0,
+  ];
+  document.getElementById('status-dots').innerHTML=dotLabels.map((l,i)=>
+    `<div class="dot ${done[i]?'done':''}">${done[i]?'✓ ':''}${l}</div>`
+  ).join('');
+}
+
+// ── RANDOMIZE ALL ──
+function randomizeAll(){
+  switchCharTab('text'); randomCharDesc();
+  selectQty([4,9,16][Math.floor(Math.random()*3)]);
+  selectStyle(styleList[Math.floor(Math.random()*styleList.length)].key);
+  selectOutfitMode(['none','manual'][Math.floor(Math.random()*2)]);
+  clearColors();
+  const n=Math.floor(Math.random()*2)+1;
+  const picked=new Set();while(picked.size<n)picked.add(Math.floor(Math.random()*presetColors.length));
+  picked.forEach(i=>toggleColor(i));
+  selectFont([...fontList.map(f=>f.n),'ai'][Math.floor(Math.random()*(fontList.length+1))]);
+  selectLayout(['random','A','B','C','D','E','F'][Math.floor(Math.random()*7)]);
+  selectBg(Math.random()>0.5?'white':'ai');
+  state.scriptSelected=[];state.customItems=[];
+  const rg=scriptGroups[Math.floor(Math.random()*scriptGroups.length)];
+  currentScriptGroup=rg.name;state.currentCat=rg.cats[0];currentScriptScope='group';
+  renderScriptCats();
+  const all=[...new Set(rg.cats.flatMap(c=>scriptData[c]||[]))];
+  state.scriptSelected=all.sort(()=>Math.random()-0.5).slice(0,state.qty);
+  filterScripts();renderSelectedTags();updateCounter();updateDots();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ── COMBINE ──
+const PET_IDENTITY_LOCK_V115=`## PET IDENTITY LOCK — v1.15
+Treat the uploaded pet or written pet description as ONE named individual character, not a generic animal breed.
+Before designing panels, internally lock these identity anchors and keep them unchanged in every panel:
+1. species and body silhouette
+2. head shape, muzzle or beak shape, ear shape, tail shape, paw or claw structure
+3. fur / feather / scale color, exact markings, patches, stripes, spots, gradients, and eye color
+4. recurring collar, bell, ribbon, tag, harness, or other signature accessory if present
+5. age impression, size impression, personality, and cuteness level
+
+If costume, props, pose, text, or style conflicts with identity, preserve the pet identity first and adapt the decoration around it.
+Never turn the pet into a different breed, different color pattern, human-like face, mascot suit, plush replacement, or unrelated cartoon animal.`;
+
+const LINE_OUTPUT_RULES_V115=`## LINE STICKER PRODUCTION RULES — v1.15
+Each panel must read as a finished LINE sticker, not a cropped illustration.
+Keep generous safe margins around every sticker. No ears, tail, paws, text, speech marks, props, or effects may touch the panel edge.
+Use clean readable silhouettes with a clear sticker border or enough contrast against the background.
+All panels must share the same character model, same rendering quality, same outline thickness, and same overall sticker-set style.
+For text panels, preserve the exact script language: Traditional Chinese stays Traditional Chinese, English stays English, and mixed sets may contain both. Place text as a deliberate sticker caption: short, bold, high-contrast, and separated from the pet's face and key body features.
+For no-text panels, do not generate hidden text, pseudo-letters, background signage, decorative glyphs, or accidental Chinese characters.
+Composition priority per panel: pet identity first, emotion second, text readability third, decoration last.`;
+
+const PET_SET_CONSISTENCY_V121=`## SAME-PET SET CONSISTENCY LOCK - v1.21
+Design this as one coherent LINE sticker pack starring the same individual pet in every panel.
+Before drawing, create an internal model sheet anchor and reuse it for every sticker:
+- exact species / breed impression and body silhouette
+- head shape, muzzle or beak shape, ear shape, tail shape, paw / claw / wing structure
+- fur, feather, or scale color and all markings, patches, stripes, spots, gradients, socks, chest color, and face mask
+- eye color, nose color, collar, ribbon, bell, tag, harness, clothing, or signature accessory
+- age impression, size, personality, and the pet's recognizable charm
+
+Every panel may change pose, expression, emotion, prop, and text, but must NOT change the pet's identity anchors.
+If the style is chibi, toy, 3D cartoon, watercolor, webtoon, or pixel art, adapt the style around the real pet identity; never turn the pet into a generic cute animal mascot.`;
+
+const STICKER_EMOTION_MATRIX_V121=`## COMPLETE LINE STICKER EMOTION MATRIX - v1.21
+Treat the selected script list as a balanced sticker pack, not random separate images.
+Distribute the pack across practical chat-use emotions:
+1. greeting / acknowledgement: hi, ok, received, coming, understood
+2. thanks / praise: thank you, great, nice, support, love
+3. apology / refusal: sorry, no, wait, not yet, please forgive me
+4. comfort / encouragement: cheer up, rest, hug, you can do it
+5. cute / begging: please, snack, pet me, hold me, attention
+6. tired / sleepy / lazy: tired, sleep, good night, spacing out
+7. surprise / panic / meme reaction: wow, shocked, crying, frozen, help
+8. pet-only expression: no text panels should rely on face, pose, tail, ears, paws, and body language
+
+For every panel, match the pet's expression and body language to the script meaning. Avoid repeating the same pose or face. The whole set should feel useful in daily LINE chats.`;
+
+const LINE_SAFE_OUTPUT_SPEC_V121=`## LINE STICKER OUTPUT SPEC LOCK - v1.21
+Make every panel suitable for LINE sticker use:
+- clean square sticker panels with generous safe margins
+- transparent-background feeling or clean white background depending on selected background mode
+- pet and text must stay inside the safe area; never crop ears, tail, paws, text, props, or effects
+- leave enough breathing room around the sticker so it remains readable in small chat bubbles
+- text should be short, bold, high contrast, and placed away from the pet's face and identity markings
+- no tiny dense text, no fake glyphs, no signage, no extra captions outside the selected script
+- keep all panels visually consistent as one sticker pack: same outline thickness, same rendering quality, same text style family, same pet model`;
+
+function combineAll(){
+  const ta=document.getElementById('script-edit-area');
+  if(ta&&ta.value.trim()){
+    const lines=ta.value.split('\n').map(l=>l.trim()).filter(l=>l);
+    if(lines.length>state.qty){
+      updateCounter(lines.length);
+      showScriptLimitMsg(`目前 ${lines.length} 格，已超過 ${state.qty} 格上限。請刪減後再組合。`);
+      ta.scrollIntoView({behavior:'smooth',block:'center'});
+      return;
+    }
+    state.scriptSelected=[];state.customItems=lines;
+    showScriptLimitMsg(lines.length?`目前 ${lines.length} / ${state.qty} 格。`: '',true);
+  }
+  const parts=[];
+  const qtyMap={1:'1×1 (1 panel)',4:'2×2 (4 panels)',9:'3×3 (9 panels)',16:'4×4 (16 panels)'};
+
+  parts.push(`## STICKER SHEET SIZE\n${qtyMap[state.qty]}\n\n## PANEL SPACING — CRITICAL\nEach sticker panel must have clear padding and separation.\nNO overlapping between stickers.\nNO content touching panel borders.\nMaintain consistent gutters between all panels.\nEach panel is a fully independent composition.`);
+
+  // Pet character
+  parts.push('## PET CHARACTER');
+  if(state.charTab==='img'){
+    parts.push(`BASE CHARACTER: Use the uploaded pet three-view reference sheet or uploaded pet photos as the sticker character.
+If a front / side / back three-view sheet is uploaded, treat it as the highest priority model sheet for identity, proportions, markings, accessories, and silhouette.
+If regular pet photos are uploaded instead, synthesize a consistent model sheet from the available photos before designing the stickers.
+Design this sticker set to look exactly like the uploaded pet.
+Faithfully recreate their fur color, fur pattern, ear shape, eye color, nose, facial markings, tail shape, body proportions, and recurring accessories.
+This is a real pet — the character MUST be recognizable as the specific individual animal in the uploaded photo.
+
+## PET IDENTITY FIDELITY — CRITICAL
+Maintain consistent pet appearance across ALL panels:
+Same fur color and pattern, same eye color, same ear shape, same facial markings, same body proportions, same signature accessories in every panel.
+The pet must look like ONE specific individual animal throughout all stickers — NOT a generic breed illustration.
+If a panel changes the pet's markings, face, eye color, ear shape, tail shape, or signature accessory, that panel is wrong and must be regenerated.`);
+  } else {
+    const desc=document.getElementById('char-input')?.value.trim()||'（未填寫）';
+    parts.push(`PET DESCRIPTION: ${desc}
+
+Design the sticker character based on the description above.
+Maintain consistent appearance across ALL panels — same fur color, same pattern, same eye color, same ear shape in every single panel.
+Do not replace the described pet with a generic breed mascot or a different animal.`);
+  }
+
+  parts.push(PET_IDENTITY_LOCK_V115);
+  parts.push(PET_SET_CONSISTENCY_V121);
+
+  // Style
+  parts.push(styleData[state.styleKey]||styleData.chibi);
+
+  // Outfit
+  if(state.outfitMode==='none'){
+    parts.push(`## COSTUME / OUTFIT
+NO costume or clothing — the pet appears in their natural animal form.
+Do NOT add human clothing or accessories.
+The pet may have a simple collar or bell only if it naturally suits the species.
+Focus on expressive poses, facial expressions, and natural species-appropriate body language.`);
+  } else if(state.outfitSelected){
+    parts.push(`## COSTUME / OUTFIT — Anthropomorphic Style
+The pet wears a costume while MAINTAINING ALL animal features.
+CRITICAL RULE: Ears, tail, paws, and fur pattern MUST all remain fully visible even while wearing the costume.
+The costume goes ON the animal — it does NOT replace or hide animal features.
+Animal ears must poke through hats or headpieces. Tail must be visible. Paws remain as paws.
+
+Costume: ${state.outfitSelected.p}`);
+  } else {
+    parts.push(`## COSTUME / OUTFIT — Anthropomorphic Style
+The pet wears a cute costume appropriate to the sticker theme.
+CRITICAL RULE: Keep ALL animal features visible — ears, tail, paws, and fur pattern must remain.
+The costume goes ON the animal — it does NOT replace or hide animal features.
+Let AI choose the most fitting and adorable costume for this pet and theme.`);
+  }
+
+  // Color
+  const allColors=[...state.colorSelections.map(c=>c.name),...state.customColors];
+  if(allColors.length>0){
+    parts.push(`## PROP / ACCESSORY PLAN\nPreferred prop, accessory, toy, pet-clothing, and decorative styling keywords: ${allColors.join('、')}\nUse these selections as visual direction for optional bows, collars, toys, snacks, sparkles, speech decorations, props, pet clothing accents, and small mood marks.\nIMPORTANT: Do NOT override the pet's natural fur color — keep the pet's real appearance unchanged.`);
+  } else {
+    parts.push(`## PROP / ACCESSORY PLAN\nNo specific prop plan — AI freely determines suitable decorations, toys, props, pet-clothing accents, small accessories, text accents, and simple mood marks.\nIMPORTANT: Do NOT override the pet's natural fur color — keep the pet's real appearance unchanged.`);
+  }
+
+  // Font
+  parts.push(fontData[state.fontStyle]||fontData.ai);
+
+  // Layout
+  parts.push(layoutData[state.layoutStyle]||layoutData.random);
+
+  // Background
+  parts.push(bgData[state.bgStyle]||bgData.white);
+
+  parts.push(LINE_OUTPUT_RULES_V115);
+  parts.push(STICKER_EMOTION_MATRIX_V121);
+  parts.push(LINE_SAFE_OUTPUT_SPEC_V121);
+
+  // Script
+  const allSelected=[...state.scriptSelected,...state.customItems];
+  const hasEnglishText=allSelected.some(v=>/[A-Za-z]/.test(v)&&!isNoTextScript(v));
+  const isPureNoTextPack=allSelected.length>0&&allSelected.every(v=>isNoTextScript(v));
+  if(allSelected.length>0){
+    const lines=[`## STICKER SCRIPT (${allSelected.length} / ${state.qty} panels)`,'']; 
+    allSelected.forEach((v,i)=>{
+      const silent=isNoTextScript(v);
+      if(silent){
+        lines.push(`Panel ${i+1}: NO TEXT. Express 「${v}」using only the pet's face, body, and pose. ABSOLUTELY NO TEXT or Chinese characters in this panel — pure visual expression only.`);
+      } else {
+        lines.push(`Panel ${i+1}: Display text 「${v}」clearly. Pet's expression and pose should match and reinforce the text meaning. Make the text readable and the pet's reaction carry the emotion.`);
+      }
+    });
+    lines.push('','## SCRIPT RULES');
+    lines.push('Every panel must have a DIFFERENT pose, expression, and body position — NO repeated poses.');
+    if(hasEnglishText){
+      lines.push('Text language: preserve the exact selected script text. Chinese phrases must stay Traditional Chinese; English phrases must stay English with correct spelling and capitalization.');
+    } else {
+      lines.push('Text: Traditional Chinese only (繁體中文) — stroke-perfect, immediately readable.');
+    }
+    lines.push('Text occupies max 35% panel area — pet character remains dominant visual element.');
+    lines.push('Keep text outside the pet face, eyes, ears, nose, mouth, paws, tail, and signature markings.');
+    parts.push(lines.join('\n'));
+  }
+
+  if(isPureNoTextPack){
+    parts.push(`## PURE PET EXPRESSION MODE - v1.22
+This is a no-text sticker pack. Do not draw any words, captions, letters, numbers, symbols, speech bubbles, signs, fake glyphs, or decorative typography in any panel.
+Every panel must communicate through the pet only: face, eyes, ears, tail, paws, body posture, movement, emotion marks, and simple props.
+Use bigger readable pet expressions, clear silhouette, and varied species-appropriate poses. The result should still feel like practical LINE reaction stickers even without text.`);
+  }
+
+  const textLanguageQuality=hasEnglishText?
+`⚠️ MIXED CHINESE / ENGLISH TEXT — NON-NEGOTIABLE ⚠️
+Preserve the selected script language exactly: do not translate English into Chinese, and do not translate Chinese into English.
+English words must be correctly spelled, cleanly kerned, and immediately readable at small LINE chat size.
+Traditional Chinese phrases must remain 繁體中文, never Simplified Chinese.
+NO AI-generated fake glyphs. NO invented stroke combinations. NO broken letters or partial characters.
+COMMERCIAL PRINT QUALITY typography standard required.
+
+FORBIDDEN: ❌ mistranslated captions ❌ misspelled English ❌ simplified Chinese substitutions ❌ invented strokes ❌ broken characters ❌ merged or split letters ❌ illegible glyphs`:
+`⚠️ TRADITIONAL CHINESE TEXT — NON-NEGOTIABLE ⚠️
+Language: Traditional Chinese (繁體中文) ONLY — NOT Simplified Chinese
+Every character must be 100% correctly formed, stroke-perfect, immediately recognizable by a native reader.
+NO AI-generated fake glyphs. NO invented stroke combinations. NO broken or partial characters.
+COMMERCIAL PRINT QUALITY typography standard required.
+
+FORBIDDEN: ❌ invented strokes ❌ simplified Chinese substitutions ❌ broken characters ❌ merged or split characters ❌ illegible glyphs`;
+
+  parts.push(`## TEXT QUALITY — ABSOLUTE PRIORITY
+Text must be MEDIUM sized — pet must remain the DOMINANT visual element (minimum 50% of panel).
+DO NOT let text cover or crowd the pet character.
+Use short sticker-caption composition: fewer words, thicker strokes, high contrast, clean spacing, readable at small LINE chat size.
+
+${textLanguageQuality}`);
+
+  parts.push(`## PET BEHAVIOR & COMPOSITION RULES
+Every panel MUST have a different pose, expression, body position — NO repeated compositions.
+Pet should behave naturally according to species:
+• Cats: sitting, lying, pawing, stretching, grooming, pouncing, head tilting
+• Dogs: tail wagging, panting smile, jumping, rolling over, begging, play bow
+• Rabbits: ear perking, nose twitching, hopping, binky jumping, flopped relaxed
+• Hamsters: cheek stuffing, tiny paw raising, sleeping in ball, spinning
+• Birds: wing flapping, head bobbing, puffing feathers, perching poses
+
+Pet character fills at least 55% of each panel unless the panel is intentionally a tiny full-body reaction sticker.
+Fur color, eye color, and markings must be CONSISTENT across ALL panels.
+Keep ears, tail, paws, and signature accessories fully visible unless the real photo clearly lacks them.
+Ultra high resolution, sharp clean outlines, professional LINE sticker quality.`);
+
+  parts.push(`## NEGATIVE PROMPT — STRICTLY FORBIDDEN
+no blurry fur or face, no low resolution, no muddy textures
+no unreadable text, no incorrect Chinese characters, no simplified Chinese characters
+no distorted text, no warped characters, no invented Chinese glyphs
+no duplicated poses, no repeated composition across panels
+no identity drift — pet must look identical in every panel
+no changed fur color, no changed eye color, no changed markings between panels
+no changed ear shape, no changed tail shape, no changed collar or signature accessory
+no human face, no human skin replacing animal features
+no generic breed swap, no mascot suit replacing the real pet, no unrelated cartoon animal
+no missing animal features — ears, tail, paws must always be present and correct
+no extra limbs, no anatomically incorrect body parts
+no cropped pet, no incomplete body, no floating body parts
+no watermark, no signature, no copyright logo
+no text covering the pet's face, eyes, ears, nose, mouth, paws, tail, or signature markings
+no dark dirty background outside panels
+no characters or text bleeding into adjacent panels
+no content touching panel borders
+no inconsistent rendering quality between panels`);
+
+  parts.unshift(`🐾 PET LINE STICKER GENERATION — ${state.qty} PANEL${state.qty>1?'S':''}\nRead ALL sections below completely before generating any image. Apply every rule to every panel.`);
+  const final=parts.join('\n\n');
+  document.getElementById('combined-box').textContent=final;
+  const charEl=document.getElementById('prompt-char-count');
+  if(charEl) charEl.textContent=`約 ${final.length.toLocaleString()} 字元`;
+  document.getElementById('combined-out').style.display='block';
+  copyToClipboard(final,document.getElementById('final-copy-btn'));
+  document.getElementById('combined-out').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function copyFinal(){
+  const text=document.getElementById('combined-box').textContent;
+  [document.getElementById('final-copy-btn'),document.getElementById('final-copy-btn-top')].forEach(btn=>{if(btn)copyToClipboard(text,btn);});
+}
+async function copyToClipboard(text,btn){
+  let success=false;
+  if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(text);success=true;}catch(e){}}
+  if(!success){try{const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;top:-9999px;left:-9999px;opacity:0;';document.body.appendChild(ta);ta.focus();ta.select();success=document.execCommand('copy');document.body.removeChild(ta);}catch(e){}}
+  if(success) showToast('✓ 咒語已複製到剪貼簿！');
+  if(btn){const o=btn.textContent;btn.textContent=success?'✓ 已複製！':'⚠️ 請手動複製';setTimeout(()=>btn.textContent=o,2000);}
+}
+
+// ── 我的套餐 v1.29 ──
+const MY_PRESETS_KEY='pet_sticker_my_presets_v126';
+function getMyPresets(){try{return JSON.parse(localStorage.getItem(MY_PRESETS_KEY)||'[]');}catch(e){return[];}}
+function setMyPresets(arr){try{localStorage.setItem(MY_PRESETS_KEY,JSON.stringify(arr));}catch(e){}}
+
+function saveMyPreset(){
+  const nameEl=document.getElementById('my-preset-name');
+  const name=(nameEl?.value||'').trim();
+  const petDesc=state.charTab==='text'?document.getElementById('char-input')?.value.trim()||'':'';
+  const preset={
+    name:name||`套餐 ${new Date().toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}`,
+    qty:state.qty,charTab:state.charTab,petDesc,
+    styleKey:state.styleKey,outfitMode:state.outfitMode,outfitSelected:state.outfitSelected,
+    colorNames:state.colorSelections.map(c=>c.name),customColors:[...state.customColors],
+    fontStyle:state.fontStyle,layoutStyle:state.layoutStyle,bgStyle:state.bgStyle,
+    scriptSelected:[...state.scriptSelected],customItems:[...state.customItems],
+  };
+  const arr=getMyPresets();arr.unshift(preset);if(arr.length>10)arr.length=10;
+  setMyPresets(arr);if(nameEl)nameEl.value='';
+  renderMyPresets();
+  showScriptLimitMsg(`已儲存套餐「${preset.name}」。`,true);
+}
+function loadMyPreset(idx){
+  const arr=getMyPresets();const p=arr[idx];if(!p)return;
+  if(p.qty)selectQty(p.qty);
+  switchCharTab(p.charTab||'img');
+  if(p.charTab==='text'&&p.petDesc){const el=document.getElementById('char-input');if(el)el.value=p.petDesc;}
+  if(p.styleKey)selectStyle(p.styleKey);
+  selectOutfitMode(p.outfitMode||'none');
+  if(p.outfitMode==='manual'&&p.outfitSelected)state.outfitSelected=p.outfitSelected;
+  state.colorSelections=[];state.customColors=p.customColors||[];
+  document.querySelectorAll('.prop-option').forEach(el=>el.classList.remove('active'));
+  (p.colorNames||[]).forEach(name=>{const i=presetColors.findIndex(c=>c.name===name);if(i>=0)toggleColor(i);});
+  renderColorTags();
+  if(p.fontStyle)selectFont(p.fontStyle);
+  if(p.layoutStyle)selectLayout(p.layoutStyle);
+  if(p.bgStyle)selectBg(p.bgStyle);
+  state.scriptSelected=[...(p.scriptSelected||[])];state.customItems=[...(p.customItems||[])];
+  renderSelectedTags();filterScripts();updateCounter();updateDots();
+  showScriptLimitMsg(`已載入套餐「${p.name}」。`,true);
+}
+function deleteMyPreset(idx){
+  const arr=getMyPresets();const name=arr[idx]?.name||'';
+  arr.splice(idx,1);setMyPresets(arr);renderMyPresets();
+  showScriptLimitMsg(`已刪除套餐「${name}」。`,true);
+}
+function renderMyPresets(){
+  const container=document.getElementById('my-presets-list');if(!container)return;
+  const arr=getMyPresets();
+  if(!arr.length){container.innerHTML=`<div style="font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;padding:2px 0;">尚無儲存的套餐</div>`;return;}
+  container.innerHTML=arr.map((p,i)=>`
+    <div style="display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 8px;max-width:100%;">
+      <span style="font-size:12px;font-family:system-ui,sans-serif;color:var(--text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escHtml(p.name)}">${escHtml(p.name)}</span>
+      <button class="btn-rand" onclick="loadMyPreset(${i})" style="padding:3px 10px;font-size:11px;white-space:nowrap;">載入</button>
+      <button class="btn-rand" onclick="deleteMyPreset(${i})" style="padding:3px 8px;font-size:11px;color:#a43d18;border-color:#e0cfc0;white-space:nowrap;">✕</button>
+    </div>`).join('');
+}
+
+// ── 我的腳本組 v1.29 ──
+const MY_SETS_KEY='pet_sticker_my_sets_v125';
+function getMyScriptSets(){try{return JSON.parse(localStorage.getItem(MY_SETS_KEY)||'[]');}catch(e){return[];}}
+function setMyScriptSets(sets){try{localStorage.setItem(MY_SETS_KEY,JSON.stringify(sets));}catch(e){}}
+
+function saveMyScriptSet(){
+  const nameEl=document.getElementById('my-set-name');
+  const name=(nameEl?.value||'').trim();
+  const scripts=[...state.scriptSelected,...state.customItems];
+  if(!scripts.length){showScriptLimitMsg('請先選擇腳本再儲存。');return;}
+  const label=name||`腳本組 ${new Date().toLocaleString('zh-TW',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'})}`;
+  const sets=getMyScriptSets();
+  sets.unshift({name:label,scripts:[...scripts]});
+  if(sets.length>20)sets.length=20;
+  setMyScriptSets(sets);
+  if(nameEl)nameEl.value='';
+  renderMyScriptSets();
+  showScriptLimitMsg(`已儲存「${label}」。`,true);
+}
+
+function loadMyScriptSet(idx){
+  const sets=getMyScriptSets();
+  const set=sets[idx];
+  if(!set)return;
+  state.scriptSelected=[...set.scripts];
+  state.customItems=[];
+  renderSelectedTags();filterScripts();updateCounter();updateDots();
+  showScriptLimitMsg(`已載入「${set.name}」（${set.scripts.length} 格）。`,true);
+}
+
+function deleteMyScriptSet(idx){
+  const sets=getMyScriptSets();
+  const name=sets[idx]?.name||'';
+  sets.splice(idx,1);
+  setMyScriptSets(sets);
+  renderMyScriptSets();
+  showScriptLimitMsg(`已刪除「${name}」。`,true);
+}
+
+function renderMyScriptSets(){
+  const container=document.getElementById('my-script-sets');
+  if(!container)return;
+  const sets=getMyScriptSets();
+  if(!sets.length){
+    container.innerHTML=`<div style="font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;padding:4px 0;">尚無儲存的腳本組</div>`;
+    return;
+  }
+  container.innerHTML=sets.map((s,i)=>`
+    <div style="display:flex;align-items:center;gap:4px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:4px 8px;max-width:100%;">
+      <span style="font-size:12px;font-family:system-ui,sans-serif;color:var(--text-muted);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escHtml(s.name)}">${escHtml(s.name)} <span style="color:var(--text-hint);">(${s.scripts.length}格)</span></span>
+      <button class="btn-rand" onclick="loadMyScriptSet(${i})" style="padding:3px 10px;font-size:11px;white-space:nowrap;">載入</button>
+      <button class="btn-rand" onclick="deleteMyScriptSet(${i})" style="padding:3px 8px;font-size:11px;color:#a43d18;border-color:#e0cfc0;white-space:nowrap;">✕</button>
+    </div>`).join('');
+}
+
+// ── 上架準備 v1.30 ──
+function toggleSubmitGuide(){
+  const g=document.getElementById('submit-guide');
+  const btn=document.getElementById('submit-toggle-btn');
+  const shown=g.style.display!=='none';
+  g.style.display=shown?'none':'block';
+  btn.textContent=shown?'展開說明 ▾':'收合說明 ▴';
+}
+const SUBMIT_CHECKLIST=[
+  '貼圖圖片已存成 PNG 格式',
+  '圖片尺寸符合 370×320px（一般貼圖）',
+  '背景為透明（去背）或純白',
+  '每張檔案大小 ≤ 1 MB',
+  '主圖 240×240px PNG 已準備',
+  '分類圖示 96×74px PNG 已準備',
+  '貼圖數量為 8／16／24／32／40 格',
+  '所有貼圖風格與角色視覺一致',
+  '沒有版權爭議（品牌 logo、明星照片等）',
+  'LINE Creators Market 帳號已申請',
+];
+function initSubmitChecklist(){
+  const c=document.getElementById('submit-checklist');
+  if(!c)return;
+  c.innerHTML=SUBMIT_CHECKLIST.map((item,i)=>`
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:2px 0;font-size:12px;font-family:system-ui,sans-serif;color:var(--text-muted);">
+      <input type="checkbox" id="chk-${i}" style="width:15px;height:15px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;">
+      <span>${escHtml(item)}</span>
+    </label>`).join('');
+}
+
+// ── Toast ──
+let _toastTimer=null;
+function showToast(msg,dur=2200){
+  const t=document.getElementById('toast-msg');if(!t)return;
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>t.classList.remove('show'),dur);
+}
+
+// ── FAB + Keyboard ──
+window.addEventListener('scroll',()=>{
+  const fab=document.getElementById('fab-top');
+  if(fab) fab.classList.toggle('visible',window.scrollY>400);
+});
+document.addEventListener('keydown',e=>{
+  if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();combineAll();}
+});
+
+// ── SCROLL REVEAL ──
+(function(){
+  const io=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
+  },{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+  function observe(){document.querySelectorAll('.section,.ai-workflow-section,.combine-section').forEach(el=>{el.classList.add('reveal');io.observe(el);});}
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',observe);}else{setTimeout(observe,50);}
+})();
+
+// ── AI IMAGE WORKFLOW ──
+const AI_HISTORY_KEY='pet_sticker_ai_history_v1';
+let aiCurrentImages=[];
+let aiSelectedIdx=-1;
+
+function getAiHistory(){try{return JSON.parse(localStorage.getItem(AI_HISTORY_KEY)||'[]');}catch(e){return[];}}
+function setAiHistory(arr){try{localStorage.setItem(AI_HISTORY_KEY,JSON.stringify(arr));}catch(e){}}
+
+function handleFileUpload(ev){
+  const files=[...ev.target.files];
+  if(!files.length)return;
+  files.forEach(file=>{
+    if(!file.type.startsWith('image/'))return;
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const dataUrl=e.target.result;
+      const entry={id:Date.now()+Math.random().toString(36).slice(2),name:file.name,dataUrl,date:new Date().toLocaleString('zh-TW')};
+      aiCurrentImages.unshift(entry);
+      const hist=getAiHistory();hist.unshift({id:entry.id,name:entry.name,dataUrl,date:entry.date});
+      if(hist.length>20)hist.length=20;
+      setAiHistory(hist);
+      renderPreviewGrid();renderAiHistory();
+      if(aiCurrentImages.length===1)selectPreviewItem(0);
+    };
+    reader.readAsDataURL(file);
+  });
+  ev.target.value='';
+}
+
+function renderPreviewGrid(){
+  const grid=document.getElementById('image-preview-grid');
+  if(!grid)return;
+  if(!aiCurrentImages.length){grid.innerHTML='';return;}
+  grid.innerHTML=aiCurrentImages.map((img,i)=>`
+    <div class="preview-item${i===aiSelectedIdx?' selected':''}" onclick="selectPreviewItem(${i})">
+      <img src="${img.dataUrl}" alt="${escHtml(img.name)}" loading="lazy">
+      <div class="preview-overlay">
+        <button class="preview-del-btn" onclick="event.stopPropagation();removePreviewItem(${i})" title="刪除">✕</button>
+      </div>
+    </div>`).join('');
+  document.getElementById('ai-prompt-panel').style.display=aiCurrentImages.length?'block':'none';
+}
+
+function selectPreviewItem(idx){
+  aiSelectedIdx=idx;
+  renderPreviewGrid();
+  const img=aiCurrentImages[idx];
+  if(img){document.getElementById('ai-prompt-output').textContent=`已選：${img.name}。點「生成描述提示」產生寵物特徵描述。`;}
+}
+
+function removePreviewItem(idx){
+  aiCurrentImages.splice(idx,1);
+  if(aiSelectedIdx>=aiCurrentImages.length)aiSelectedIdx=aiCurrentImages.length-1;
+  renderPreviewGrid();
+}
+
+const PET_PROMPT_TEMPLATES=[
+  '請依照上傳的寵物照片描述這隻寵物的外觀特徵：毛色、花紋、眼睛顏色、耳朵形狀、尾巴、體型與氣質。請保留所有辨識特徵，確保生成的貼圖每張都像同一隻寵物。',
+  '根據上方上傳的寵物照片，請描述這隻寵物的品種特徵、毛色斑紋、臉型、眼睛、耳朵與尾巴，讓 AI 能夠在所有貼圖中維持一致的外觀。',
+  '以上傳的寵物三視圖或照片為最高基準，鎖定這隻寵物的所有外觀特徵：毛色、花紋分布、眼睛顏色、耳朵、尾巴形狀、體型比例與常用配件，確保每一格貼圖都是同一隻寵物。',
+];
+function generatePetPrompt(){
+  const img=aiCurrentImages[aiSelectedIdx];
+  if(!img){showToast('⚠️ 請先選擇一張寵物照片');return;}
+  const tpl=PET_PROMPT_TEMPLATES[Math.floor(Math.random()*PET_PROMPT_TEMPLATES.length)];
+  const out=document.getElementById('ai-prompt-output');
+  out.textContent='生成中…';
+  setTimeout(()=>{out.textContent=tpl;},600);
+}
+
+function copyPromptToDesc(){
+  const txt=document.getElementById('ai-prompt-output')?.textContent||'';
+  if(!txt||txt.includes('請先選擇'))return;
+  switchCharTab('text');
+  const el=document.getElementById('char-input');
+  if(el){el.value=txt;updateDots();}
+  showToast('✓ 已複製到寵物描述欄');
+}
+
+function renderAiHistory(){
+  const list=document.getElementById('ai-history-list');if(!list)return;
+  const hist=getAiHistory();
+  if(!hist.length){list.innerHTML='<div style="font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;padding:8px 0;">尚無歷史紀錄。上傳寵物照片後將自動儲存。</div>';return;}
+  list.innerHTML=hist.map((h,i)=>`
+    <div class="ai-history-item" onclick="loadHistoryItem(${i})">
+      <img class="ai-history-thumb" src="${h.dataUrl}" alt="${escHtml(h.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" loading="lazy">
+      <div class="ai-history-thumb-ph" style="display:none;">🐾</div>
+      <div class="ai-history-info">
+        <div class="ai-history-name">${escHtml(h.name)}</div>
+        <div class="ai-history-date">${escHtml(h.date)}</div>
+      </div>
+      <button class="ai-history-del" onclick="event.stopPropagation();deleteHistoryItem(${i})" title="刪除">✕</button>
+    </div>`).join('');
+}
+
+function loadHistoryItem(idx){
+  const hist=getAiHistory();const h=hist[idx];if(!h)return;
+  const already=aiCurrentImages.findIndex(x=>x.id===h.id);
+  if(already>=0){selectPreviewItem(already);return;}
+  aiCurrentImages.unshift({...h});
+  renderPreviewGrid();selectPreviewItem(0);
+  showToast(`✓ 已載入「${h.name}」`);
+}
+
+function deleteHistoryItem(idx){
+  const hist=getAiHistory();hist.splice(idx,1);setAiHistory(hist);renderAiHistory();
+}
+
+function clearAiHistory(){
+  setAiHistory([]);renderAiHistory();showToast('✓ 歷史紀錄已清除');
+}
+
+// Drag & drop
+(function(){
+  const zone=document.getElementById('upload-zone');if(!zone)return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag-over');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag-over'));
+  zone.addEventListener('drop',e=>{
+    e.preventDefault();zone.classList.remove('drag-over');
+    const files=[...e.dataTransfer.files].filter(f=>f.type.startsWith('image/'));
+    if(!files.length)return;
+    const dt=new DataTransfer();files.forEach(f=>dt.items.add(f));
+    const inp=document.getElementById('pet-file-input');if(inp){inp.files=dt.files;handleFileUpload({target:{files:dt.files,value:''}});}
+  });
+})();
+
+// ── INIT ──
+initPresets();
+initStyleUI();
+initColorSwatches();
+initFontUI();
+renderScriptCats();
+filterScripts();
+selectStyle('chibi');
+selectFont('ai');
+selectLayout('random');
+selectBg('white');
+selectOutfitMode('none');
+updateCounter();
+updateDots();
+renderMyPresets();
+renderMyScriptSets();
+initSubmitChecklist();
+renderAiHistory();
+</script>
+</body>
+</html>

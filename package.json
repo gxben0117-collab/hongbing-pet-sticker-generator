@@ -1,0 +1,21 @@
+{
+  "name": "hongbing-pet-line-sticker-prompt-generator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hongbing pet LINE sticker prompt generator static HTML app.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/serve.mjs",
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/*.mjs",
+    "lint": "eslint scripts/ tests/"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0"
+  }
+}
