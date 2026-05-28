@@ -17,9 +17,27 @@ tmp/
 # OS/editor metadata
 .DS_Store
 Thumbs.db
+desktop.ini
 .vscode/
 .idea/
+
+# Editor swap files
+*.swp
+*.swo
+*~
 
 # Test and tooling caches
 .eslintcache
 coverage/
+
+# Netlify (已不使用)
+.netlify/
+
+# Windows batch files
+*.cmd
+*.bat
+
+# 臨時中文文檔
+*檢查清單*.md
+*部署*.md
+*修復*.md
