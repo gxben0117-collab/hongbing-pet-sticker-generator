@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🐾 寵物 LINE 貼圖咒語產生器 v1.34</title>
+<title>🐾 寵物 LINE 貼圖咒語產生器 v1.35</title>
 <style>
 /* ── Premium Design System ── */
 :root {
@@ -32,7 +32,6 @@
 @keyframes fadeIn   { from{opacity:0} to{opacity:1} }
 @keyframes float    { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
 @keyframes glow-pulse{ 0%,100%{box-shadow:0 0 20px rgba(245,131,10,.20)} 50%{box-shadow:0 0 44px rgba(245,131,10,.50)} }
-@keyframes shimmer  { 0%{background-position:-200% 0} 100%{background-position:200% 0} }
 
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -48,76 +47,8 @@ body{
   min-height:100vh; overflow-x:hidden;
 }
 
-/* ── Hero ── */
-.hero{
-  position:relative; min-height:100vh;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center; padding:7rem 2rem 5rem; overflow:hidden;
-}
-.hero-bg{
-  position:absolute;inset:0;
-  background:
-    radial-gradient(ellipse 90% 60% at 50% -5%,rgba(245,131,10,.18) 0%,transparent 65%),
-    radial-gradient(ellipse 60% 40% at 85% 85%,rgba(180,80,20,.13) 0%,transparent 55%),
-    radial-gradient(ellipse 40% 30% at 8%  90%,rgba(120,55,10,.10) 0%,transparent 55%);
-  z-index:0;
-}
-.hero-orb{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;}
-.hero-orb-1{width:380px;height:380px;background:rgba(245,131,10,.11);top:-100px;right:8%;animation:float 9s ease-in-out infinite;}
-.hero-orb-2{width:260px;height:260px;background:rgba(180,80,20,.09);bottom:18%;left:4%;animation:float 11s ease-in-out infinite;animation-delay:-4s;}
-.hero-orb-3{width:200px;height:200px;background:rgba(255,200,100,.07);top:38%;right:4%;animation:float 7s ease-in-out infinite;animation-delay:-2s;}
-.hero-content{position:relative;z-index:1;max-width:720px;}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:8px;
-  background:rgba(245,131,10,.14);border:1px solid rgba(245,131,10,.28);
-  border-radius:50px;padding:8px 20px;font-size:11px;
-  font-family:system-ui,sans-serif;color:rgba(255,185,90,.92);
-  letter-spacing:.14em;text-transform:uppercase;margin-bottom:2.2rem;
-  backdrop-filter:var(--blur-sm);animation:fadeUp .8s ease both;
-}
-.hero-title{
-  font-size:clamp(2.5rem,6.5vw,5rem);font-weight:700;line-height:1.08;
-  letter-spacing:-.025em;margin-bottom:1.4rem;
-  background:linear-gradient(140deg,#F5EDE3 0%,#FFD08A 48%,#F5830A 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:fadeUp .9s .1s ease both;
-}
-.hero-subtitle{
-  font-size:clamp(.95rem,2vw,1.2rem);color:var(--text-muted);
-  font-family:system-ui,sans-serif;font-weight:400;line-height:1.75;
-  max-width:540px;margin:0 auto 2.8rem;
-  animation:fadeUp 1s .2s ease both;
-}
-.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;animation:fadeUp 1s .35s ease both;}
-.hero-btn-primary{
-  background:linear-gradient(135deg,#F5830A,#D46500);color:#fff;border:none;
-  padding:17px 40px;border-radius:50px;font-size:16px;font-weight:600;
-  font-family:system-ui,sans-serif;cursor:pointer;letter-spacing:.03em;
-  box-shadow:0 4px 28px rgba(245,131,10,.42);transition:all .25s ease;
-}
-.hero-btn-primary:hover{transform:translateY(-3px);box-shadow:0 10px 40px rgba(245,131,10,.58);}
-.hero-btn-secondary{
-  background:rgba(255,255,255,.08);color:var(--text);
-  border:1px solid rgba(255,255,255,.16);padding:17px 40px;
-  border-radius:50px;font-size:16px;font-weight:500;
-  font-family:system-ui,sans-serif;cursor:pointer;
-  backdrop-filter:var(--blur-sm);transition:all .25s ease;
-}
-.hero-btn-secondary:hover{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.26);transform:translateY(-3px);}
-.hero-stats{display:flex;gap:3.5rem;justify-content:center;margin-top:4.5rem;animation:fadeUp 1s .5s ease both;}
-.hero-stat{text-align:center;}
-.hero-stat-num{font-size:2.2rem;font-weight:700;color:var(--accent);line-height:1;}
-.hero-stat-label{font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-top:5px;letter-spacing:.09em;text-transform:uppercase;}
-.hero-scroll-hint{
-  position:absolute;bottom:2.8rem;left:50%;transform:translateX(-50%);
-  z-index:1;display:flex;flex-direction:column;align-items:center;gap:9px;
-  color:var(--text-hint);font-size:10px;font-family:system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;
-  animation:fadeIn 2s 1.2s ease both;
-}
-.hero-scroll-line{width:1px;height:48px;background:linear-gradient(to bottom,rgba(245,131,10,.6),transparent);animation:float 2.2s ease-in-out infinite;}
-
 /* ── Main Container ── */
-.page{max-width:700px;margin:0 auto;padding:0 1.5rem 6rem;}
+.page{max-width:700px;margin:0 auto;padding:1.5rem 1.5rem 6rem;}
 
 /* ── Reveal on Scroll ── */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .65s ease,transform .65s ease;}
@@ -328,30 +259,10 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
 }
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ── AI Image Workflow ── */
-.ai-workflow-section{
-  background:var(--surface);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
-  border:1px solid var(--glass-border);border-radius:var(--radius-xl);
-  margin-bottom:1.5rem;overflow:hidden;box-shadow:var(--shadow);
-  transition:transform .25s ease,box-shadow .25s ease;
-}
-.ai-workflow-section:hover{transform:translateY(-2px);box-shadow:var(--shadow),0 0 40px rgba(245,131,10,.10);}
-.ai-workflow-header{
-  padding:1.35rem 1.5rem;background:rgba(245,131,10,.06);
-  border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;
-}
-.ai-workflow-icon{
-  width:46px;height:46px;border-radius:14px;
-  background:linear-gradient(135deg,rgba(245,131,10,.28),rgba(212,101,0,.25));
-  border:1px solid rgba(245,131,10,.28);
-  display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;
-}
-.ai-workflow-title{font-size:15px;font-weight:700;color:var(--text);font-family:system-ui,sans-serif;}
-.ai-workflow-subtitle{font-size:12px;color:var(--text-muted);margin-top:3px;font-family:system-ui,sans-serif;}
-.ai-workflow-body{padding:1.4rem 1.5rem;}
+/* ── Image Upload Assist ── */
 .upload-zone{
   border:2px dashed rgba(245,131,10,.32);border-radius:var(--radius-lg);
-  padding:2.8rem 2rem;text-align:center;cursor:pointer;
+  padding:1.8rem 1.2rem;text-align:center;cursor:pointer;
   transition:all .22s ease;background:rgba(245,131,10,.03);
   position:relative;overflow:hidden;
 }
@@ -363,10 +274,10 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   width:100%;height:100%;border:none;background:transparent;padding:0;
 }
 .upload-zone input[type=file]:focus{box-shadow:none;}
-.upload-icon{font-size:3.2rem;margin-bottom:1rem;display:block;animation:float 4s ease-in-out infinite;}
+.upload-icon{font-size:2.4rem;margin-bottom:.7rem;display:block;animation:float 4s ease-in-out infinite;}
 .upload-text{font-size:15px;font-weight:600;color:var(--text);font-family:system-ui,sans-serif;margin-bottom:6px;}
 .upload-hint{font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;}
-.image-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;margin-top:1.3rem;}
+.image-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px;margin-top:1rem;}
 .preview-item{
   position:relative;aspect-ratio:1;border-radius:var(--radius);
   overflow:hidden;border:1px solid var(--border);
@@ -397,42 +308,46 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   font-size:13px;color:var(--text-muted);font-family:system-ui,sans-serif;
   line-height:1.75;min-height:56px;
 }
-.ai-history-panel{margin-top:1.2rem;border-top:1px solid var(--border);padding-top:1.2rem;}
-.ai-history-title{font-size:11px;font-weight:600;color:var(--text-hint);font-family:system-ui,sans-serif;letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;}
-.ai-history-list{display:flex;flex-direction:column;gap:8px;max-height:300px;overflow-y:auto;}
-.ai-history-item{
-  display:flex;gap:10px;align-items:center;
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-  border-radius:var(--radius);padding:10px 14px;cursor:pointer;transition:all .2s ease;
-}
-.ai-history-item:hover{background:rgba(245,131,10,.08);border-color:rgba(245,131,10,.28);}
-.ai-history-thumb{width:42px;height:42px;border-radius:8px;object-fit:cover;flex-shrink:0;}
-.ai-history-thumb-ph{width:42px;height:42px;border-radius:8px;background:rgba(245,131,10,.15);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.ai-history-info{flex:1;min-width:0;}
-.ai-history-name{font-size:13px;font-weight:500;color:var(--text);font-family:system-ui,sans-serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.ai-history-date{font-size:11px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-top:2px;}
-.ai-history-del{color:var(--text-hint);border:none;background:transparent;font-size:14px;padding:4px 8px;border-radius:8px;flex-shrink:0;}
-.ai-history-del:hover{color:#FF6B6B;background:rgba(255,0,0,.10);transform:none;}
 
-/* ── Page Header (below hero) ── */
-.page-header{text-align:center;margin-bottom:2.5rem;padding:2rem 0 2rem;}
+/* ── Page Header ── */
+.page-header{
+  display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  margin-bottom:1.25rem;padding:1rem 0 1.2rem;border-bottom:1px solid var(--border);
+}
 .page-header h1{font-size:clamp(1.4rem,3vw,2rem);font-weight:700;letter-spacing:-.01em;
   background:linear-gradient(135deg,#F5EDE3 0%,#FFD08A 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .page-header .version-badge{display:inline-flex;align-items:center;background:linear-gradient(135deg,var(--accent),var(--accent-dark));color:#fff;font-size:10px;padding:3px 10px;border-radius:50px;font-weight:700;font-family:system-ui,sans-serif;margin-left:8px;vertical-align:middle;}
-.page-header .subtitle{font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;letter-spacing:.08em;margin-top:6px;}
+.page-header .subtitle{font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-top:6px;}
+.flow-heading{
+  display:flex;align-items:center;gap:10px;margin:1.35rem 0 .75rem;
+  font-family:system-ui,sans-serif;color:var(--text);
+}
+.flow-step{
+  width:28px;height:28px;border-radius:9px;background:rgba(245,131,10,.18);
+  border:1px solid rgba(245,131,10,.32);color:#FFC06E;
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;
+}
+.flow-title{font-size:13px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;}
+.flow-note{font-size:11px;color:var(--text-hint);margin-top:2px;}
+.advanced-settings{margin-bottom:1.5rem;}
+.advanced-settings summary{
+  list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;
+  background:rgba(255,255,255,.05);border:1px solid var(--glass-border);
+  border-radius:var(--radius-lg);padding:1rem 1.25rem;cursor:pointer;
+  font-family:system-ui,sans-serif;color:var(--text);box-shadow:var(--shadow-sm);
+}
+.advanced-settings summary::-webkit-details-marker{display:none;}
+.advanced-settings summary::after{content:'展開';font-size:11px;color:var(--text-hint);}
+.advanced-settings[open] summary{margin-bottom:1rem;border-color:rgba(245,131,10,.28);}
+.advanced-settings[open] summary::after{content:'收合';color:#FFC06E;}
 
 /* ── Mobile Responsive ── */
 @media (max-width:640px){
-  .hero{min-height:auto;padding:5.5rem 1.5rem 3.5rem;}
-  .hero-title{font-size:2.2rem;}
-  .hero-subtitle{font-size:.95rem;}
-  .hero-stats{gap:2rem;margin-top:3rem;}
-  .hero-stat-num{font-size:1.7rem;}
-  .hero-cta{gap:10px;}
-  .hero-btn-primary,.hero-btn-secondary{padding:14px 26px;font-size:14px;}
   .page{padding:0 1rem 4rem;}
+  .page-header{flex-direction:column;align-items:flex-start;padding-top:1rem;}
+  .page-header-actions{width:100%;display:grid !important;grid-template-columns:1fr;}
   .section-body{padding:.9rem 1rem;}
   .section-header{padding:.9rem 1.1rem;gap:8px;}
   .section-num{width:24px;height:24px;font-size:11px;border-radius:8px;}
@@ -459,7 +374,6 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   .btn-rand{font-size:11px;padding:6px 11px;}
   .upload-zone{padding:1.8rem 1rem;}
   .image-preview-grid{grid-template-columns:repeat(auto-fill,minmax(88px,1fr));}
-  .ai-workflow-body{padding:1rem;}
 }
 @media (max-width:400px){
   .page{padding:0 .75rem 4rem;}
@@ -467,92 +381,29 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   .script-toolbar{grid-template-columns:1fr;}
   .prop-options{grid-template-columns:1fr 1fr;}
   .fab-top{bottom:1rem;right:1rem;width:42px;height:42px;}
-  .hero-stats{flex-direction:column;gap:1.2rem;align-items:center;}
 }
 </style>
 </head>
 <body>
-
-<!-- Hero -->
-<section class="hero" id="hero-section">
-  <div class="hero-bg"></div>
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  <div class="hero-orb hero-orb-3"></div>
-  <div class="hero-content">
-    <div class="hero-badge">✦ AI 貼圖生成工具 ✦</div>
-    <h1 class="hero-title">寵物 LINE 貼圖<br>咒語產生器</h1>
-    <p class="hero-subtitle">上傳你的毛孩照片，填入設定，一鍵產生專屬 ChatGPT 提示詞，讓 AI 幫你畫出完整 LINE 貼圖包。</p>
-    <div class="hero-cta">
-      <button class="hero-btn-primary" onclick="document.querySelector('.page').scrollIntoView({behavior:'smooth'})">🐾 開始生成咒語</button>
-      <button class="hero-btn-secondary" onclick="document.getElementById('ai-workflow-section').scrollIntoView({behavior:'smooth'})">📸 AI 圖片工作流</button>
-    </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="hero-stat-num">55+</div><div class="hero-stat-label">寵物套餐</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">50+</div><div class="hero-stat-label">腳本分類</div></div>
-      <div class="hero-stat"><div class="hero-stat-num">16</div><div class="hero-stat-label">貼圖格式</div></div>
-    </div>
-  </div>
-  <div class="hero-scroll-hint">
-    <div class="hero-scroll-line"></div>
-    SCROLL
-  </div>
-</section>
 
 <button class="fab-top" id="fab-top" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到頂部">⬆</button>
 <div class="toast" id="toast-msg"></div>
 <div class="page">
 <header class="page-header">
   <div>
-    <h1>🐾 寵物 LINE 貼圖咒語產生器<span class="version-badge">v1.34</span></h1>
-    <p class="subtitle">PET STICKER PROMPT GENERATOR — 填完各模組後點「組合全部」複製給 ChatGPT</p>
+    <h1>🐾 寵物 LINE 貼圖咒語產生器<span class="version-badge">v1.35</span></h1>
+    <p class="subtitle">選套餐、補照片或描述、挑台詞，直接組合給 ChatGPT。</p>
   </div>
-  <div style="display:flex;justify-content:center;margin-top:1.2rem;">
+  <div class="page-header-actions" style="display:flex;justify-content:center;">
     <button onclick="randomizeAll()" class="btn-primary" style="font-size:14px;padding:12px 28px;border-radius:50px;">🎲 全部隨機</button>
   </div>
 </header>
 
-<!-- AI 圖片工作流 -->
-<div class="ai-workflow-section reveal" id="ai-workflow-section">
-  <div class="ai-workflow-header">
-    <div class="ai-workflow-icon">📸</div>
-    <div>
-      <div class="ai-workflow-title">AI 圖片工作流</div>
-      <div class="ai-workflow-subtitle">上傳寵物照片 · 預覽管理 · 產生提示描述 · 儲存歷史紀錄</div>
-    </div>
-  </div>
-  <div class="ai-workflow-body">
-    <!-- Upload Zone -->
-    <div class="upload-zone" id="upload-zone">
-      <input type="file" id="pet-file-input" accept="image/*" multiple onchange="handleFileUpload(event)">
-      <span class="upload-icon">🐾</span>
-      <div class="upload-text">拖曳寵物照片到這裡，或點擊選擇檔案</div>
-      <div class="upload-hint">支援 JPG / PNG / WebP · 可多選 · 建議上傳三視圖</div>
-    </div>
-
-    <!-- Preview Grid -->
-    <div class="image-preview-grid" id="image-preview-grid"></div>
-
-    <!-- AI Prompt Panel (shown when image selected) -->
-    <div class="ai-prompt-panel" id="ai-prompt-panel" style="display:none;">
-      <div class="ai-prompt-label">生成的寵物描述提示</div>
-      <div class="ai-prompt-output" id="ai-prompt-output">選擇上方照片後點「生成描述」</div>
-      <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
-        <button class="btn-primary" onclick="generatePetPrompt()" style="font-size:13px;padding:9px 20px;">✨ 生成描述提示</button>
-        <button class="btn-rand" onclick="copyPromptToDesc()" style="font-size:12px;">📋 複製到寵物描述欄</button>
-      </div>
-    </div>
-
-    <!-- History -->
-    <div class="ai-history-panel" id="ai-history-panel">
-      <div class="ai-history-title">
-        <span>歷史紀錄</span>
-        <button class="btn-rand" onclick="clearAiHistory()" style="font-size:11px;padding:4px 10px;border-radius:6px;">清除全部</button>
-      </div>
-      <div class="ai-history-list" id="ai-history-list">
-        <div style="font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;padding:8px 0;">尚無歷史紀錄。上傳寵物照片後將自動儲存。</div>
-      </div>
-    </div>
+<div class="flow-heading">
+  <div class="flow-step">1</div>
+  <div>
+    <div class="flow-title">寵物資料</div>
+    <div class="flow-note">先選套餐或補上照片 / 文字描述。</div>
   </div>
 </div>
 
@@ -597,6 +448,21 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
       <div class="tab" id="tab-text" onclick="switchCharTab('text')">文字輸入</div>
     </div>
     <div id="char-img-panel">
+      <div class="upload-zone" id="upload-zone">
+        <input type="file" id="pet-file-input" accept="image/*" multiple onchange="handleFileUpload(event)">
+        <span class="upload-icon">🐾</span>
+        <div class="upload-text">拖曳寵物照片到這裡，或點擊選擇檔案</div>
+        <div class="upload-hint">支援 JPG / PNG / WebP · 可多選 · 建議三視圖或清楚日常照片</div>
+      </div>
+      <div class="image-preview-grid" id="image-preview-grid"></div>
+      <div class="ai-prompt-panel" id="ai-prompt-panel" style="display:none;">
+        <div class="ai-prompt-label">生成的寵物描述提示</div>
+        <div class="ai-prompt-output" id="ai-prompt-output">選擇上方照片後點「生成描述」</div>
+        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+          <button class="btn-primary" onclick="generatePetPrompt()" style="font-size:13px;padding:9px 20px;">✨ 生成描述提示</button>
+          <button class="btn-rand" onclick="copyPromptToDesc()" style="font-size:12px;">📋 複製到寵物描述欄</button>
+        </div>
+      </div>
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;">
         <div style="font-size:13px;font-weight:500;color:var(--text);font-family:system-ui,sans-serif;margin-bottom:6px;">📎 請將寵物三視圖或照片上傳給 ChatGPT</div>
         <div style="font-size:12px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:1.7;">組合咒語後，請先在 ChatGPT 上傳事先做好的寵物三視圖；若沒有三視圖，也可以上傳正面、側面、背面或日常照片。系統會要求 ChatGPT 依照上傳圖片鎖定同一隻寵物來設計貼圖。</div>
@@ -612,6 +478,14 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
       </div>
       <textarea id="char-input" rows="3" placeholder="例：橘白貓、圓臉大眼、短毛、胖胖的、額頭有M紋、綠色眼睛" oninput="updateDots()"></textarea>
     </div>
+  </div>
+</div>
+
+<div class="flow-heading">
+  <div class="flow-step">2</div>
+  <div>
+    <div class="flow-title">貼圖設定</div>
+    <div class="flow-note">先選數量與畫風；服裝、道具、字體、構圖可進階調整。</div>
   </div>
 </div>
 
@@ -640,6 +514,14 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
     <div class="c-item ai-pick" id="style-ai" onclick="selectStyle('ai')" style="margin-top:4px;"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🎲 AI 隨機選擇</div><div class="c-desc">由 AI 自行決定最適合的畫風</div></div></div>
   </div>
 </div>
+
+<details class="advanced-settings">
+  <summary>
+    <span>
+      <strong>進階設定</strong>
+      <span style="display:block;font-size:11px;color:var(--text-hint);margin-top:3px;">服裝、道具、字體、構圖與背景細節</span>
+    </span>
+  </summary>
 
 <!-- ④ 服裝 -->
 <div class="section">
@@ -712,8 +594,16 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
     </div>
   </div>
 </div>
+</details>
 
 <!-- ⑨ 腳本 -->
+<div class="flow-heading">
+  <div class="flow-step">3</div>
+  <div>
+    <div class="flow-title">台詞腳本</div>
+    <div class="flow-note">常用分類優先顯示，指定寵物專屬分類會在套用對應套餐後出現。</div>
+  </div>
+</div>
 <div class="section">
   <div class="section-header"><div class="section-num">9</div><div class="section-title">貼圖腳本</div><button class="btn-rand" onclick="randomScript()" style="margin-left:auto;">🎲 隨機填入</button></div>
   <div class="section-body" style="padding:0;">
@@ -758,6 +648,13 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
 </div>
 
 <!-- 組合 -->
+<div class="flow-heading">
+  <div class="flow-step">4</div>
+  <div>
+    <div class="flow-title">生成咒語</div>
+    <div class="flow-note">確認狀態後組合並複製給 ChatGPT。</div>
+  </div>
+</div>
 <div class="combine-section">
   <h2>🐾 組合全部咒語</h2>
   <p>複製後貼到 ChatGPT（記得先上傳寵物照片！）</p>
@@ -848,7 +745,8 @@ const state = {
   styleKey:'chibi', outfitMode:'none', outfitSelected:null,
   colorSelections:[], customColors:[],
   fontStyle:'ai', layoutStyle:'random', bgStyle:'white',
-  scriptSelected:[], customItems:[], currentCat:'日常萌態'
+  scriptSelected:[], customItems:[], currentCat:'日常萌態',
+  activePresetId:null
 };
 
 // ── PRESETS ──
@@ -1149,6 +1047,7 @@ function renderPresetGrid(){
 }
 function applyPreset(id) {
   const p = presets.find(x=>x.id===id); if(!p) return;
+  state.activePresetId=id;
   document.querySelectorAll('#preset-grid .c-item').forEach(el=>el.classList.remove('active'));
   document.getElementById('preset-'+id)?.classList.add('active');
   if(p.qty) selectQty(p.qty);
@@ -1165,6 +1064,7 @@ function applyPreset(id) {
   selectFont(p.font);
   selectLayout(p.layout);
   if(p.bg) selectBg(p.bg);
+  renderScriptCats();
   selectCat(p.cat);
   if(!p.petDesc) switchCharTab('img');
   if(p.scripts?.length){
@@ -1748,10 +1648,10 @@ const scriptGroups=[
   {name:'下班放鬆',cats:['下班解壓','睡眠休息','崩潰迷因']},
   {name:'學習加油',cats:['考試讀書','鼓勵打氣']},
   {name:'節日特輯',cats:['春節祝賀','節日祝福','奇幻冒險']},
-  {name:'v1.31 新增',cats:['早晚問候','已讀回覆','情侶放閃','飼主語錄','貓咪專用','狗狗專用','兔鳥鼠龜','急用短句','貼圖標語']},
+  {name:'寵物短句',cats:['早晚問候','已讀回覆','情侶放閃','飼主語錄','貓咪專用','狗狗專用','兔鳥鼠龜','急用短句','貼圖標語']},
   {name:'寵物物種',cats:['貓咪專用','狗狗專用','兔鳥鼠龜','寵物日記','寵物視角']},
   {name:'短句快用',cats:['急用短句','已讀回覆','熱門常用','貼圖標語']},
-  {name:'v1.32 新增',cats:['平台客服','直播互動','社團公告','買賣交易','醫療照護','毛孩照護','節氣季節','台語口吻','日本語貼圖','韓語貼圖']},
+  {name:'商用多語',cats:['平台客服','直播互動','社團公告','買賣交易','醫療照護','毛孩照護','節氣季節','台語口吻','日本語貼圖','韓語貼圖']},
   {name:'營運商用',cats:['平台客服','社團公告','買賣交易','商務回覆','客服禮貌']},
   {name:'多語擴充',cats:['英語貼圖','日本語貼圖','韓語貼圖','台語口吻','台灣用語']},
   {name:'照護關心',cats:['醫療照護','毛孩照護','生病關心','安慰療癒']},
@@ -1812,15 +1712,40 @@ const scriptGroups=[
   {name:'生活日常擴充',cats:['美食吃貨','運動健身','學習進修','居家生活']},
   {name:'指定寵物專屬',cats:['灰灰日常','甜心日常','可樂日常','QQ日常','糖糖日常','湯圓日常','卡哇日常']},
 ];
+const PRESET_SCRIPT_GROUPS={
+  'huihui':['灰灰專屬','灰灰生活應用','灰灰情緒陪伴','指定寵物專屬'],
+  'tianxin':['甜心專屬','指定寵物專屬'],
+  'cola-cat':['可樂專屬','指定寵物專屬'],
+  'qq-dog':['QQ專屬','指定寵物專屬'],
+  'tangtang-dog':['糖糖專屬','指定寵物專屬'],
+  'tangyuan-cat':['湯圓專屬','指定寵物專屬'],
+  'kawa-cat':['卡哇專屬','指定寵物專屬'],
+};
+const HIDDEN_SCRIPT_GROUPS=new Set([
+  '灰灰專屬','灰灰生活應用','灰灰情緒陪伴','甜心專屬','可樂專屬','QQ專屬','糖糖專屬','湯圓專屬','卡哇專屬','指定寵物專屬',
+  '野狼專屬','生肖鼠專屬','生肖牛專屬','生肖虎專屬','生肖兔專屬','生肖龍專屬','生肖蛇專屬','生肖馬專屬','生肖羊專屬','生肖猴專屬','生肖雞專屬','生肖狗專屬','生肖豬專屬',
+  '獅子專屬','大象專屬','長頸鹿專屬','斑馬專屬','熊貓專屬','無尾熊專屬','袋鼠專屬','企鵝專屬','北極熊專屬','河馬專屬','犀牛專屬','大猩猩專屬','紅鶴專屬','孔雀專屬','樹懶專屬',
+  '鯊魚專屬','海豚專屬','鯨魚專屬','章魚專屬','水母專屬','海龜專屬','海豹專屬','螃蟹專屬','海星專屬','海馬專屬','小丑魚專屬',
+]);
 let currentScriptGroup=scriptGroups[0].name, currentScriptScope='cat';
 
 function escHtml(v){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
 function jsArg(v){return JSON.stringify(v).replace(/</g,'\\u003c');}
-function getScriptGroup(name=currentScriptGroup){return scriptGroups.find(g=>g.name===name)||scriptGroups[0];}
+function getVisibleScriptGroups(){
+  const presetGroups=new Set(PRESET_SCRIPT_GROUPS[state.activePresetId]||[]);
+  return scriptGroups.filter(g=>!HIDDEN_SCRIPT_GROUPS.has(g.name)||presetGroups.has(g.name));
+}
+function getScriptGroup(name=currentScriptGroup){
+  const groups=getVisibleScriptGroups();
+  return groups.find(g=>g.name===name)||groups[0]||scriptGroups[0];
+}
+function getVisibleScriptPool(){
+  return [...new Set(getVisibleScriptGroups().flatMap(g=>g.cats).flatMap(c=>scriptData[c]||[]))];
+}
 function getVisibleScriptItems(){
   const q=(document.getElementById('script-search')?.value||'').trim().toLowerCase();
   if(q) return [...new Set(Object.values(scriptData).flat())].filter(t=>t.toLowerCase().includes(q));
-  if(currentScriptScope==='all') return [...new Set(Object.values(scriptData).flat())];
+  if(currentScriptScope==='all') return getVisibleScriptPool();
   const g=getScriptGroup();
   if(currentScriptScope==='group') return [...new Set(g.cats.flatMap(c=>scriptData[c]||[]))];
   return [...new Set(scriptData[state.currentCat]||[])];
@@ -1842,11 +1767,12 @@ function clearScriptSearch(){
 
 function renderScriptCats() {
   const g=getScriptGroup();
-  const allCount=[...new Set(Object.values(scriptData).flat())].length;
+  const groups=getVisibleScriptGroups();
+  const allCount=getVisibleScriptPool().length;
   const gCount=[...new Set(g.cats.flatMap(c=>scriptData[c]||[]))].length;
   const allBtn=`<div class="cat-tag${currentScriptScope==='all'?' active':''}" onclick="selectAllScripts()">全選 ${allCount}</div>`;
   const gAllBtn=`<div class="cat-tag${currentScriptScope==='group'?' active':''}" style="font-size:11px;" onclick="selectGroupAll()">全選 ${gCount}</div>`;
-  const gHtml=scriptGroups.map(sg=>`<div class="cat-tag${currentScriptScope!=='all'&&sg.name===currentScriptGroup?' active':''}" onclick='selectScriptGroup(${jsArg(sg.name)})'>${escHtml(sg.name)}</div>`).join('');
+  const gHtml=groups.map(sg=>`<div class="cat-tag${currentScriptScope!=='all'&&sg.name===currentScriptGroup?' active':''}" onclick='selectScriptGroup(${jsArg(sg.name)})'>${escHtml(sg.name)}</div>`).join('');
   const cHtml=g.cats.filter(c=>scriptData[c]).map(c=>`<div class="cat-tag${currentScriptScope==='cat'&&c===state.currentCat?' active':''}" style="font-size:11px;" onclick='selectCat(${jsArg(c)})'>${escHtml(c)}</div>`).join('');
   document.getElementById('script-cats').innerHTML=`
     <div style="display:flex;flex-wrap:wrap;gap:6px;">${allBtn}${gHtml}</div>
@@ -1855,7 +1781,7 @@ function renderScriptCats() {
 function selectAllScripts(){currentScriptScope='all';renderScriptCats();filterScripts();}
 function selectGroupAll(){currentScriptScope='group';renderScriptCats();filterScripts();}
 function selectScriptGroup(name){currentScriptGroup=name;currentScriptScope='cat';const g=getScriptGroup(name);if(!g.cats.includes(state.currentCat))state.currentCat=g.cats[0];renderScriptCats();filterScripts();}
-function selectCat(cat){state.currentCat=cat;currentScriptScope='cat';currentScriptGroup=scriptGroups.find(g=>g.cats.includes(cat))?.name||currentScriptGroup;renderScriptCats();filterScripts();}
+function selectCat(cat){state.currentCat=cat;currentScriptScope='cat';currentScriptGroup=getVisibleScriptGroups().find(g=>g.cats.includes(cat))?.name||currentScriptGroup;renderScriptCats();filterScripts();}
 
 function filterScripts(){
   const items=getVisibleScriptItems();
@@ -1998,7 +1924,8 @@ function randomizeAll(){
   selectLayout(['random','A','B','C','D','E','F'][Math.floor(Math.random()*7)]);
   selectBg(Math.random()>0.5?'white':'ai');
   state.scriptSelected=[];state.customItems=[];
-  const rg=scriptGroups[Math.floor(Math.random()*scriptGroups.length)];
+  const visibleGroups=getVisibleScriptGroups();
+  const rg=visibleGroups[Math.floor(Math.random()*visibleGroups.length)]||scriptGroups[0];
   currentScriptGroup=rg.name;state.currentCat=rg.cats[0];currentScriptScope='group';
   renderScriptCats();
   const all=[...new Set(rg.cats.flatMap(c=>scriptData[c]||[]))];
@@ -2436,7 +2363,7 @@ document.addEventListener('keydown',e=>{
   const io=new IntersectionObserver(entries=>{
     entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');io.unobserve(e.target);}});
   },{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
-  function observe(){document.querySelectorAll('.section,.ai-workflow-section,.combine-section').forEach(el=>{el.classList.add('reveal');io.observe(el);});}
+  function observe(){document.querySelectorAll('.section,.combine-section').forEach(el=>{el.classList.add('reveal');io.observe(el);});}
   if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',observe);}else{setTimeout(observe,50);}
 })();
 

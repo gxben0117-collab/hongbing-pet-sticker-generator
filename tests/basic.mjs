@@ -23,6 +23,14 @@ describe('index.html structure', () => {
     }
   });
 
+  it('uses compact app flow instead of landing hero', () => {
+    assert.ok(!html.includes('id="hero-section"'), 'Hero section should be removed');
+    assert.ok(!html.includes('class="hero-title"'), 'Hero title should be removed');
+    for (const label of ['寵物資料', '貼圖設定', '台詞腳本', '生成咒語']) {
+      assert.ok(html.includes(label), `Missing flow label ${label}`);
+    }
+  });
+
   it('has combineAll function', () => {
     assert.ok(html.includes('function combineAll()'));
   });
@@ -125,6 +133,13 @@ describe('UI features', () => {
     assert.ok(html.includes('id="prompt-char-count"'), 'Missing prompt char count element');
   });
 
+  it('integrates image upload into pet description instead of a separate AI workflow block', () => {
+    assert.ok(html.includes('id="char-img-panel"'), 'Missing pet image panel');
+    assert.ok(html.includes('id="upload-zone"'), 'Missing upload zone');
+    assert.ok(!html.includes('id="ai-workflow-section"'), 'AI workflow should not be a separate top-level section');
+    assert.ok(!html.includes('id="ai-history-panel"'), 'AI history panel should be removed from the UI');
+  });
+
   it('has 上架準備 section', () => {
     assert.ok(html.includes('LINE 貼圖上架準備清單'), 'Missing 上架準備 section');
     assert.ok(html.includes('function toggleSubmitGuide'), 'Missing toggleSubmitGuide function');
@@ -166,7 +181,8 @@ describe('script content', () => {
     assert.ok(html.includes("'毛孩照護'"), 'Missing 毛孩照護 category');
     assert.ok(html.includes("'日本語貼圖'"), 'Missing 日本語貼圖 category');
     assert.ok(html.includes("'韓語貼圖'"), 'Missing 韓語貼圖 category');
-    assert.ok(html.includes("name:'v1.32 新增'"), 'Missing v1.32 group');
+    assert.ok(html.includes("name:'商用多語'"), 'Missing renamed business/multilingual group');
+    assert.ok(!html.includes("name:'v1.32 新增'"), 'Version labels should not appear as script groups');
   });
 
   it('has responsive script toolbar and empty state', () => {
@@ -193,6 +209,8 @@ describe('script content', () => {
     for (const group of ['甜心專屬', '可樂專屬', 'QQ專屬', '糖糖專屬', '湯圓專屬', '卡哇專屬', '指定寵物專屬']) {
       assert.ok(html.includes(`name:'${group}'`), `Missing ${group} group`);
     }
+    assert.ok(html.includes('HIDDEN_SCRIPT_GROUPS'), 'Dedicated groups should be hidden by default');
+    assert.ok(html.includes('PRESET_SCRIPT_GROUPS'), 'Dedicated groups should be tied to presets');
     for (const line of ['甜心抱抱', 'QQ慢慢來', '糖糖起床啦', '湯圓大小姐到', '卡哇探頭']) {
       assert.ok(html.includes(line), `Missing preset line ${line}`);
     }
