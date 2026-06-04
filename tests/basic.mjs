@@ -67,6 +67,9 @@ describe('index.html structure', () => {
     assert.ok(html.includes('LINE STICKER SHEET LAYOUT LOCK v2.0'), 'Missing layout lock');
     assert.ok(html.includes('370 × 320 px per sticker'), 'Missing LINE panel export target');
     assert.ok(html.includes('PRIORITIZE PANEL SEPARATION'), 'Missing panel separation priority');
+    assert.ok(html.includes('NO DIVIDER OR FRAME LINES'), 'Missing no-divider rule');
+    assert.ok(html.includes('Do NOT draw panel divider lines'), 'Missing explicit panel divider ban');
+    assert.ok(!html.includes('visible light-gray cutting guides'), 'Should not request visible guide lines');
   });
 });
 
