@@ -17,10 +17,11 @@ describe('index.html structure', () => {
     assert.ok(html.includes('charset="UTF-8"'));
   });
 
-  it('has main UI sections (1-9)', () => {
-    for (let i = 1; i <= 9; i++) {
+  it('has main UI sections for the streamlined workflow', () => {
+    for (const i of [1, 2, 3, 4, 6, 7, 8, 9]) {
       assert.ok(html.includes(`<div class="section-num">${i}</div>`), `Missing section ${i}`);
     }
+    assert.ok(!html.includes('<div class="section-num">5</div>'), 'Props section should be removed');
   });
 
   it('uses compact app flow instead of landing hero', () => {
@@ -60,6 +61,12 @@ describe('index.html structure', () => {
 
   it('has PET_IDENTITY_LOCK constant', () => {
     assert.ok(html.includes('PET_IDENTITY_LOCK_V115'));
+  });
+
+  it('has strict 4x4 LINE export layout lock', () => {
+    assert.ok(html.includes('LINE STICKER SHEET LAYOUT LOCK v2.0'), 'Missing layout lock');
+    assert.ok(html.includes('370 × 320 px per sticker'), 'Missing LINE panel export target');
+    assert.ok(html.includes('PRIORITIZE PANEL SEPARATION'), 'Missing panel separation priority');
   });
 });
 
@@ -133,11 +140,22 @@ describe('UI features', () => {
     assert.ok(html.includes('id="prompt-char-count"'), 'Missing prompt char count element');
   });
 
-  it('integrates image upload into pet description instead of a separate AI workflow block', () => {
+  it('uses ChatGPT-side image upload instructions without fake local upload UI', () => {
     assert.ok(html.includes('id="char-img-panel"'), 'Missing pet image panel');
-    assert.ok(html.includes('id="upload-zone"'), 'Missing upload zone');
+    assert.ok(html.includes('照片和咒語一起傳給 ChatGPT'), 'Missing ChatGPT-side upload instruction');
+    assert.ok(!html.includes('id="upload-zone"'), 'Fake local upload zone should be removed');
+    assert.ok(!html.includes('id="pet-file-input"'), 'File input should be removed');
     assert.ok(!html.includes('id="ai-workflow-section"'), 'AI workflow should not be a separate top-level section');
     assert.ok(!html.includes('id="ai-history-panel"'), 'AI history panel should be removed from the UI');
+  });
+
+  it('fixes output to 4x4 and removes prop selection UI', () => {
+    assert.ok(html.includes('4×4 固定格式'), 'Missing fixed 4x4 UI');
+    assert.ok(!html.includes('id="qty-1"'), '1 panel option should be removed');
+    assert.ok(!html.includes('id="qty-4"'), '4 panel option should be removed');
+    assert.ok(!html.includes('id="qty-9"'), '9 panel option should be removed');
+    assert.ok(!html.includes('id="color-swatches"'), 'Prop swatch UI should be removed');
+    assert.ok(!html.includes('PROP / ACCESSORY PLAN'), 'Prop prompt block should be removed');
   });
 
   it('has 上架準備 section', () => {
@@ -183,6 +201,13 @@ describe('script content', () => {
     assert.ok(html.includes("'韓語貼圖'"), 'Missing 韓語貼圖 category');
     assert.ok(html.includes("name:'商用多語'"), 'Missing renamed business/multilingual group');
     assert.ok(!html.includes("name:'v1.32 新增'"), 'Version labels should not appear as script groups');
+  });
+
+  it('uses curated script groups by default', () => {
+    assert.ok(html.includes('DEFAULT_SCRIPT_GROUPS'), 'Missing curated default script group control');
+    for (const group of ['常用短句', '問候回覆', '情緒反應', '撒嬌陪伴', '工作實用', '美食吃貨', '寵物互動', '純表情無字']) {
+      assert.ok(html.includes(`name:'${group}'`) || html.includes(`'${group}'`), `Missing curated group ${group}`);
+    }
   });
 
   it('has responsive script toolbar and empty state', () => {

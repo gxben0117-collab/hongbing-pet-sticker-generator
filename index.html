@@ -444,28 +444,13 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   <div class="section-header"><div class="section-num">1</div><div class="section-title">寵物描述</div></div>
   <div class="section-body">
     <div class="tabs">
-      <div class="tab active" id="tab-img" onclick="switchCharTab('img')">圖片上傳（推薦）</div>
+      <div class="tab active" id="tab-img" onclick="switchCharTab('img')">照片隨咒語上傳（推薦）</div>
       <div class="tab" id="tab-text" onclick="switchCharTab('text')">文字輸入</div>
     </div>
     <div id="char-img-panel">
-      <div class="upload-zone" id="upload-zone">
-        <input type="file" id="pet-file-input" accept="image/*" multiple onchange="handleFileUpload(event)">
-        <span class="upload-icon">🐾</span>
-        <div class="upload-text">拖曳寵物照片到這裡，或點擊選擇檔案</div>
-        <div class="upload-hint">支援 JPG / PNG / WebP · 可多選 · 建議三視圖或清楚日常照片</div>
-      </div>
-      <div class="image-preview-grid" id="image-preview-grid"></div>
-      <div class="ai-prompt-panel" id="ai-prompt-panel" style="display:none;">
-        <div class="ai-prompt-label">生成的寵物描述提示</div>
-        <div class="ai-prompt-output" id="ai-prompt-output">選擇上方照片後點「生成描述」</div>
-        <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
-          <button class="btn-primary" onclick="generatePetPrompt()" style="font-size:13px;padding:9px 20px;">✨ 生成描述提示</button>
-          <button class="btn-rand" onclick="copyPromptToDesc()" style="font-size:12px;">📋 複製到寵物描述欄</button>
-        </div>
-      </div>
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;">
-        <div style="font-size:13px;font-weight:500;color:var(--text);font-family:system-ui,sans-serif;margin-bottom:6px;">📎 請將寵物三視圖或照片上傳給 ChatGPT</div>
-        <div style="font-size:12px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:1.7;">組合咒語後，請先在 ChatGPT 上傳事先做好的寵物三視圖；若沒有三視圖，也可以上傳正面、側面、背面或日常照片。系統會要求 ChatGPT 依照上傳圖片鎖定同一隻寵物來設計貼圖。</div>
+        <div style="font-size:13px;font-weight:500;color:var(--text);font-family:system-ui,sans-serif;margin-bottom:6px;">📎 實際出圖時，請把寵物照片和咒語一起傳給 ChatGPT</div>
+        <div style="font-size:12px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:1.7;">本工具不在網頁內上傳照片。組合咒語後，請在 ChatGPT 對話中先附上寵物三視圖或照片，再貼上咒語送出。若沒有三視圖，也可以附正面、側面、背面或清楚日常照片。</div>
       </div>
       <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:10px 14px;font-size:12px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:1.7;">
         💡 <strong>建議素材：</strong>三視圖最穩定；若只有照片，請盡量提供正面、側面、背面或能看清毛色花紋、眼睛、耳朵、尾巴與常用配件的照片。
@@ -485,7 +470,7 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   <div class="flow-step">2</div>
   <div>
     <div class="flow-title">貼圖設定</div>
-    <div class="flow-note">先選數量與畫風；服裝、道具、字體、構圖可進階調整。</div>
+    <div class="flow-note">固定 4×4 16 格；畫風直接選，服裝、字體、構圖可進階調整。</div>
   </div>
 </div>
 
@@ -493,14 +478,11 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
 <div class="section">
   <div class="section-header"><div class="section-num">2</div><div class="section-title">貼圖數量</div></div>
   <div class="section-body">
-    <div class="check-list col4">
-      <div class="c-item" id="qty-1" onclick="selectQty(1)"><div class="c-check">✓</div><div class="c-body"><div class="c-name">1×1</div><div class="c-desc">1 格・測試用</div></div></div>
-      <div class="c-item" id="qty-4" onclick="selectQty(4)"><div class="c-check">✓</div><div class="c-body"><div class="c-name">2×2</div><div class="c-desc">4 格・測試用</div></div></div>
-      <div class="c-item" id="qty-9" onclick="selectQty(9)"><div class="c-check">✓</div><div class="c-body"><div class="c-name">3×3</div><div class="c-desc">9 格・測試用</div></div></div>
-      <div class="c-item active" id="qty-16" onclick="selectQty(16)"><div class="c-check">✓</div><div class="c-body"><div class="c-name">4×4</div><div class="c-desc">16 格・LINE 最小值 ✓</div></div></div>
+    <div class="check-list col2">
+      <div class="c-item active" id="qty-16"><div class="c-check">✓</div><div class="c-body"><div class="c-name">4×4 固定格式</div><div class="c-desc">16 格・每格以 370×320 LINE 貼圖切圖為目標</div></div></div>
     </div>
     <div style="margin-top:8px;padding:9px 12px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);font-size:11px;color:var(--text-muted);font-family:system-ui,sans-serif;line-height:1.7;">
-      📋 <strong>LINE 上架規格：</strong>正式貼圖包最少 <strong>8 格</strong>，以 8 的倍數遞增（8、16、24、32、40）。建議以 <strong>16 格</strong>為第一套起步數量。1／4／9 格適合先測試風格，確認滿意後再做完整版。
+      📋 <strong>本工具固定輸出：</strong>4×4 共 <strong>16 格</strong>，每格以 <strong>370×320 px</strong> LINE 貼圖切圖為目標，並在咒語中強制要求大間距與安全邊界。
     </div>
   </div>
 </div>
@@ -509,7 +491,6 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
 <div class="section">
   <div class="section-header"><div class="section-num">3</div><div class="section-title">畫風 / 材質風格</div></div>
   <div class="section-body">
-    <div class="script-cats" id="style-cats"></div>
     <div class="check-list col2" id="style-grid" style="margin-bottom:6px;"></div>
     <div class="c-item ai-pick" id="style-ai" onclick="selectStyle('ai')" style="margin-top:4px;"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🎲 AI 隨機選擇</div><div class="c-desc">由 AI 自行決定最適合的畫風</div></div></div>
   </div>
@@ -519,7 +500,7 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   <summary>
     <span>
       <strong>進階設定</strong>
-      <span style="display:block;font-size:11px;color:var(--text-hint);margin-top:3px;">服裝、道具、字體、構圖與背景細節</span>
+      <span style="display:block;font-size:11px;color:var(--text-hint);margin-top:3px;">服裝、字體、構圖與背景細節</span>
     </span>
   </summary>
 
@@ -539,32 +520,12 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   </div>
 </div>
 
-<!-- ⑤ 道具 -->
-<div class="section">
-  <div class="section-header"><div class="section-num">5</div><div class="section-title">道具方案 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:6px;">裝飾品、玩具、寵物衣之類的</span></div></div>
-  <div class="section-body">
-    <div style="display:flex;justify-content:flex-end;gap:6px;margin-bottom:8px;">
-      <button class="btn-rand" onclick="clearColors()">讓 AI 自行判斷</button>
-      <button class="btn-rand" onclick="randomColors()">🎲 隨機道具風格</button>
-    </div>
-    <div class="color-swatches" id="color-swatches"></div>
-    <div class="color-tags" id="color-tags"></div>
-    <div class="custom-color-input" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
-      <input id="custom-color-input" placeholder="輸入自訂道具或裝飾，逗號分隔" style="flex:1;min-width:180px;padding:10px 12px;border:1px solid var(--border);border-radius:12px;background:var(--panel);color:var(--ink);" />
-      <button class="btn-primary" style="padding:10px 14px;white-space:nowrap;" onclick="addCustomColors()">新增自訂項目</button>
-    </div>
-    <div class="color-tags" id="custom-color-tags" style="margin-top:8px;"></div>
-    <div id="color-ai-hint" style="font-size:12px;color:var(--text-hint);font-family:system-ui,sans-serif;margin-top:8px;">讓 AI / ChatGPT 自行判斷道具、裝飾品、玩具或寵物衣搭配</div>
-  </div>
-</div>
-
 <!-- ⑥ 字體 -->
 <div class="section">
   <div class="section-header"><div class="section-num">6</div><div class="section-title">文字字體</div></div>
   <div class="section-body">
     <div class="c-item ai-pick active" id="font-ai" onclick="selectFont('ai')" style="margin-bottom:10px;"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🎲 AI 隨機選擇</div><div class="c-desc">由 AI 選擇最搭配風格的字體</div></div></div>
-    <div class="script-cats" id="font-cats"></div>
-    <div class="check-list col2" id="font-grid" style="max-height:260px;overflow-y:auto;"></div>
+    <div class="check-list col2" id="font-grid"></div>
   </div>
 </div>
 
@@ -1059,7 +1020,6 @@ function applyPreset(id) {
   selectOutfitMode(p.outfit==='none'?'none':'manual');
   state.colorSelections=[]; state.customColors=[];
   document.querySelectorAll('.prop-option').forEach(el=>el.classList.remove('active'));
-  p.colors.forEach(name=>{const i=presetColors.findIndex(c=>c.name===name);if(i>=0)toggleColor(i);});
   renderColorTags();
   selectFont(p.font);
   selectLayout(p.layout);
@@ -1106,11 +1066,12 @@ function switchCharTab(tab) {
 
 // ── QTY ──
 function selectQty(n) {
-  [1,4,9,16].forEach(q=>document.getElementById('qty-'+q).classList.toggle('active',q===n));
-  state.qty=n;
-  while(state.scriptSelected.length+state.customItems.length>n){if(state.customItems.length)state.customItems.pop();else state.scriptSelected.pop();}
+  const fixedQty=16;
+  document.getElementById('qty-16')?.classList.add('active');
+  state.qty=fixedQty;
+  while(state.scriptSelected.length+state.customItems.length>fixedQty){if(state.customItems.length)state.customItems.pop();else state.scriptSelected.pop();}
   renderSelectedTags(); filterScripts();
-  document.getElementById('total-slots').textContent=n;
+  document.getElementById('total-slots').textContent=fixedQty;
   updateCounter(); updateDots();
 }
 
@@ -1150,20 +1111,11 @@ const styleData={
   ai:'## ART STYLE\nAI freely selects the most suitable visual rendering style for this pet — choose based on the pet species, personality, and sticker theme.',
 };
 
-let currentStyleCat=styleCats[0];
 function initStyleUI() {
-  document.getElementById('style-cats').innerHTML=styleCats.map(c=>
-    `<div class="cat-tag${c===currentStyleCat?' active':''}" onclick="filterStyles('${c}')">${c}</div>`
-  ).join('');
-  filterStyles(currentStyleCat);
-}
-function filterStyles(cat) {
-  currentStyleCat=cat;
-  document.querySelectorAll('#style-cats .cat-tag').forEach(el=>el.classList.toggle('active',el.textContent===cat));
-  document.getElementById('style-grid').innerHTML=styleList.filter(s=>s.cat===cat).map(s=>
+  document.getElementById('style-grid').innerHTML=styleList.map(s=>
     `<div class="c-item${state.styleKey===s.key?' active':''}" id="style-${s.key}" onclick="selectStyle('${s.key}')">
       <div class="c-check">✓</div>
-      <div class="c-body"><div class="c-name">${s.name}</div><div class="c-desc">${s.desc}</div></div>
+      <div class="c-body"><div class="c-name">${s.name}</div><div class="c-desc">${s.cat}・${s.desc}</div></div>
     </div>`
   ).join('');
   document.getElementById('style-ai')?.classList.toggle('active',state.styleKey==='ai');
@@ -1273,11 +1225,13 @@ const presetColors=[
   {name:'小碗',icon:'🫙'},
 ];
 function initColorSwatches() {
-  document.getElementById('color-swatches').innerHTML=presetColors.map((col,i)=>
+  const el=document.getElementById('color-swatches');
+  if(!el)return;
+  el.innerHTML=presetColors.map((col,i)=>
     `<div class="prop-option" id="swatch-${i}" onclick="toggleColor(${i})"><span class="prop-icon">${col.icon}</span><span class="prop-name">${col.name}</span></div>`
   ).join('');
 }
-function clearColors(){state.colorSelections=[];state.customColors=[];document.getElementById('custom-color-input').value='';document.querySelectorAll('.prop-option').forEach(el=>el.classList.remove('active'));renderColorTags();}
+function clearColors(){state.colorSelections=[];state.customColors=[];const input=document.getElementById('custom-color-input');if(input)input.value='';document.querySelectorAll('.prop-option').forEach(el=>el.classList.remove('active'));renderColorTags();}
 function randomColors(){
   clearColors();
   const num=Math.floor(Math.random()*2)+2;
@@ -1287,12 +1241,13 @@ function randomColors(){
 function toggleColor(i){
   const c=presetColors[i];
   const idx=state.colorSelections.findIndex(s=>s.name===c.name);
-  if(idx>=0){state.colorSelections.splice(idx,1);document.getElementById('swatch-'+i).classList.remove('active');}
-  else{state.colorSelections.push(c);document.getElementById('swatch-'+i).classList.add('active');}
+  if(idx>=0){state.colorSelections.splice(idx,1);document.getElementById('swatch-'+i)?.classList.remove('active');}
+  else{state.colorSelections.push(c);document.getElementById('swatch-'+i)?.classList.add('active');}
   renderColorTags();
 }
 function addCustomColors(){
   const input = document.getElementById('custom-color-input');
+  if(!input)return;
   const values = input.value.split(/[，,]+/).map(v=>v.trim()).filter(Boolean);
   values.forEach((value)=>{
     if(!state.customColors.includes(value) && !state.colorSelections.some(c=>c.name===value)){
@@ -1303,10 +1258,12 @@ function addCustomColors(){
   renderColorTags();
   updateDots();
 }
-function removeColor(i){const name=state.colorSelections[i].name;const pi=presetColors.findIndex(c=>c.name===name);if(pi>=0)document.getElementById('swatch-'+pi).classList.remove('active');state.colorSelections.splice(i,1);renderColorTags();}
+function removeColor(i){const name=state.colorSelections[i].name;const pi=presetColors.findIndex(c=>c.name===name);if(pi>=0)document.getElementById('swatch-'+pi)?.classList.remove('active');state.colorSelections.splice(i,1);renderColorTags();}
 function removeCustomColor(i){state.customColors.splice(i,1);renderColorTags();}
 function renderColorTags(){
-  document.getElementById('color-tags').innerHTML=[
+  const tags=document.getElementById('color-tags');
+  if(!tags)return;
+  tags.innerHTML=[
     ...state.colorSelections.map((clr,i)=>
       `<div class="color-tag">${clr.icon} ${clr.name} <span class="rm" onclick="removeColor(${i})">✕</span></div>`
     ),
@@ -1314,8 +1271,10 @@ function renderColorTags(){
       `<div class="color-tag">✏️ ${escHtml(name)} <span class="rm" onclick="removeCustomColor(${i})">✕</span></div>`
     )
   ].join('');
-  document.getElementById('custom-color-tags').innerHTML='';
-  document.getElementById('color-ai-hint').style.display=(state.colorSelections.length>0 || state.customColors.length>0)?'none':'block';
+  const customTags=document.getElementById('custom-color-tags');
+  if(customTags)customTags.innerHTML='';
+  const hint=document.getElementById('color-ai-hint');
+  if(hint)hint.style.display=(state.colorSelections.length>0 || state.customColors.length>0)?'none':'block';
 }
 
 // ── FONT ──
@@ -1340,21 +1299,13 @@ const fontData={ai:'## FONT STYLE\nAI freely selects the most suitable font styl
 fontList.forEach(f=>{fontData[f.n]=`## FONT STYLE — ${f.n}\n${f.p}`;});
 
 function initFontUI() {
-  let currentFontCat=fontCats[0];
-  const renderFC=()=>{
-    document.getElementById('font-cats').innerHTML=fontCats.map(c=>
-      `<div class="cat-tag${c===currentFontCat?' active':''}" onclick="filterFonts('${c}')">${c}</div>`
-    ).join('');
-    document.getElementById('font-grid').innerHTML=fontList.filter(f=>f.c===currentFontCat).map(f=>
+  document.getElementById('font-grid').innerHTML=fontList.map(f=>
       `<div class="c-item${state.fontStyle===f.n?' active':''}" id="font-${f.n}" onclick="selectFont('${f.n}')">
         <div class="c-check">✓</div>
-        <div class="c-body"><div class="c-name">${f.n}</div></div>
+        <div class="c-body"><div class="c-name">${f.n}</div><div class="c-desc">${f.c}</div></div>
       </div>`
     ).join('');
-    document.getElementById('font-ai')?.classList.toggle('active',state.fontStyle==='ai');
-  };
-  window.filterFonts=(cat)=>{currentFontCat=cat;renderFC();};
-  renderFC();
+  document.getElementById('font-ai')?.classList.toggle('active',state.fontStyle==='ai');
 }
 function selectFont(key) {
   state.fontStyle=key;
@@ -1630,6 +1581,16 @@ const noTextCats=['純表情無字'];
 // "純表情無字" intentionally appears in both 情緒表達 and 純圖無字:
 // one path keeps it discoverable with reactions, the other is a dedicated no-text shortcut.
 const scriptGroups=[
+  {name:'常用短句',cats:['熱門常用','急用短句','已讀回覆','日常確認']},
+  {name:'問候回覆',cats:['早晚問候','打招呼日常','問候回覆','聊天常用']},
+  {name:'情緒反應',cats:['誇張反應','心情狀態','日常抱怨','驚喜讚嘆','冷笑吐槽']},
+  {name:'撒嬌陪伴',cats:['撒嬌賣萌','陪伴戀愛','安慰療癒','情侶放閃']},
+  {name:'工作實用',cats:['職場日常','工作學校','進度狀態','商務回覆']},
+  {name:'美食吃貨',cats:['吃吃喝喝','美食吃貨','餐飲點心']},
+  {name:'寵物互動',cats:['寵物視角','寵物日記','飼主語錄','貓咪專用','狗狗專用','兔鳥鼠龜']},
+  {name:'純表情無字',cats:['純表情無字']},
+  {name:'更多生活',cats:['生活瑣事','旅行出門','購物花錢','運動健康','家務整理','拍照打卡']},
+  {name:'商用多語',cats:['平台客服','客服禮貌','直播互動','社團公告','買賣交易','英語貼圖','日本語貼圖','韓語貼圖','台語口吻']},
   {name:'熱門文字',cats:['熱門常用']},
   {name:'日常互動',cats:['日常萌態','撒嬌賣萌','吃吃喝喝']},
   {name:'情緒表達',cats:['誇張反應','慵懶放空','純表情無字']},
@@ -1651,7 +1612,7 @@ const scriptGroups=[
   {name:'寵物短句',cats:['早晚問候','已讀回覆','情侶放閃','飼主語錄','貓咪專用','狗狗專用','兔鳥鼠龜','急用短句','貼圖標語']},
   {name:'寵物物種',cats:['貓咪專用','狗狗專用','兔鳥鼠龜','寵物日記','寵物視角']},
   {name:'短句快用',cats:['急用短句','已讀回覆','熱門常用','貼圖標語']},
-  {name:'商用多語',cats:['平台客服','直播互動','社團公告','買賣交易','醫療照護','毛孩照護','節氣季節','台語口吻','日本語貼圖','韓語貼圖']},
+  {name:'商用多語延伸',cats:['平台客服','直播互動','社團公告','買賣交易','醫療照護','毛孩照護','節氣季節','台語口吻','日本語貼圖','韓語貼圖']},
   {name:'營運商用',cats:['平台客服','社團公告','買賣交易','商務回覆','客服禮貌']},
   {name:'多語擴充',cats:['英語貼圖','日本語貼圖','韓語貼圖','台語口吻','台灣用語']},
   {name:'照護關心',cats:['醫療照護','毛孩照護','生病關心','安慰療癒']},
@@ -1721,6 +1682,7 @@ const PRESET_SCRIPT_GROUPS={
   'tangyuan-cat':['湯圓專屬','指定寵物專屬'],
   'kawa-cat':['卡哇專屬','指定寵物專屬'],
 };
+const DEFAULT_SCRIPT_GROUPS=new Set(['常用短句','問候回覆','情緒反應','撒嬌陪伴','工作實用','美食吃貨','寵物互動','純表情無字','更多生活','商用多語']);
 const HIDDEN_SCRIPT_GROUPS=new Set([
   '灰灰專屬','灰灰生活應用','灰灰情緒陪伴','甜心專屬','可樂專屬','QQ專屬','糖糖專屬','湯圓專屬','卡哇專屬','指定寵物專屬',
   '野狼專屬','生肖鼠專屬','生肖牛專屬','生肖虎專屬','生肖兔專屬','生肖龍專屬','生肖蛇專屬','生肖馬專屬','生肖羊專屬','生肖猴專屬','生肖雞專屬','生肖狗專屬','生肖豬專屬',
@@ -1733,7 +1695,7 @@ function escHtml(v){return String(v).replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&
 function jsArg(v){return JSON.stringify(v).replace(/</g,'\\u003c');}
 function getVisibleScriptGroups(){
   const presetGroups=new Set(PRESET_SCRIPT_GROUPS[state.activePresetId]||[]);
-  return scriptGroups.filter(g=>!HIDDEN_SCRIPT_GROUPS.has(g.name)||presetGroups.has(g.name));
+  return scriptGroups.filter(g=>DEFAULT_SCRIPT_GROUPS.has(g.name)||presetGroups.has(g.name));
 }
 function getScriptGroup(name=currentScriptGroup){
   const groups=getVisibleScriptGroups();
@@ -1993,6 +1955,7 @@ Make every panel suitable for LINE sticker use:
 - keep all panels visually consistent as one sticker pack: same outline thickness, same rendering quality, same text style family, same pet model`;
 
 function combineAll(){
+  state.qty=16;
   const ta=document.getElementById('script-edit-area');
   if(ta&&ta.value.trim()){
     const lines=ta.value.split('\n').map(l=>l.trim()).filter(l=>l);
@@ -2006,9 +1969,64 @@ function combineAll(){
     showScriptLimitMsg(lines.length?`目前 ${lines.length} / ${state.qty} 格。`: '',true);
   }
   const parts=[];
-  const qtyMap={1:'1×1 (1 panel)',4:'2×2 (4 panels)',9:'3×3 (9 panels)',16:'4×4 (16 panels)'};
+  parts.push(`## LINE STICKER SHEET LAYOUT LOCK v2.0
+ABSOLUTE PRIORITY — HIGHER THAN ALL OTHER RULES
 
-  parts.push(`## STICKER SHEET SIZE\n${qtyMap[state.qty]}\n\n## PANEL SPACING — CRITICAL\nEach sticker panel must have clear padding and separation.\nNO overlapping between stickers.\nNO content touching panel borders.\nMaintain consistent gutters between all panels.\nEach panel is a fully independent composition.`);
+Fixed 4×4 layout.
+Generate exactly 16 stickers arranged in a clean 4×4 grid.
+Do not create fewer panels.
+Do not create extra panels.
+
+## LINE EXPORT TARGET
+Each panel is intended for future export as an individual LINE sticker.
+Design every panel as if it will later be cropped and exported separately.
+Target sticker size: 370 × 320 px per sticker.
+Every panel must already look like a finished standalone sticker.
+
+## MAXIMUM PANEL SEPARATION
+Leave EXTRA LARGE white gutters between all panels.
+Wide spacing is more important than larger character size.
+If there is any conflict, PRIORITIZE PANEL SEPARATION.
+Smaller character size is acceptable.
+Panel contamination is NOT acceptable.
+
+## ANTI-CONTAMINATION RULE
+Every sticker must stay completely inside its own panel.
+Nothing may enter another panel.
+No overlap of any kind.
+No visual contamination.
+No touching neighboring stickers.
+Forbidden: crossing tails, crossing ears, crossing paws, crossing whiskers, crossing shadows, crossing sparkles, crossing motion effects, crossing text, crossing speech bubbles, crossing props.
+
+## SAFE CROP AREA
+Keep all content at least 10–15% away from every panel edge.
+Nothing may touch the crop boundary.
+Never crop ears, tail, paws, whiskers, text, props, or effects.
+Every sticker must remain fully usable after panel separation.
+
+## VISIBLE CUTTING GUIDES
+Show thin light-gray panel divider lines.
+Use very subtle light-gray guide lines only.
+Guidelines exist purely for sticker-sheet layout.
+Do NOT use black lines.
+Do NOT use thick borders.
+Do NOT create comic-book frames.
+Background remains pure white.
+Guide lines must stay unobtrusive and easy to remove later.
+
+## QUALITY CHECK BEFORE FINAL OUTPUT
+✓ 4×4 grid
+✓ 16 panels
+✓ future 370×320 export compatible
+✓ large white gutters
+✓ no overlap
+✓ no cross-panel contamination
+✓ no cropped ears
+✓ no cropped tail
+✓ no cropped paws
+✓ no cropped text
+✓ visible light-gray cutting guides
+✓ every sticker independently usable`);
 
   // Pet character
   parts.push('## PET CHARACTER');
@@ -2061,14 +2079,6 @@ The pet wears a cute costume appropriate to the sticker theme.
 CRITICAL RULE: Keep ALL animal features visible — ears, tail, paws, and fur pattern must remain.
 The costume goes ON the animal — it does NOT replace or hide animal features.
 Let AI choose the most fitting and adorable costume for this pet and theme.`);
-  }
-
-  // Color
-  const allColors=[...state.colorSelections.map(c=>c.name),...state.customColors];
-  if(allColors.length>0){
-    parts.push(`## PROP / ACCESSORY PLAN\nPreferred prop, accessory, toy, pet-clothing, and decorative styling keywords: ${allColors.join('、')}\nUse these selections as visual direction for optional bows, collars, toys, snacks, sparkles, speech decorations, props, pet clothing accents, and small mood marks.\nIMPORTANT: Do NOT override the pet's natural fur color — keep the pet's real appearance unchanged.`);
-  } else {
-    parts.push(`## PROP / ACCESSORY PLAN\nNo specific prop plan — AI freely determines suitable decorations, toys, props, pet-clothing accents, small accessories, text accents, and simple mood marks.\nIMPORTANT: Do NOT override the pet's natural fur color — keep the pet's real appearance unchanged.`);
   }
 
   // Font
