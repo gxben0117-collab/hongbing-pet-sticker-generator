@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🐾 寵物 LINE 貼圖咒語產生器 v1.35</title>
+<title>🐾 寵物 LINE 貼圖咒語產生器 v1.36</title>
 <style>
 /* ── Premium Design System ── */
 :root {
@@ -391,7 +391,7 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
 <div class="page">
 <header class="page-header">
   <div>
-    <h1>🐾 寵物 LINE 貼圖咒語產生器<span class="version-badge">v1.35</span></h1>
+    <h1>🐾 寵物 LINE 貼圖咒語產生器<span class="version-badge">v1.36</span></h1>
     <p class="subtitle">選套餐、補照片或描述、挑台詞，直接組合給 ChatGPT。</p>
   </div>
 </header>
@@ -1326,7 +1326,7 @@ function selectLayout(key) {
 
 // ── BG ──
 const bgData={
-  white:`## BACKGROUND\nClean pure white background for all panels. NO gradient, NO pattern, NO scene elements. White only — standard LINE sticker ready format.`,
+  white:`## BACKGROUND\nClean pure white background for all panels.\nSolid white (#FFFFFF) — NO gradient, NO pattern, NO texture, NO scene elements.\nWhite only — JPG export ready, no transparency required.`,
   ai:`## BACKGROUND\nAI generates a simple contextual background matching each panel's mood and theme. Keep backgrounds simple and uncluttered — pet character must remain the dominant element.`,
 };
 function selectBg(key) {
@@ -1869,6 +1869,7 @@ Do not create extra panels.
 Each panel is intended for future export as an individual LINE sticker.
 Design every panel as if it will later be cropped and exported separately.
 Target sticker size: 370 × 320 px per sticker.
+Full sheet: 1480 × 1280 px total canvas (4 columns × 4 rows).
 Every panel must already look like a finished standalone sticker.
 
 ## MAXIMUM PANEL SEPARATION

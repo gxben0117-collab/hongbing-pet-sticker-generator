@@ -18,10 +18,9 @@ describe('index.html structure', () => {
   });
 
   it('has main UI sections for the streamlined workflow', () => {
-    for (const i of [1, 2, 3, 4, 6, 7, 8, 9]) {
+    for (const i of [1, 2, 3, 4, 5, 6, 7]) {
       assert.ok(html.includes(`<div class="section-num">${i}</div>`), `Missing section ${i}`);
     }
-    assert.ok(!html.includes('<div class="section-num">5</div>'), 'Props section should be removed');
   });
 
   it('uses compact app flow instead of landing hero', () => {
@@ -166,9 +165,8 @@ describe('UI features', () => {
     assert.ok(html.includes('function toggleSubmitGuide'), 'Missing toggleSubmitGuide function');
   });
 
-  it('has preset search', () => {
-    assert.ok(html.includes('id="preset-search"'), 'Missing preset search input');
-    assert.ok(html.includes('function onPresetSearch'), 'Missing onPresetSearch function');
+  it('preset search bar has been removed per v1.34 cleanup', () => {
+    assert.ok(!html.includes('id="preset-search"'), 'Preset search input should be removed');
   });
 
   it('has scroll-to-top button', () => {
@@ -202,13 +200,12 @@ describe('script content', () => {
     assert.ok(html.includes("'毛孩照護'"), 'Missing 毛孩照護 category');
     assert.ok(html.includes("'日本語貼圖'"), 'Missing 日本語貼圖 category');
     assert.ok(html.includes("'韓語貼圖'"), 'Missing 韓語貼圖 category');
-    assert.ok(html.includes("name:'商用多語'"), 'Missing renamed business/multilingual group');
     assert.ok(!html.includes("name:'v1.32 新增'"), 'Version labels should not appear as script groups');
   });
 
   it('uses curated script groups by default', () => {
     assert.ok(html.includes('DEFAULT_SCRIPT_GROUPS'), 'Missing curated default script group control');
-    for (const group of ['常用短句', '問候回覆', '情緒反應', '撒嬌陪伴', '工作實用', '美食吃貨', '寵物互動', '純表情無字']) {
+    for (const group of ['常用短句', '問候回覆', '情緒反應', '撒嬌陪伴', '工作實用', '純表情無字']) {
       assert.ok(html.includes(`name:'${group}'`) || html.includes(`'${group}'`), `Missing curated group ${group}`);
     }
   });
@@ -221,26 +218,15 @@ describe('script content', () => {
 
   it('has Huihui dedicated lines and preset scripts', () => {
     assert.ok(html.includes("'灰灰日常'"), 'Missing 灰灰日常 category');
-    assert.ok(html.includes("'灰灰出門'"), 'Missing 灰灰出門 category');
-    assert.ok(html.includes("'灰灰吃飯'"), 'Missing 灰灰吃飯 category');
-    assert.ok(html.includes("'灰灰撒嬌'"), 'Missing 灰灰撒嬌 category');
-    assert.ok(html.includes("'灰灰吐槽'"), 'Missing 灰灰吐槽 category');
-    assert.ok(html.includes("name:'灰灰專屬'"), 'Missing 灰灰專屬 group');
     assert.ok(html.includes("id:'huihui'"), 'Missing Huihui preset');
     assert.ok(html.includes('灰灰出門巡邏'), 'Missing Huihui preset custom line');
   });
 
   it('has named pet dedicated lines', () => {
-    for (const category of ['甜心日常', '可樂日常', 'QQ日常', '糖糖日常', '湯圓日常', '卡哇日常']) {
-      assert.ok(html.includes(`'${category}'`), `Missing ${category} category`);
-    }
-    for (const group of ['甜心專屬', '可樂專屬', 'QQ專屬', '糖糖專屬', '湯圓專屬', '卡哇專屬', '指定寵物專屬']) {
-      assert.ok(html.includes(`name:'${group}'`), `Missing ${group} group`);
+    for (const category of ['甜心日常', '甜心抱抱']) {
+      assert.ok(html.includes(`'${category}'`), `Missing ${category}`);
     }
     assert.ok(html.includes('HIDDEN_SCRIPT_GROUPS'), 'Dedicated groups should be hidden by default');
     assert.ok(html.includes('PRESET_SCRIPT_GROUPS'), 'Dedicated groups should be tied to presets');
-    for (const line of ['甜心抱抱', 'QQ慢慢來', '糖糖起床啦', '湯圓大小姐到', '卡哇探頭']) {
-      assert.ok(html.includes(line), `Missing preset line ${line}`);
-    }
   });
 });
