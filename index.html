@@ -464,11 +464,32 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   </div>
 </div>
 
-<details class="advanced-settings">
+<!-- ⑤ 道具顏色 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">5</div><div class="section-title">道具顏色 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:6px;">角色搭配的配件或顏色</span></div></div>
+  <div class="section-body">
+    <div class="check-list col2" id="color-grid" style="margin-bottom:10px;"></div>
+    <div style="margin-top:8px;">
+      <div class="sub-label">已選道具／顏色</div>
+      <div id="color-tags" style="display:flex;flex-wrap:wrap;gap:6px;min-height:32px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ 文字字體 -->
+<div class="section">
+  <div class="section-header"><div class="section-num">6</div><div class="section-title">文字字體</div></div>
+  <div class="section-body">
+    <div class="c-item ai-pick active" id="font-ai" onclick="selectFont('ai')" style="margin-bottom:10px;"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🎲 AI 隨機選擇</div><div class="c-desc">由 AI 選擇最搭配風格的字體</div></div></div>
+    <div class="check-list col2" id="font-grid"></div>
+  </div>
+</div>
+
+<details class="advanced-settings" open>
   <summary>
     <span>
       <strong>進階設定</strong>
-      <span style="display:block;font-size:11px;color:var(--text-hint);margin-top:3px;">服裝、字體、構圖與背景細節</span>
+      <span style="display:block;font-size:11px;color:var(--text-hint);margin-top:3px;">服裝、構圖與背景細節</span>
     </span>
   </summary>
 
@@ -485,15 +506,6 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
       <div class="script-cats" id="outfit-cats"></div>
       <div class="check-list col2" id="outfit-grid"></div>
     </div>
-  </div>
-</div>
-
-<!-- ⑥ 字體 -->
-<div class="section">
-  <div class="section-header"><div class="section-num">6</div><div class="section-title">文字字體</div></div>
-  <div class="section-body">
-    <div class="c-item ai-pick active" id="font-ai" onclick="selectFont('ai')" style="margin-bottom:10px;"><div class="c-check">✓</div><div class="c-body"><div class="c-name">🎲 AI 隨機選擇</div><div class="c-desc">由 AI 選擇最搭配風格的字體</div></div></div>
-    <div class="check-list col2" id="font-grid"></div>
   </div>
 </div>
 
