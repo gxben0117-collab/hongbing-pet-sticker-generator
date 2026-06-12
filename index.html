@@ -988,10 +988,10 @@ const PRESET_CATS_MAP={
   '狗狗':['shiba','tianxin','qq-dog','tangtang-dog','corgi','dog-poodle','dog-pomeranian','dog-golden','dog-frenchie','dog-husky','samoyed','labrador','chihuahua','border-collie','beagle'],
   '小動物':['bunny','hamster','rabbit-extra','goat','monkey','guinea-pig','hedgehog','chinchilla','turtle'],
   '生肖':['zodiac-rat','zodiac-ox','zodiac-tiger','zodiac-rabbit','zodiac-dragon','zodiac-snake','zodiac-horse','zodiac-goat','zodiac-monkey','zodiac-rooster','zodiac-dog','zodiac-pig'],
-  '動物園':['zoo-lion','zoo-elephant','zoo-giraffe','zoo-zebra','zoo-panda','zoo-koala','zoo-kangaroo','zoo-penguin','zoo-polarbear','zoo-hippo','zoo-rhino','zoo-gorilla','zoo-flamingo','zoo-peacock','zoo-sloth'],
+  '動物園':['zoo-lion','zoo-elephant','zoo-giraffe','zoo-zebra','zoo-panda','zoo-koala','zoo-kangaroo','zoo-penguin','zoo-polar-bear','zoo-hippo','zoo-rhino','zoo-gorilla','zoo-flamingo','zoo-peacock','zoo-sloth'],
   '海洋':['shark','ocean-dolphin','ocean-whale','ocean-octopus','ocean-jellyfish','ocean-turtle','ocean-seal','ocean-crab','ocean-starfish','ocean-seahorse','ocean-clownfish'],
   '主題':['shiba-work','dog-meme','puppy-love','cat-wizard','cat-princess','cat-xmas'],
-  '其他':['crocodile','parrot','green-snake','green-bird','wild-wolf'],
+  '其他':['crocodile','parrot','green-snake','green-bird','wolf'],
 };
 const PRESET_ALL_CATS=['全部','新手包','貓咪','狗狗','小動物','生肖','動物園','海洋','主題','其他'];
 let currentPresetCat='全部';
@@ -999,28 +999,9 @@ let currentPresetCat='全部';
 function initPresets(){
   renderPresetGrid();
 }
-function filterPresets(cat){
-  currentPresetCat=cat;
-  document.querySelectorAll('#preset-cat-tabs .cat-tag').forEach(el=>el.classList.toggle('active',el.dataset.cat===cat));
-  renderPresetGrid();
-}
-function onPresetSearch(){
-  const q=document.getElementById('preset-search')?.value.trim()||'';
-  const clearBtn=document.getElementById('preset-search-clear');
-  if(clearBtn)clearBtn.style.display=q?'inline-block':'none';
-  renderPresetGrid();
-}
-function clearPresetSearch(){
-  const el=document.getElementById('preset-search');if(el)el.value='';
-  const clearBtn=document.getElementById('preset-search-clear');
-  if(clearBtn)clearBtn.style.display='none';
-  renderPresetGrid();
-}
 function renderPresetGrid(){
-  const q=(document.getElementById('preset-search')?.value||'').trim().toLowerCase();
   const ids=currentPresetCat==='全部'?null:(PRESET_CATS_MAP[currentPresetCat]||[]);
   let filtered=ids?presets.filter(p=>ids.includes(p.id)):presets;
-  if(q) filtered=filtered.filter(p=>p.name.toLowerCase().includes(q)||(p.petDesc||'').toLowerCase().includes(q));
   document.getElementById('preset-grid').innerHTML=filtered.length?filtered.map(p=>
     `<div class="c-item" id="preset-${p.id}" onclick="applyPreset('${p.id}')">
       <div style="font-size:20px;flex-shrink:0;">${p.icon}</div>
@@ -1619,8 +1600,6 @@ function getVisibleScriptPool(){
   return [...new Set(getVisibleScriptGroups().flatMap(g=>g.cats).flatMap(c=>scriptData[c]||[]))];
 }
 function getVisibleScriptItems(){
-  const q=(document.getElementById('script-search')?.value||'').trim().toLowerCase();
-  if(q) return [...new Set(Object.values(scriptData).flat())].filter(t=>t.toLowerCase().includes(q));
   if(currentScriptScope==='all') return getVisibleScriptPool();
   const g=getScriptGroup();
   if(currentScriptScope==='group') return [...new Set(g.cats.flatMap(c=>scriptData[c]||[]))];
@@ -1628,18 +1607,6 @@ function getVisibleScriptItems(){
 }
 function isNoTextScript(t){return noTextCats.some(c=>scriptData[c]?.includes(t));}
 
-function onScriptSearch(){
-  const q=document.getElementById('script-search')?.value.trim()||'';
-  const clearBtn=document.getElementById('script-search-clear');
-  if(clearBtn)clearBtn.style.display=q?'inline-block':'none';
-  filterScripts();
-}
-function clearScriptSearch(){
-  const el=document.getElementById('script-search');if(el)el.value='';
-  const clearBtn=document.getElementById('script-search-clear');
-  if(clearBtn)clearBtn.style.display='none';
-  filterScripts();
-}
 
 function renderScriptCats() {
   const g=getScriptGroup();
