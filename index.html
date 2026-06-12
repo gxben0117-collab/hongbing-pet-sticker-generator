@@ -407,6 +407,29 @@ button:hover{background:rgba(255,255,255,.10);border-color:rgba(245,131,10,.35);
   </div>
 </div>
 
+<!-- ⓪ 快速選擇寵物 -->
+<div class="section" style="border-color:var(--accent);box-shadow:0 2px 12px rgba(196,114,74,0.12);">
+  <div class="section-header" style="background:linear-gradient(135deg,var(--accent-light),#fde8d5);">
+    <div class="section-num">⚡</div>
+    <div class="section-title">快速選擇寵物 <span style="font-size:11px;font-weight:400;color:var(--text-muted);margin-left:6px;">一鍵套用畫風與預設文字</span></div>
+  </div>
+  <div class="section-body" style="padding:0;">
+    <!-- 套餐搜尋 -->
+    <div style="padding:0.6rem 1.25rem;border-bottom:1px solid var(--border);display:flex;gap:6px;align-items:center;">
+      <input type="text" id="preset-search" placeholder="🔍 搜尋寵物名稱、種類…" oninput="onPresetSearch()" style="flex:1;font-size:12px;">
+      <button class="btn-rand" id="preset-search-clear" onclick="clearPresetSearch()" style="display:none;font-size:11px;padding:5px 10px;">✕ 清除</button>
+    </div>
+    <!-- 分類標籤 -->
+    <div style="padding:0.75rem 1.25rem 0.5rem;border-bottom:1px solid var(--border);">
+      <div id="preset-cat-tabs" style="display:flex;flex-wrap:wrap;gap:6px;"></div>
+    </div>
+    <!-- 套餐列表 -->
+    <div style="padding:1rem 1.25rem;">
+      <div class="check-list col2" id="preset-grid"></div>
+    </div>
+  </div>
+</div>
+
 <!-- ① 寵物描述 -->
 <div class="section">
   <div class="section-header"><div class="section-num">1</div><div class="section-title">寵物描述</div></div>
@@ -958,11 +981,13 @@ const PRESET_CATS_MAP={
   '貓咪':['happy-cat','lazy-cat','huihui','cola-cat','tangyuan-cat','kawa-cat','cat-british','cat-ragdoll','cat-mainecoon','cat-siamese','cat-bengal','persian-cat','scottish-fold','black-cat','tuxedo-cat'],
   '狗狗':['shiba','tianxin','qq-dog','tangtang-dog','corgi','dog-poodle','dog-pomeranian','dog-golden','dog-frenchie','dog-husky','samoyed','labrador','chihuahua','border-collie','beagle'],
   '小動物':['bunny','hamster','rabbit-extra','goat','monkey','guinea-pig','hedgehog','chinchilla','turtle'],
-  '節日':['cat-xmas','mothers-day','fathers-day','valentines','halloween'],
-  '主題':['shiba-work','dog-meme','puppy-love','cat-wizard','cat-princess'],
-  '其他':['shark','crocodile','parrot','green-snake','green-bird'],
+  '生肖':['zodiac-rat','zodiac-ox','zodiac-tiger','zodiac-rabbit','zodiac-dragon','zodiac-snake','zodiac-horse','zodiac-goat','zodiac-monkey','zodiac-rooster','zodiac-dog','zodiac-pig'],
+  '動物園':['zoo-lion','zoo-elephant','zoo-giraffe','zoo-zebra','zoo-panda','zoo-koala','zoo-kangaroo','zoo-penguin','zoo-polarbear','zoo-hippo','zoo-rhino','zoo-gorilla','zoo-flamingo','zoo-peacock','zoo-sloth'],
+  '海洋':['shark','ocean-dolphin','ocean-whale','ocean-octopus','ocean-jellyfish','ocean-turtle','ocean-seal','ocean-crab','ocean-starfish','ocean-seahorse','ocean-clownfish'],
+  '主題':['shiba-work','dog-meme','puppy-love','cat-wizard','cat-princess','cat-xmas'],
+  '其他':['crocodile','parrot','green-snake','green-bird','wild-wolf'],
 };
-const PRESET_ALL_CATS=['全部','新手包','貓咪','狗狗','小動物','節日','主題','其他'];
+const PRESET_ALL_CATS=['全部','新手包','貓咪','狗狗','小動物','生肖','動物園','海洋','主題','其他'];
 let currentPresetCat='全部';
 
 function initPresets(){
@@ -2348,6 +2373,7 @@ function clearAiHistory(){
 })();
 
 // ── INIT ──
+initPresets();
 initStyleUI();
 initColorSwatches();
 initFontUI();
