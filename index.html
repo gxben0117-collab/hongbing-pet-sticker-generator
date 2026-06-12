@@ -974,10 +974,6 @@ const PRESET_ALL_CATS=['全部','新手包','貓咪','狗狗','小動物','生�
 let currentPresetCat='全部';
 
 function initPresets(){
-  document.getElementById('preset-cat-tabs').innerHTML=PRESET_ALL_CATS.map(c=>{
-    const cnt=c==='全部'?presets.length:(PRESET_CATS_MAP[c]||[]).length;
-    return `<div class="cat-tag${c===currentPresetCat?' active':''}" data-cat="${c}" onclick="filterPresets('${c}')">${c}<span style="font-size:10px;opacity:0.65;margin-left:3px;">${cnt}</span></div>`;
-  }).join('');
   renderPresetGrid();
 }
 function filterPresets(cat){
